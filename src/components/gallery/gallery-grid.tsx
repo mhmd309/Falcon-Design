@@ -85,10 +85,6 @@ export function GalleryGrid({
   }, [activeIndex, close, next, prev, locale]);
 
   const active = activeIndex !== null ? pageItems[activeIndex] : null;
-  const pageLabel = copy.pageOf
-    .replace("{current}", String(page))
-    .replace("{total}", String(totalPages));
-
   return (
     <section className="section-space">
       <div className="container-page">
@@ -147,7 +143,7 @@ export function GalleryGrid({
             </div>
 
             {totalPages > 1 ? (
-              <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-steel/15 pt-6">
+              <div className="mt-10 flex flex-wrap items-center justify-between gap-4">
                 <button
                   type="button"
                   disabled={page <= 1}
@@ -165,10 +161,6 @@ export function GalleryGrid({
                   />
                   {copy.previous}
                 </button>
-
-                <p className="text-sm text-text-dark-muted" aria-live="polite">
-                  {pageLabel}
-                </p>
 
                 <button
                   type="button"
