@@ -35,7 +35,7 @@ export function switchLocalePath(pathname: string, nextLocale: Locale) {
 export function absoluteUrl(path: string) {
   const base =
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-    "http://localhost:3000";
+    "https://falcon-design.vercel.app/";
   return `${base}${path.startsWith("/") ? path : `/${path}`}`;
 }
 

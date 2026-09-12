@@ -117,11 +117,18 @@ export function ContactForm({ locale }: { locale: Locale }) {
     <form
       ref={formRef}
       onSubmit={(e) => void onSubmit(e)}
-      className="relative space-y-4 rounded-xl border border-steel/15 bg-white p-6"
+      className="relative space-y-5"
       noValidate
       lang={locale}
       dir={locale === "ar" ? "rtl" : "ltr"}
     >
+      <div className="mb-2">
+        <h2 className="text-xl font-semibold text-text-dark sm:text-2xl">
+          {copy.sendMessage}
+        </h2>
+        <div className="metallic-line mt-4" />
+      </div>
+
       <div
         className="pointer-events-none absolute -left-[9999px] h-0 w-0 overflow-hidden opacity-0"
         aria-hidden="true"
@@ -137,64 +144,67 @@ export function ContactForm({ locale }: { locale: Locale }) {
         />
       </div>
 
-      <div>
-        <Label htmlFor="name">{copy.name}</Label>
-        <Input
-          id="name"
-          name="name"
-          autoComplete="name"
-          value={values.name}
-          onChange={(e) => updateField("name", e.target.value)}
-          onBlur={() => setTouched((prev) => ({ ...prev, name: true }))}
-        />
-        <FieldError message={fieldErrors.name} />
-      </div>
-      <div>
-        <Label htmlFor="email">{copy.email}</Label>
-        <Input
-          id="email"
-          name="email"
-          type="email"
-          autoComplete="email"
-          value={values.email}
-          onChange={(e) => updateField("email", e.target.value)}
-          onBlur={() => setTouched((prev) => ({ ...prev, email: true }))}
-        />
-        <FieldError message={fieldErrors.email} />
-      </div>
-      <div>
-        <Label htmlFor="phone">{copy.phone}</Label>
-        <Input
-          id="phone"
-          name="phone"
-          type="tel"
-          autoComplete="tel"
-          value={values.phone}
-          onChange={(e) => updateField("phone", e.target.value)}
-        />
-        <FieldError message={fieldErrors.phone} />
-      </div>
-      <div>
-        <Label htmlFor="subject">{copy.subject}</Label>
-        <Input
-          id="subject"
-          name="subject"
-          value={values.subject}
-          onChange={(e) => updateField("subject", e.target.value)}
-          onBlur={() => setTouched((prev) => ({ ...prev, subject: true }))}
-        />
-        <FieldError message={fieldErrors.subject} />
-      </div>
-      <div>
-        <Label htmlFor="message">{copy.message}</Label>
-        <Textarea
-          id="message"
-          name="message"
-          value={values.message}
-          onChange={(e) => updateField("message", e.target.value)}
-          onBlur={() => setTouched((prev) => ({ ...prev, message: true }))}
-        />
-        <FieldError message={fieldErrors.message} />
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div className="sm:col-span-2">
+          <Label htmlFor="name">{copy.name}</Label>
+          <Input
+            id="name"
+            name="name"
+            autoComplete="name"
+            value={values.name}
+            onChange={(e) => updateField("name", e.target.value)}
+            onBlur={() => setTouched((prev) => ({ ...prev, name: true }))}
+          />
+          <FieldError message={fieldErrors.name} />
+        </div>
+        <div>
+          <Label htmlFor="email">{copy.email}</Label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            value={values.email}
+            onChange={(e) => updateField("email", e.target.value)}
+            onBlur={() => setTouched((prev) => ({ ...prev, email: true }))}
+          />
+          <FieldError message={fieldErrors.email} />
+        </div>
+        <div>
+          <Label htmlFor="phone">{copy.phone}</Label>
+          <Input
+            id="phone"
+            name="phone"
+            type="tel"
+            autoComplete="tel"
+            value={values.phone}
+            onChange={(e) => updateField("phone", e.target.value)}
+          />
+          <FieldError message={fieldErrors.phone} />
+        </div>
+        <div className="sm:col-span-2">
+          <Label htmlFor="subject">{copy.subject}</Label>
+          <Input
+            id="subject"
+            name="subject"
+            value={values.subject}
+            onChange={(e) => updateField("subject", e.target.value)}
+            onBlur={() => setTouched((prev) => ({ ...prev, subject: true }))}
+          />
+          <FieldError message={fieldErrors.subject} />
+        </div>
+        <div className="sm:col-span-2">
+          <Label htmlFor="message">{copy.message}</Label>
+          <Textarea
+            id="message"
+            name="message"
+            value={values.message}
+            onChange={(e) => updateField("message", e.target.value)}
+            onBlur={() => setTouched((prev) => ({ ...prev, message: true }))}
+            className="min-h-40"
+          />
+          <FieldError message={fieldErrors.message} />
+        </div>
       </div>
 
       {success && !error ? (
@@ -208,7 +218,7 @@ export function ContactForm({ locale }: { locale: Locale }) {
         </p>
       ) : null}
 
-      <Button type="submit" disabled={!canSubmit}>
+      <Button type="submit" disabled={!canSubmit} className="w-full sm:w-auto">
         {pending ? copy.loading : copy.sendMessage}
       </Button>
     </form>

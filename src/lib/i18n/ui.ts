@@ -35,6 +35,9 @@ export const ui = {
     requestQuote: "Request a Quote",
     vision: "Vision",
     mission: "Mission",
+    previous: "Previous",
+    next: "Next",
+    pageOf: "Page {current} of {total}",
   },
   ar: {
     navCta: "اطلب عرض سعر",
@@ -70,6 +73,9 @@ export const ui = {
     requestQuote: "اطلب عرض سعر",
     vision: "الرؤية",
     mission: "الرسالة",
+    previous: "السابق",
+    next: "التالي",
+    pageOf: "صفحة {current} من {total}",
   },
 } as const;
 

@@ -1,7 +1,10 @@
+import type { ReactNode } from "react";
+import { MapPin, Phone, Clock, Mail, MessageCircle } from "lucide-react";
 import type { Locale } from "@/config/site";
 import type { ContactEmail, ContactSettings } from "@/types/database";
 import { pickLocalized, safeExternalUrl } from "@/lib/utils";
 import { t } from "@/lib/i18n/ui";
+import { Reveal } from "@/components/ui/motion";
 
 export function ContactInfo({
   locale,
@@ -23,126 +26,148 @@ export function ContactInfo({
       ? `https://maps.google.com/maps?q=${settings.latitude},${settings.longitude}&z=12&output=embed`
       : null;
 
-  const social = [
-    { label: "Facebook", href: safeExternalUrl(settings.facebook_url) },
-    { label: "Instagram", href: safeExternalUrl(settings.instagram_url) },
-    { label: "LinkedIn", href: safeExternalUrl(settings.linkedin_url) },
-    { label: "YouTube", href: safeExternalUrl(settings.youtube_url) },
-    { label: "X", href: safeExternalUrl(settings.x_url) },
-  ].filter((s) => s.href);
+  const rows = [
+    {
+      icon: MapPin,
+      label: copy.address,
+      content: (
+        <>
+          <span className="block font-medium text-text-dark">
+            {pickLocalized(settings, locale, "company_name")}
+          </span>
+          <span className="mt-1 block text-text-dark-muted">
+            {pickLocalized(settings, locale, "address")}
+          </span>
+        </>
+      ),
+    },
+    settings.phone
+      ? {
+          icon: Phone,
+          label: copy.phone,
+          content: (
+            <a
+              className="text-text-dark transition hover:text-gold"
+              href={`tel:${settings.phone.replace(/\s/g, "")}`}
+            >
+              {settings.phone}
+            </a>
+          ),
+        }
+      : null,
+    settings.whatsapp
+      ? {
+          icon: MessageCircle,
+          label: copy.whatsapp,
+          content: (
+            <a
+              className="text-text-dark transition hover:text-gold"
+              href={`https://wa.me/${settings.whatsapp.replace(/[^\d]/g, "")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {settings.whatsapp}
+            </a>
+          ),
+        }
+      : null,
+    {
+      icon: Clock,
+      label: copy.hours,
+      content: (
+        <span className="text-text-dark-muted">
+          {pickLocalized(settings, locale, "business_hours")}
+        </span>
+      ),
+    },
+  ].filter(Boolean) as Array<{
+    icon: typeof MapPin;
+    label: string;
+    content: ReactNode;
+  }>;
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold text-text-dark">
-          {pickLocalized(settings, locale, "page_title") ||
-            (locale === "ar" ? "تواصل معنا" : "Contact Us")}
+    <div className="space-y-10">
+      <Reveal>
+        <h2 className="text-2xl font-semibold tracking-tight text-text-dark sm:text-3xl">
+          {locale === "ar" ? "بيانات التواصل" : "Contact details"}
         </h2>
-        <p className="mt-2 text-text-dark-muted">
+        <p className="mt-3 max-w-xl text-base leading-relaxed text-text-dark-muted">
           {pickLocalized(settings, locale, "page_description")}
         </p>
-      </div>
+      </Reveal>
 
-      <dl className="space-y-4 text-sm">
-        <div>
-          <dt className="font-semibold text-text-dark">{copy.address}</dt>
-          <dd className="mt-1 text-text-dark-muted">
-            {pickLocalized(settings, locale, "company_name")}
-            <br />
-            {pickLocalized(settings, locale, "address")}
-          </dd>
-        </div>
-        {settings.phone ? (
-          <div>
-            <dt className="font-semibold text-text-dark">{copy.phone}</dt>
-            <dd className="mt-1">
-              <a
-                className="text-gold hover:text-gold-soft"
-                href={`tel:${settings.phone.replace(/\s/g, "")}`}
-              >
-                {settings.phone}
-              </a>
-            </dd>
-          </div>
-        ) : null}
-        {settings.whatsapp ? (
-          <div>
-            <dt className="font-semibold text-text-dark">{copy.whatsapp}</dt>
-            <dd className="mt-1">
-              <a
-                className="text-gold hover:text-gold-soft"
-                href={`https://wa.me/${settings.whatsapp.replace(/[^\d]/g, "")}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {settings.whatsapp}
-              </a>
-            </dd>
-          </div>
-        ) : null}
-        <div>
-          <dt className="font-semibold text-text-dark">{copy.hours}</dt>
-          <dd className="mt-1 text-text-dark-muted">
-            {pickLocalized(settings, locale, "business_hours")}
-          </dd>
-        </div>
-        <div>
-          <dt className="font-semibold text-text-dark">{copy.contactEmails}</dt>
-          <dd className="mt-2 space-y-2">
-            {emails.map((email) => (
-              <a
-                key={email.id}
-                href={`mailto:${email.email}`}
-                className="block text-text-dark-muted hover:text-gold"
-              >
-                <span className="font-medium text-text-dark">
-                  {pickLocalized(email, locale, "label")}:{" "}
-                </span>
-                {email.email}
-              </a>
-            ))}
-          </dd>
-        </div>
-      </dl>
+      <Reveal delay={0.06}>
+        <ul className="space-y-0 divide-y divide-steel/15 border-y border-steel/15">
+          {rows.map((row) => (
+            <li key={row.label} className="flex gap-4 py-5">
+              <row.icon
+                className="mt-0.5 size-5 shrink-0 text-gold"
+                aria-hidden
+              />
+              <div className="min-w-0">
+                <p className="text-xs font-semibold tracking-wide text-text-dark-muted uppercase">
+                  {row.label}
+                </p>
+                <div className="mt-1.5 text-sm sm:text-base">{row.content}</div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </Reveal>
 
-      {social.length ? (
-        <div>
-          <p className="text-sm font-semibold text-text-dark">{copy.followUs}</p>
-          <div className="mt-2 flex flex-wrap gap-3 text-sm">
-            {social.map((item) => (
-              <a
-                key={item.label}
-                href={item.href!}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gold hover:text-gold-soft"
-              >
-                {item.label}
-              </a>
-            ))}
+      {emails.length ? (
+        <Reveal delay={0.1}>
+          <div className="flex gap-4">
+            <Mail className="mt-0.5 size-5 shrink-0 text-gold" aria-hidden />
+            <div>
+              <p className="text-xs font-semibold tracking-wide text-text-dark-muted uppercase">
+                {copy.contactEmails}
+              </p>
+              <ul className="mt-3 space-y-2">
+                {emails.map((email) => (
+                  <li key={email.id}>
+                    <a
+                      href={`mailto:${email.email}`}
+                      className="group inline-flex flex-wrap items-baseline gap-x-2 text-sm sm:text-base"
+                    >
+                      <span className="font-medium text-text-dark">
+                        {pickLocalized(email, locale, "label")}
+                      </span>
+                      <span className="text-text-dark-muted transition group-hover:text-gold">
+                        {email.email}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-        </div>
+        </Reveal>
       ) : null}
 
       {embedSrc ? (
-        <div className="overflow-hidden rounded-xl border border-steel/20">
-          <iframe
-            title="Google Maps"
-            src={embedSrc}
-            className="h-64 w-full border-0"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
-        </div>
-      ) : mapUrl ? (
-        <a
-          href={mapUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex text-sm font-semibold text-gold"
-        >
-          Open in Google Maps
-        </a>
+        <Reveal delay={0.12}>
+          <div className="overflow-hidden rounded-2xl border border-steel/15">
+            <iframe
+              title="Google Maps"
+              src={embedSrc}
+              className="h-56 w-full border-0 sm:h-64"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+          {mapUrl ? (
+            <a
+              href={mapUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-flex text-sm font-semibold text-gold transition hover:text-gold-soft"
+            >
+              {locale === "ar" ? "فتح في خرائط جوجل" : "Open in Google Maps"}
+            </a>
+          ) : null}
+        </Reveal>
       ) : null}
     </div>
   );

@@ -7,7 +7,6 @@ import type {
   TimelineItem,
 } from "@/types/database";
 import { pickLocalized } from "@/lib/utils";
-import { SectionHeading } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/motion";
 import { t } from "@/lib/i18n/ui";
 
@@ -29,91 +28,118 @@ export function AboutContent({
   team: TeamMember[];
 }) {
   const copy = t(locale);
+  const title = intro
+    ? pickLocalized(intro, locale, "title")
+    : locale === "ar"
+      ? "من نحن"
+      : "About Us";
 
   return (
     <>
-      <section className="section-space">
-        <div className="container-page grid items-center gap-10 lg:grid-cols-2">
+      <section className="relative min-h-[70vh] overflow-hidden bg-bg text-text">
+        {intro?.image_url ? (
+          <Image
+            src={intro.image_url}
+            alt={
+              pickLocalized(intro, locale, "alt_text") ||
+              pickLocalized(intro, locale, "title")
+            }
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+        ) : null}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0d10] via-[#0b0d10]/72 to-[#0b0d10]/35" />
+        <div className="container-page relative flex min-h-[70vh] flex-col justify-end pb-14 pt-28 sm:pb-16 md:pb-20">
           <Reveal>
-            <SectionHeading
-              title={
-                intro
-                  ? pickLocalized(intro, locale, "title")
-                  : locale === "ar"
-                    ? "من نحن"
-                    : "About Us"
-              }
-              description={
-                intro ? pickLocalized(intro, locale, "subtitle") : undefined
-              }
-            />
-            <p className="mt-6 text-base leading-relaxed text-text-dark-muted md:text-lg">
-              {intro ? pickLocalized(intro, locale, "description") : null}
+            <p className="text-sm font-semibold tracking-[0.22em] text-gold-soft uppercase">
+              Falcon Design
             </p>
+            <h1 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight sm:text-5xl md:text-6xl">
+              {title}
+            </h1>
+            {intro ? (
+              <p className="mt-4 max-w-2xl text-base text-text-muted sm:text-lg">
+                {pickLocalized(intro, locale, "subtitle")}
+              </p>
+            ) : null}
           </Reveal>
-          {intro?.image_url ? (
-            <Reveal delay={0.08}>
-              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
-                <Image
-                  src={intro.image_url}
-                  alt={
-                    pickLocalized(intro, locale, "alt_text") ||
-                    pickLocalized(intro, locale, "title")
-                  }
-                  fill
-                  sizes="(max-width:1024px) 100vw, 50vw"
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            </Reveal>
-          ) : null}
         </div>
       </section>
 
-      <section className="border-y border-steel/15 bg-bg text-text">
-        <div className="container-page grid gap-8 py-14 md:grid-cols-2">
-          {vision ? (
+      {intro ? (
+        <section className="section-space">
+          <div className="container-page">
             <Reveal>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
-                {copy.vision}
-              </p>
-              <h2 className="mt-3 text-2xl font-semibold">
-                {pickLocalized(vision, locale, "title")}
-              </h2>
-              <p className="mt-4 leading-relaxed text-text-muted">
-                {pickLocalized(vision, locale, "description")}
-              </p>
+              <div className="mx-auto max-w-3xl text-center">
+                <div className="metallic-line mx-auto mb-8 w-24" />
+                <p className="text-lg leading-relaxed text-text-dark-muted sm:text-xl md:leading-8">
+                  {pickLocalized(intro, locale, "description")}
+                </p>
+              </div>
             </Reveal>
-          ) : null}
-          {mission ? (
-            <Reveal delay={0.06}>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
-                {copy.mission}
-              </p>
-              <h2 className="mt-3 text-2xl font-semibold">
-                {pickLocalized(mission, locale, "title")}
-              </h2>
-              <p className="mt-4 leading-relaxed text-text-muted">
-                {pickLocalized(mission, locale, "description")}
-              </p>
-            </Reveal>
-          ) : null}
-        </div>
-      </section>
+          </div>
+        </section>
+      ) : null}
+
+      {(vision || mission) && (
+        <section className="border-y border-steel/15 bg-bg text-text">
+          <div className="container-page grid gap-0 md:grid-cols-2">
+            {vision ? (
+              <Reveal>
+                <div className="border-steel/15 py-14 md:border-e md:pe-12 md:py-16">
+                  <p className="text-xs font-semibold tracking-[0.22em] text-gold uppercase">
+                    {copy.vision}
+                  </p>
+                  <h2 className="mt-4 text-2xl font-semibold sm:text-3xl">
+                    {pickLocalized(vision, locale, "title")}
+                  </h2>
+                  <p className="mt-5 max-w-md text-base leading-relaxed text-text-muted">
+                    {pickLocalized(vision, locale, "description")}
+                  </p>
+                </div>
+              </Reveal>
+            ) : null}
+            {mission ? (
+              <Reveal delay={0.06}>
+                <div className="py-14 md:ps-12 md:py-16">
+                  <p className="text-xs font-semibold tracking-[0.22em] text-gold uppercase">
+                    {copy.mission}
+                  </p>
+                  <h2 className="mt-4 text-2xl font-semibold sm:text-3xl">
+                    {pickLocalized(mission, locale, "title")}
+                  </h2>
+                  <p className="mt-5 max-w-md text-base leading-relaxed text-text-muted">
+                    {pickLocalized(mission, locale, "description")}
+                  </p>
+                </div>
+              </Reveal>
+            ) : null}
+          </div>
+        </section>
+      )}
 
       {values.length ? (
         <section className="section-space">
           <div className="container-page">
-            <SectionHeading title={copy.ourValues} />
-            <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            <Reveal>
+              <h2 className="text-2xl font-semibold tracking-tight text-text-dark sm:text-3xl md:text-4xl">
+                {copy.ourValues}
+              </h2>
+              <div className="metallic-line mt-5 w-20" />
+            </Reveal>
+            <div className="mt-12 grid gap-x-10 gap-y-12 sm:grid-cols-2">
               {values.map((value, index) => (
                 <Reveal key={value.id} delay={index * 0.04}>
-                  <article className="h-full rounded-xl border border-steel/15 bg-white p-5">
-                    <h3 className="text-lg font-semibold text-text-dark">
+                  <article className="relative ps-12">
+                    <span className="absolute start-0 top-0 text-3xl font-semibold text-gold/70">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <h3 className="text-xl font-semibold text-text-dark">
                       {pickLocalized(value, locale, "title")}
                     </h3>
-                    <p className="mt-3 text-sm leading-relaxed text-text-dark-muted">
+                    <p className="mt-3 text-sm leading-relaxed text-text-dark-muted sm:text-base">
                       {pickLocalized(value, locale, "description")}
                     </p>
                   </article>
@@ -125,19 +151,25 @@ export function AboutContent({
       ) : null}
 
       {timeline.length ? (
-        <section className="section-space bg-surface-muted/40">
+        <section className="section-space bg-[#12161c] text-text">
           <div className="container-page">
-            <SectionHeading title={copy.timeline} />
-            <ol className="mt-10 space-y-6 border-s border-gold/40 ps-6">
+            <Reveal>
+              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl md:text-4xl">
+                {copy.timeline}
+              </h2>
+              <div className="metallic-line mt-5 w-20" />
+            </Reveal>
+            <ol className="mt-12 grid gap-8 md:grid-cols-3">
               {timeline.map((item, index) => (
-                <Reveal key={item.id} delay={index * 0.04}>
-                  <li className="relative">
-                    <span className="absolute -start-[1.9rem] top-1.5 size-3 rounded-full bg-gold" />
-                    <p className="text-sm font-semibold text-gold">{item.year}</p>
-                    <h3 className="mt-1 text-lg font-semibold text-text-dark">
+                <Reveal key={item.id} delay={index * 0.05}>
+                  <li className="border-t border-gold/35 pt-6">
+                    <p className="text-sm font-semibold tracking-wide text-gold">
+                      {item.year}
+                    </p>
+                    <h3 className="mt-3 text-xl font-semibold">
                       {pickLocalized(item, locale, "title")}
                     </h3>
-                    <p className="mt-2 text-sm text-text-dark-muted">
+                    <p className="mt-3 text-sm leading-relaxed text-text-muted">
                       {pickLocalized(item, locale, "description")}
                     </p>
                   </li>
@@ -151,18 +183,25 @@ export function AboutContent({
       {team.length ? (
         <section className="section-space">
           <div className="container-page">
-            <SectionHeading title={copy.team} />
-            <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <Reveal>
+              <h2 className="text-2xl font-semibold tracking-tight text-text-dark sm:text-3xl md:text-4xl">
+                {copy.team}
+              </h2>
+              <div className="metallic-line mt-5 w-20" />
+            </Reveal>
+            <div className="mt-12 space-y-8">
               {team.map((member, index) => (
                 <Reveal key={member.id} delay={index * 0.04}>
-                  <article className="rounded-xl border border-steel/15 bg-white p-5">
-                    <h3 className="text-lg font-semibold text-text-dark">
-                      {pickLocalized(member, locale, "name")}
-                    </h3>
-                    <p className="mt-1 text-sm text-gold">
-                      {pickLocalized(member, locale, "position")}
-                    </p>
-                    <p className="mt-3 text-sm text-text-dark-muted">
+                  <article className="grid gap-3 border-b border-steel/15 pb-8 md:grid-cols-[minmax(0,0.4fr)_minmax(0,0.6fr)] md:gap-10">
+                    <div>
+                      <h3 className="text-xl font-semibold text-text-dark sm:text-2xl">
+                        {pickLocalized(member, locale, "name")}
+                      </h3>
+                      <p className="mt-2 text-sm font-medium text-gold">
+                        {pickLocalized(member, locale, "position")}
+                      </p>
+                    </div>
+                    <p className="text-sm leading-relaxed text-text-dark-muted sm:text-base">
                       {pickLocalized(member, locale, "bio")}
                     </p>
                   </article>

@@ -1,11 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { Locale } from "@/config/site";
 import type { Service, SiteSection } from "@/types/database";
-import { localizedPath, pickLocalized } from "@/lib/utils";
+import { pickLocalized } from "@/lib/utils";
 import { SectionHeading, EmptyState } from "@/components/ui/section";
 import { FilterTabs } from "@/components/ui/filter-tabs";
 import { Input } from "@/components/ui/form";
@@ -128,21 +127,6 @@ export function ServicesGrid({
             ))}
           </div>
         )}
-
-        <div className="mt-12 rounded-2xl border border-gold/25 bg-bg p-6 text-text sm:p-8">
-          <h2 className="text-xl font-semibold sm:text-2xl">
-            {copy.requestQuote}
-          </h2>
-          <p className="mt-2 text-sm text-text-muted sm:text-base">
-            {intro ? pickLocalized(intro, locale, "subtitle") : null}
-          </p>
-          <Link
-            href={localizedPath(locale, "/contact")}
-            className="mt-6 inline-flex cursor-pointer rounded-md bg-gold px-5 py-2.5 text-sm font-semibold text-text-dark transition hover:bg-gold-soft"
-          >
-            {copy.navCta}
-          </Link>
-        </div>
       </div>
     </section>
   );
