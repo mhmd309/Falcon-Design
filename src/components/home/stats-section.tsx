@@ -75,10 +75,10 @@ export function StatsSection({
   if (!stats.length) return null;
   return (
     <section className="border-y border-steel/15 bg-bg text-text">
-      <div className="container-page grid grid-cols-2 gap-6 py-10 md:grid-cols-4 md:py-14">
+      <div className="container-page grid grid-cols-2 place-items-center gap-6 py-10 md:grid-cols-4 md:py-14">
         {stats.map((stat, index) => (
-          <Reveal key={stat.id} delay={index * 0.05}>
-            <div className="text-center md:text-start">
+          <Reveal key={stat.id} delay={index * 0.05} className="w-full">
+            <div className="text-center">
               <p className="text-3xl font-semibold text-gold md:text-4xl">
                 <AnimatedValue
                   value={stat.value}
