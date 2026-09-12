@@ -23,18 +23,42 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL || "https://falcon-design.vercel.app",
   ),
   title: {
-    default: siteConfig.name,
+    default: `${siteConfig.nameAr} | أعمال الصلب والألمنيوم`,
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.tagline.ar,
+  applicationName: siteConfig.name,
+  keywords: [...siteConfig.keywords.ar, ...siteConfig.keywords.en],
+  authors: [{ name: siteConfig.name }],
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
+  formatDetection: {
+    telephone: true,
+    email: true,
+    address: true,
+  },
   icons: {
     icon: "/logo.png",
     shortcut: "/logo.png",
     apple: "/logo.png",
   },
+  manifest: "/manifest.webmanifest",
+  openGraph: {
+    type: "website",
+    siteName: siteConfig.name,
+    locale: "ar_AE",
+    alternateLocale: ["en_AE"],
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
-const themeBootScript = `(function(){try{var k='falcon-theme';var t=localStorage.getItem(k);if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();`;
+const themeBootScript = `(function(){try{var p=location.pathname;var loc=p==='/en'||p.indexOf('/en/')===0?'en':'ar';document.documentElement.lang=loc;document.documentElement.dir=loc==='ar'?'rtl':'ltr';var k='falcon-theme';var t=localStorage.getItem(k);if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();`;
 
 export default function RootLayout({
   children,

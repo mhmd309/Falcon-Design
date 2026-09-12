@@ -3,11 +3,12 @@ import type { Locale } from "@/config/site";
 import { ContactForm } from "@/components/contact/contact-form";
 import { ContactInfo } from "@/components/contact/contact-info";
 import { Reveal } from "@/components/ui/motion";
-import { getPageBySlug } from "@/lib/data";
+import { getPageBySlug, getSiteSettings } from "@/lib/data";
 import {
   JsonLd,
   breadcrumbJsonLd,
   buildPageMetadata,
+  contactPageJsonLd,
 } from "@/lib/seo/metadata";
 
 export async function generateMetadata({
@@ -27,6 +28,7 @@ export default async function ContactPage({
 }) {
   const { locale: localeParam } = await params;
   const locale = localeParam as Locale;
+  const settings = await getSiteSettings();
 
   return (
     <>
@@ -39,6 +41,7 @@ export default async function ContactPage({
           },
         ])}
       />
+      <JsonLd data={contactPageJsonLd(locale, settings.phone)} />
       <section className="relative overflow-hidden border-b border-steel/15 bg-bg text-text">
         <div
           className="pointer-events-none absolute inset-0 opacity-40"

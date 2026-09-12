@@ -1,8 +1,18 @@
 import type { Metadata } from "next";
 import type { Locale } from "@/config/site";
 import { getSiteUrl, siteConfig } from "@/config/site";
-import type { SitePage } from "@/types/content";
+import type { GalleryItem, Service, SitePage } from "@/types/content";
 import { absoluteUrl } from "@/lib/utils";
+
+function formatPageTitle(title: string, locale: Locale): string {
+  const brandNames = [siteConfig.name, siteConfig.nameAr];
+  const alreadyBranded = brandNames.some((name) =>
+    title.toLowerCase().includes(name.toLowerCase()),
+  );
+  if (alreadyBranded) return title;
+  const brand = locale === "ar" ? siteConfig.nameAr : siteConfig.name;
+  return `${title} | ${brand}`;
+}
 
 export function buildPageMetadata(
   locale: Locale,
@@ -16,10 +26,12 @@ export function buildPageMetadata(
   const canonical =
     page?.canonical_url || absoluteUrl(localizedPath);
 
-  const title =
+  const rawTitle =
     (locale === "ar" ? page?.seo_title_ar : page?.seo_title_en) ||
     (locale === "ar" ? page?.title_ar : page?.title_en) ||
-    siteConfig.name;
+    (locale === "ar" ? siteConfig.nameAr : siteConfig.name);
+
+  const title = formatPageTitle(rawTitle, locale);
 
   const description =
     (locale === "ar" ? page?.seo_description_ar : page?.seo_description_en) ||
@@ -30,13 +42,19 @@ export function buildPageMetadata(
   const ogDescription =
     (locale === "ar" ? page?.og_description_ar : page?.og_description_en) ||
     description;
-  const ogImage = page?.og_image || "/gallery/01.jpeg";
+  const ogImagePath = page?.og_image || "/gallery/01.jpeg";
+  const ogImageUrl = absoluteUrl(ogImagePath);
 
   return {
     title: {
-      absolute: title.includes(siteConfig.name) ? title : `${title} | ${siteConfig.name}`,
+      absolute: title,
     },
     description,
+    keywords: [...siteConfig.keywords[locale]],
+    authors: [{ name: siteConfig.name, url: siteUrl }],
+    creator: siteConfig.name,
+    publisher: siteConfig.name,
+    category: "construction",
     alternates: {
       canonical,
       languages: {
@@ -48,33 +66,56 @@ export function buildPageMetadata(
     openGraph: {
       type: "website",
       locale: locale === "ar" ? "ar_AE" : "en_AE",
+      alternateLocale: locale === "ar" ? ["en_AE"] : ["ar_AE"],
       url: absoluteUrl(localizedPath),
       siteName: siteConfig.name,
       title: ogTitle,
       description: ogDescription,
-      images: [{ url: absoluteUrl(ogImage) }],
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: ogTitle,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: ogTitle,
       description: ogDescription,
-      images: [absoluteUrl(ogImage)],
+      images: [ogImageUrl],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
     },
   };
 }
 
-export function organizationJsonLd(settings: {
+type OrgSettings = {
   company_name_en: string;
   company_name_ar: string;
   phone: string | null;
+  whatsapp?: string | null;
   address_en: string | null;
   address_ar: string | null;
+  logo_url?: string | null;
   facebook_url?: string | null;
   instagram_url?: string | null;
   linkedin_url?: string | null;
   youtube_url?: string | null;
   x_url?: string | null;
-}, locale: Locale) {
+};
+
+export function organizationJsonLd(settings: OrgSettings, locale: Locale) {
   const sameAs = [
     settings.facebook_url,
     settings.instagram_url,
@@ -82,32 +123,188 @@ export function organizationJsonLd(settings: {
     settings.youtube_url,
     settings.x_url,
   ].filter(Boolean);
+  const siteUrl = getSiteUrl();
+  const name =
+    locale === "ar" ? settings.company_name_ar : settings.company_name_en;
+  const description = siteConfig.tagline[locale];
+  const streetAddress =
+    locale === "ar" ? settings.address_ar : settings.address_en;
+  const logo = absoluteUrl(settings.logo_url || "/logo.png");
 
   return {
     "@context": "https://schema.org",
-    "@type": ["Organization", "LocalBusiness"],
-    name: locale === "ar" ? settings.company_name_ar : settings.company_name_en,
-    url: getSiteUrl(),
+    "@type": ["Organization", "LocalBusiness", "GeneralContractor"],
+    "@id": `${siteUrl}/#organization`,
+    name,
+    legalName: siteConfig.legalName,
+    alternateName: [
+      settings.company_name_en,
+      settings.company_name_ar,
+    ].filter((n) => n !== name),
+    url: siteUrl,
+    logo: {
+      "@type": "ImageObject",
+      url: logo,
+    },
+    image: logo,
+    description,
     telephone: settings.phone || undefined,
+    email: "falcondesign20@gmail.com",
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Al Ain",
-      addressRegion: "Abu Dhabi",
-      addressCountry: "AE",
-      streetAddress:
-        locale === "ar" ? settings.address_ar : settings.address_en,
+      streetAddress: streetAddress || undefined,
+      addressLocality: siteConfig.geo.locality,
+      addressRegion: siteConfig.geo.region,
+      addressCountry: siteConfig.geo.country,
     },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: siteConfig.geo.latitude,
+      longitude: siteConfig.geo.longitude,
+    },
+    areaServed: [
+      {
+        "@type": "City",
+        name: "Al Ain",
+      },
+      {
+        "@type": "AdministrativeArea",
+        name: "Abu Dhabi",
+      },
+      {
+        "@type": "Country",
+        name: "United Arab Emirates",
+      },
+    ],
+    priceRange: "$$",
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ],
+        opens: "08:00",
+        closes: "18:00",
+      },
+    ],
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        telephone: settings.phone || undefined,
+        contactType: "customer service",
+        areaServed: "AE",
+        availableLanguage: ["ar", "en"],
+      },
+      settings.whatsapp
+        ? {
+            "@type": "ContactPoint",
+            telephone: settings.whatsapp,
+            contactType: "WhatsApp",
+            areaServed: "AE",
+            availableLanguage: ["ar", "en"],
+          }
+        : null,
+    ].filter(Boolean),
     sameAs: sameAs.length ? sameAs : undefined,
+    knowsAbout: [
+      "Steel structure erection",
+      "Aluminum fabrication",
+      "Metal works",
+      "General contracting",
+    ],
   };
 }
 
 export function websiteJsonLd(locale: Locale) {
+  const siteUrl = getSiteUrl();
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": `${siteUrl}/#website`,
     name: siteConfig.name,
-    url: `${getSiteUrl()}/${locale}`,
-    inLanguage: locale === "ar" ? "ar" : "en",
+    alternateName: siteConfig.nameAr,
+    url: `${siteUrl}/${locale}`,
+    inLanguage: locale === "ar" ? "ar-AE" : "en-AE",
+    publisher: {
+      "@id": `${siteUrl}/#organization`,
+    },
+    copyrightHolder: {
+      "@id": `${siteUrl}/#organization`,
+    },
+  };
+}
+
+export function contactPageJsonLd(locale: Locale, phone: string | null) {
+  const siteUrl = getSiteUrl();
+  return {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "@id": `${siteUrl}/${locale}/contact#contactpage`,
+    name: locale === "ar" ? "تواصل معنا" : "Contact",
+    url: `${siteUrl}/${locale}/contact`,
+    inLanguage: locale === "ar" ? "ar-AE" : "en-AE",
+    isPartOf: { "@id": `${siteUrl}/#website` },
+    about: { "@id": `${siteUrl}/#organization` },
+    mainEntity: {
+      "@type": "LocalBusiness",
+      "@id": `${siteUrl}/#organization`,
+      telephone: phone || undefined,
+    },
+  };
+}
+
+export function servicesItemListJsonLd(locale: Locale, services: Service[]) {
+  const siteUrl = getSiteUrl();
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "@id": `${siteUrl}/${locale}/services#servicelist`,
+    name: locale === "ar" ? "خدمات فالكون ديزاين" : "Falcon Design Services",
+    numberOfItems: services.length,
+    itemListElement: services.map((service, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "Service",
+        name: locale === "ar" ? service.title_ar : service.title_en,
+        description:
+          locale === "ar"
+            ? service.short_description_ar || service.description_ar
+            : service.short_description_en || service.description_en,
+        provider: { "@id": `${siteUrl}/#organization` },
+        areaServed: "AE",
+      },
+    })),
+  };
+}
+
+export function galleryJsonLd(locale: Locale, items: GalleryItem[]) {
+  const siteUrl = getSiteUrl();
+  return {
+    "@context": "https://schema.org",
+    "@type": "ImageGallery",
+    "@id": `${siteUrl}/${locale}/gallery#gallery`,
+    name:
+      locale === "ar"
+        ? "معرض مشاريع فالكون ديزاين"
+        : "Falcon Design Project Gallery",
+    url: `${siteUrl}/${locale}/gallery`,
+    inLanguage: locale === "ar" ? "ar-AE" : "en-AE",
+    isPartOf: { "@id": `${siteUrl}/#website` },
+    image: items.slice(0, 12).map((item) => ({
+      "@type": "ImageObject",
+      contentUrl: absoluteUrl(item.image_url),
+      name: locale === "ar" ? item.title_ar : item.title_en,
+      description:
+        locale === "ar"
+          ? item.description_ar || item.alt_text_ar
+          : item.description_en || item.alt_text_en,
+    })),
   };
 }
 
@@ -127,7 +324,11 @@ export function breadcrumbJsonLd(
   };
 }
 
-export function JsonLd({ data }: { data: Record<string, unknown> | Record<string, unknown>[] }) {
+export function JsonLd({
+  data,
+}: {
+  data: Record<string, unknown> | Record<string, unknown>[];
+}) {
   return (
     <script
       type="application/ld+json"

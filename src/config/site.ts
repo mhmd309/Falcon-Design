@@ -1,11 +1,37 @@
 export const siteConfig = {
   name: "Falcon Design",
+  nameAr: "فالكون ديزاين",
   legalName: "Falcon Design General Contracting — Sole Proprietorship",
   defaultLocale: "ar" as const,
   locales: ["ar", "en"] as const,
   tagline: {
     en: "Where Proven Mastery Meets Structural Innovation",
     ar: "حيث تلتقي الخبرة المثبتة بالابتكار الإنشائي",
+  },
+  keywords: {
+    en: [
+      "Falcon Design",
+      "steel fabrication UAE",
+      "aluminum works Al Ain",
+      "steel structure erection",
+      "metal works Abu Dhabi",
+      "general contracting Al Ain",
+    ],
+    ar: [
+      "فالكون ديزاين",
+      "أعمال الصلب الإمارات",
+      "أعمال الألمنيوم العين",
+      "هياكل فولاذية",
+      "أعمال معدنية أبوظبي",
+      "مقاولات عامة العين",
+    ],
+  },
+  geo: {
+    latitude: 24.2075,
+    longitude: 55.7447,
+    locality: "Al Ain",
+    region: "Abu Dhabi",
+    country: "AE",
   },
 } as const;
 

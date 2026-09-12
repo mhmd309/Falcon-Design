@@ -6,6 +6,7 @@ import {
   JsonLd,
   breadcrumbJsonLd,
   buildPageMetadata,
+  servicesItemListJsonLd,
 } from "@/lib/seo/metadata";
 
 export async function generateMetadata({
@@ -41,6 +42,7 @@ export default async function ServicesPage({
           },
         ])}
       />
+      <JsonLd data={servicesItemListJsonLd(locale, services)} />
       <ServicesGrid locale={locale} services={services} intro={intro} />
     </>
   );

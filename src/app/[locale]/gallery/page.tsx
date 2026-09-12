@@ -10,6 +10,7 @@ import {
   JsonLd,
   breadcrumbJsonLd,
   buildPageMetadata,
+  galleryJsonLd,
 } from "@/lib/seo/metadata";
 
 export async function generateMetadata({
@@ -45,6 +46,7 @@ export default async function GalleryPage({
           },
         ])}
       />
+      <JsonLd data={galleryJsonLd(locale, items)} />
       <GalleryGrid locale={locale} items={items} categories={categories} />
     </>
   );

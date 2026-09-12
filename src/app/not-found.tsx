@@ -1,5 +1,11 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
+
+export const metadata: Metadata = {
+  title: "Page not found | Falcon Design",
+  robots: { index: false, follow: true },
+};
 
 export default function NotFound() {
   return (

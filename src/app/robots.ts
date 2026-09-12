@@ -10,7 +10,13 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
         disallow: ["/api/"],
       },
+      {
+        userAgent: "Googlebot",
+        allow: "/",
+        disallow: ["/api/"],
+      },
     ],
+    host: siteUrl,
     sitemap: `${siteUrl}/sitemap.xml`,
   };
 }
