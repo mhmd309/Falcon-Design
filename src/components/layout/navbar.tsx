@@ -95,7 +95,7 @@ export function Navbar({
               </Link>
             ))}
           </nav>
-          <div className="mt-4 flex items-center justify-end gap-3">
+          <div className="mt-4 flex items-center justify-start gap-3">
             <Link
               href={localizedPath(locale, "/contact")}
               className="rounded-md bg-gold px-4 py-2 text-sm font-semibold text-[#0b0d10]"
