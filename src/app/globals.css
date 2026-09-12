@@ -25,6 +25,9 @@
   --page-bg-b: #eef1f5;
   --page-glow-1: rgba(198, 161, 91, 0.12);
   --page-glow-2: rgba(61, 70, 84, 0.18);
+  --scrollbar-track: #e8ecf0;
+  --scrollbar-thumb: #c6a15b;
+  --scrollbar-thumb-hover: #b08d4a;
   --font-en: var(--font-beiruti), var(--font-roboto), "Beiruti", "Roboto", sans-serif;
   --font-ar: var(--font-beiruti), "Beiruti", sans-serif;
 }
@@ -52,6 +55,9 @@
   --page-bg-b: #12161c;
   --page-glow-1: rgba(198, 161, 91, 0.1);
   --page-glow-2: rgba(61, 70, 84, 0.35);
+  --scrollbar-track: #12161c;
+  --scrollbar-thumb: #c6a15b;
+  --scrollbar-thumb-hover: #d4b87a;
 }
 
 @theme inline {
@@ -79,6 +85,8 @@
 
 * {
   box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
 html {
@@ -149,6 +157,43 @@ button:disabled {
 .metallic-line {
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+/* Custom scrollbar — Falcon Design */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    var(--gold-soft) 0%,
+    var(--scrollbar-thumb) 50%,
+    #9a7a3d 100%
+  );
+  border-radius: 999px;
+  border: 2px solid var(--scrollbar-track);
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    var(--scrollbar-thumb-hover) 0%,
+    var(--gold) 100%
+  );
+  border: 2px solid var(--scrollbar-track);
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-corner {
+  background: var(--scrollbar-track);
 }
 
 @media (prefers-reduced-motion: reduce) {
