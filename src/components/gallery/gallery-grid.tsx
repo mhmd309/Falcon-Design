@@ -123,11 +123,6 @@ export function GalleryGrid({
                     loading="lazy"
                   />
                 </span>
-                <span className="block px-4 py-3">
-                  <span className="line-clamp-1 text-sm font-semibold text-text-dark">
-                    {pickLocalized(item, locale, "title")}
-                  </span>
-                </span>
               </button>
             ))}
           </div>
