@@ -6,14 +6,33 @@ import {
   checkRateLimit,
   contactFormSchema,
 } from "@/lib/validation/schemas";
+import { resolveLocale, v } from "@/lib/i18n/validation";
 
 export async function POST(request: Request) {
+  let locale = resolveLocale(null);
+
   try {
     const body = await request.json();
+    locale = resolveLocale(
+      typeof body?.locale === "string" ? body.locale : null,
+    );
+    const messages = v(locale);
+
     const parsed = contactFormSchema.safeParse(body);
     if (!parsed.success) {
+      const fieldErrors: Record<string, string> = {};
+      for (const issue of parsed.error.issues) {
+        const key = String(issue.path[0] || "");
+        if (!key || fieldErrors[key]) continue;
+        if (key === "email") fieldErrors[key] = messages.emailInvalid;
+        else if (key === "name") fieldErrors[key] = messages.nameRequired;
+        else if (key === "subject") fieldErrors[key] = messages.subjectRequired;
+        else if (key === "message") fieldErrors[key] = messages.messageTooShort;
+        else fieldErrors[key] = messages.required;
+      }
+
       return NextResponse.json(
-        { error: "Invalid form submission." },
+        { error: messages.invalidForm, fieldErrors },
         { status: 400 },
       );
     }
@@ -26,18 +45,17 @@ export async function POST(request: Request) {
     const ipHash = createHash("sha256").update(forwarded).digest("hex");
     const rate = checkRateLimit(`contact:${ipHash}`, 5, 60_000);
     if (!rate.allowed) {
-      return NextResponse.json(
-        { error: "Too many requests. Please try again later." },
-        { status: 429 },
-      );
+      return NextResponse.json({ error: messages.rateLimit }, { status: 429 });
     }
 
     if (!isSupabaseConfigured()) {
-      // Graceful degradation for local demo without Supabase
       return NextResponse.json({
         ok: true,
         persisted: false,
-        message: "Received. Connect Supabase to persist messages.",
+        message:
+          locale === "ar"
+            ? "تم الاستلام. اربط Supabase لحفظ الرسائل."
+            : "Received. Connect Supabase to persist messages.",
       });
     }
 
@@ -48,22 +66,19 @@ export async function POST(request: Request) {
       phone: parsed.data.phone || null,
       subject: parsed.data.subject,
       message: parsed.data.message,
-      locale: parsed.data.locale || null,
+      locale: parsed.data.locale || locale,
       ip_hash: ipHash,
       status: "new",
     });
 
     if (error) {
-      return NextResponse.json(
-        { error: "Unable to send your message right now." },
-        { status: 500 },
-      );
+      return NextResponse.json({ error: messages.sendFailed }, { status: 500 });
     }
 
     return NextResponse.json({ ok: true, persisted: true });
   } catch {
     return NextResponse.json(
-      { error: "Unable to send your message right now." },
+      { error: v(locale).sendFailed },
       { status: 500 },
     );
   }

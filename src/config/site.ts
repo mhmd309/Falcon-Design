@@ -1,8 +1,8 @@
 export const siteConfig = {
   name: "Falcon Design",
   legalName: "Falcon Design General Contracting — Sole Proprietorship",
-  defaultLocale: "en" as const,
-  locales: ["en", "ar"] as const,
+  defaultLocale: "ar" as const,
+  locales: ["ar", "en"] as const,
   tagline: {
     en: "Where Proven Mastery Meets Structural Innovation",
     ar: "حيث تلتقي الخبرة المثبتة بالابتكار الإنشائي",

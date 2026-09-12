@@ -32,7 +32,7 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) — middleware redirects `/` → `/en`.
+Open [http://localhost:3000](http://localhost:3000) — middleware redirects `/` → `/ar`.
 
 ## Environment variables
 

@@ -1,7 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { siteConfig } from "@/config/site";
 import { createClient } from "@/lib/supabase/client";
+import { v } from "@/lib/i18n/validation";
 import { cn, isSupabaseConfigured } from "@/lib/utils";
 import { imageUploadMetaSchema } from "@/lib/validation/schemas";
 import { ImagePlus, Loader2, X } from "lucide-react";
@@ -30,6 +32,7 @@ export function ImageUploader({
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const configured = isSupabaseConfigured();
+  const messages = v(siteConfig.defaultLocale);
 
   async function handleFile(file: File) {
     setError(null);
@@ -38,12 +41,12 @@ export function ImageUploader({
       size: file.size,
     });
     if (!parsed.success) {
-      setError("Invalid file. Use JPEG, PNG, WebP, GIF, or AVIF under 10 MB.");
+      setError(messages.invalidFile);
       return;
     }
 
     if (!configured) {
-      setError("Upload requires Supabase configuration.");
+      setError(messages.uploadRequiresSupabase);
       return;
     }
 
@@ -62,7 +65,7 @@ export function ImageUploader({
       const { data } = supabase.storage.from(bucket).getPublicUrl(path);
       onChange(data.publicUrl);
     } catch {
-      setError("Upload failed. Please try again.");
+      setError(messages.uploadFailed);
     } finally {
       setUploading(false);
     }

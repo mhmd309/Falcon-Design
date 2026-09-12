@@ -5,9 +5,11 @@ import type { Locale } from "@/config/site";
 import { Button } from "@/components/ui/button";
 import { FieldError, Input, Label, Textarea } from "@/components/ui/form";
 import { t } from "@/lib/i18n/ui";
+import { v } from "@/lib/i18n/validation";
 
 export function ContactForm({ locale }: { locale: Locale }) {
   const copy = t(locale);
+  const messages = v(locale);
   const [pending, setPending] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -32,10 +34,21 @@ export function ContactForm({ locale }: { locale: Locale }) {
     };
 
     const errors: Record<string, string> = {};
-    if (payload.name.trim().length < 2) errors.name = "Required";
-    if (!payload.email.includes("@")) errors.email = "Invalid email";
-    if (payload.subject.trim().length < 2) errors.subject = "Required";
-    if (payload.message.trim().length < 10) errors.message = "Too short";
+    if (payload.name.trim().length < 2) {
+      errors.name = messages.nameRequired;
+    }
+    if (!payload.email.trim()) {
+      errors.email = messages.emailRequired;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email.trim())) {
+      errors.email = messages.emailInvalid;
+    }
+    if (payload.subject.trim().length < 2) {
+      errors.subject = messages.subjectRequired;
+    }
+    if (payload.message.trim().length < 10) {
+      errors.message = messages.messageTooShort;
+    }
+
     if (Object.keys(errors).length) {
       setFieldErrors(errors);
       setPending(false);
@@ -48,8 +61,16 @@ export function ContactForm({ locale }: { locale: Locale }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
+      const data = (await res.json().catch(() => null)) as {
+        error?: string;
+        fieldErrors?: Record<string, string>;
+      } | null;
+
       if (!res.ok) {
-        setError(copy.formError);
+        if (data?.fieldErrors) {
+          setFieldErrors(data.fieldErrors);
+        }
+        setError(data?.error || copy.formError);
       } else {
         setSuccess(true);
         e.currentTarget.reset();
@@ -66,8 +87,13 @@ export function ContactForm({ locale }: { locale: Locale }) {
       onSubmit={onSubmit}
       className="relative space-y-4 rounded-xl border border-steel/15 bg-white p-6"
       noValidate
+      lang={locale}
+      dir={locale === "ar" ? "rtl" : "ltr"}
     >
-      <div className="pointer-events-none absolute -left-[9999px] h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
+      <div
+        className="pointer-events-none absolute -left-[9999px] h-0 w-0 overflow-hidden opacity-0"
+        aria-hidden="true"
+      >
         <Label htmlFor="website">Website</Label>
         <Input id="website" name="website" tabIndex={-1} autoComplete="off" />
       </div>
@@ -79,12 +105,19 @@ export function ContactForm({ locale }: { locale: Locale }) {
       </div>
       <div>
         <Label htmlFor="email">{copy.email}</Label>
-        <Input id="email" name="email" type="email" required autoComplete="email" />
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          required
+          autoComplete="email"
+        />
         <FieldError message={fieldErrors.email} />
       </div>
       <div>
         <Label htmlFor="phone">{copy.phone}</Label>
         <Input id="phone" name="phone" type="tel" autoComplete="tel" />
+        <FieldError message={fieldErrors.phone} />
       </div>
       <div>
         <Label htmlFor="subject">{copy.subject}</Label>

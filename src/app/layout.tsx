@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     default: siteConfig.name,
     template: `%s | ${siteConfig.name}`,
   },
-  description: siteConfig.tagline.en,
+  description: siteConfig.tagline.ar,
 };
 
 export default function RootLayout({
@@ -34,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="ar" suppressHydrationWarning>
       <body className={`${beiruti.variable} ${roboto.variable} antialiased`}>
         {children}
       </body>

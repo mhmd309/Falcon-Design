@@ -42,7 +42,7 @@ export function buildPageMetadata(
       languages: {
         en: alternateEn,
         ar: alternateAr,
-        "x-default": alternateEn,
+        "x-default": alternateAr,
       },
     },
     openGraph: {

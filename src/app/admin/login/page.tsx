@@ -2,7 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/form";
+import { siteConfig } from "@/config/site";
 import { createClient } from "@/lib/supabase/client";
+import { v } from "@/lib/i18n/validation";
 import { isSupabaseConfigured } from "@/lib/utils";
 import { Building2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -10,6 +12,7 @@ import { useState } from "react";
 
 export default function AdminLoginPage() {
   const router = useRouter();
+  const messages = v(siteConfig.defaultLocale);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -20,8 +23,17 @@ export default function AdminLoginPage() {
     e.preventDefault();
     setError(null);
 
+    if (!email.trim()) {
+      setError(messages.emailFieldRequired);
+      return;
+    }
+    if (!password) {
+      setError(messages.passwordRequired);
+      return;
+    }
+
     if (!configured) {
-      setError("Supabase is not configured. Add environment variables to enable login.");
+      setError(messages.supabaseNotConfigured);
       return;
     }
 
@@ -34,14 +46,14 @@ export default function AdminLoginPage() {
       });
 
       if (signInError) {
-        setError("Invalid email or password.");
+        setError(messages.invalidCredentials);
         return;
       }
 
       router.push("/admin");
       router.refresh();
     } catch {
-      setError("Unable to sign in. Please try again.");
+      setError(messages.signInFailed);
     } finally {
       setLoading(false);
     }

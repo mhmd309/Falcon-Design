@@ -15,7 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         languages: {
           en: `${siteUrl}/en${path}`,
           ar: `${siteUrl}/ar${path}`,
-          "x-default": `${siteUrl}/en${path}`,
+          "x-default": `${siteUrl}/ar${path}`,
         },
       },
     })),
