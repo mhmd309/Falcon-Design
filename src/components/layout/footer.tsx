@@ -43,7 +43,7 @@ export function Footer({
 
   return (
     <footer className="bg-[#0b0d10] text-text">
-      <div className="container-page grid gap-12 py-20 sm:py-24 md:grid-cols-2 lg:grid-cols-4 lg:gap-16">
+      <div className="container-page grid gap-12 py-20 sm:py-24 md:grid-cols-2 lg:grid-cols-[1.1fr_1fr_1fr_1.1fr] lg:gap-x-20 lg:gap-y-16">
         <div>
           <p className="text-lg font-semibold tracking-[0.08em]">
             <span className="text-gold">FALCON</span> DESIGN
