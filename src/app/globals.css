@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0b0d10;
+  --bg-elevated: #12161c;
+  --bg-soft: #1a2029;
+  --surface: #f4f6f8;
+  --surface-muted: #e8ecf0;
+  --text: #f3f5f7;
+  --text-muted: #a8b0bb;
+  --text-dark: #12161c;
+  --text-dark-muted: #5b6572;
+  --steel: #8a93a0;
+  --steel-dark: #3d4654;
+  --gold: #c6a15b;
+  --gold-soft: #d4b87a;
+  --border: rgba(198, 161, 91, 0.22);
+  --danger: #c45c5c;
+  --success: #3f8f6b;
+  --radius: 0.75rem;
+  --font-en: var(--font-beiruti), var(--font-roboto), "Beiruti", "Roboto", sans-serif;
+  --font-ar: var(--font-beiruti), "Beiruti", sans-serif;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-bg-soft: var(--bg-soft);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-text-dark: var(--text-dark);
+  --color-text-dark-muted: var(--text-dark-muted);
+  --color-steel: var(--steel);
+  --color-steel-dark: var(--steel-dark);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-border: var(--border);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+  --font-sans: var(--font-en);
+  --font-arabic: var(--font-ar);
+  --font-family-beiruti: "Beiruti", var(--font-beiruti), sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text-dark);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(198, 161, 91, 0.12), transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, rgba(61, 70, 84, 0.18), transparent 50%),
+    linear-gradient(180deg, #f7f8fa 0%, #eef1f5 100%);
+  font-family: "Beiruti", var(--font-beiruti), var(--font-roboto), sans-serif;
+}
+
+html[lang="ar"] body,
+html[dir="rtl"] body {
+  font-family: "Beiruti", var(--font-beiruti), sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: rgba(198, 161, 91, 0.35);
+}
+
+.container-page {
+  width: min(1180px, calc(100% - 1.25rem));
+  margin-inline: auto;
+}
+
+@media (min-width: 640px) {
+  .container-page {
+    width: min(1180px, calc(100% - 2rem));
+  }
+}
+
+.section-space {
+  padding-block: clamp(2.75rem, 5.5vw, 6rem);
+}
+
+button,
+[role="tab"],
+a[href] {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+.metallic-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
