@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createHash } from "crypto";
+import { sendContactEmail } from "@/lib/email/send-contact";
 import { checkRateLimit, contactFormSchema } from "@/lib/validation/schemas";
 import { resolveLocale, v } from "@/lib/i18n/validation";
 
@@ -43,13 +44,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: messages.rateLimit }, { status: 429 });
     }
 
-    // Static site: validated successfully (no database persistence).
-    console.info("[contact]", {
-      locale,
-      name: parsed.data.name,
-      email: parsed.data.email,
-      subject: parsed.data.subject,
-    });
+    const sent = await sendContactEmail(parsed.data);
+    if (!sent.ok) {
+      const error =
+        sent.reason === "not_configured" || sent.reason === "no_recipients"
+          ? locale === "ar"
+            ? "إرسال البريد غير مُعدّ. أضف إعدادات SMTP أو Resend."
+            : "Email delivery is not configured. Add SMTP or Resend settings."
+          : messages.sendFailed;
+
+      return NextResponse.json({ error }, { status: 500 });
+    }
 
     return NextResponse.json({ ok: true });
   } catch {

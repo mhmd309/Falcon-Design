@@ -10,12 +10,12 @@ Content is **static in code** (no database / no admin CMS). Edit `src/lib/data/c
 - React 19 + Tailwind CSS 4
 - Framer Motion + Lucide React
 - Zod (contact form validation)
+- Nodemailer / Resend (contact email delivery)
 
 ## Pages
 
-- Home, About, Services, Gallery, **Certificates**, Contact
+- Home, About, Services, Gallery, Certificates, Contact
 - Locales: `/ar/*` (default) and `/en/*` with RTL/LTR
-- Contact form: client + API validation, honeypot, rate limiting
 
 ## Setup
 
@@ -27,11 +27,22 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) — redirects to `/ar`.
 
-Optional env:
+## Contact form email delivery
+
+Add SMTP (or Resend) credentials in `.env.local`.
+
+Gmail: enable 2FA, create an App Password, then set:
 
 ```env
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
+CONTACT_TO_EMAIL=falcondesign20@gmail.com
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=falcondesign20@gmail.com
+SMTP_PASS=your-app-password
+CONTACT_FROM_EMAIL=falcondesign20@gmail.com
 ```
+
+Without these, the form validates but cannot deliver mail.
 
 ## Editing content
 
@@ -39,10 +50,8 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 |------|--------|
 | Company copy, services, gallery metadata, emails, certificates | `src/lib/data/content.ts` |
 | Gallery photos | `public/gallery/*.jpeg` |
-| Certificate images | `public/certificates/*` (replace SVGs with real scans) |
+| Certificate images | `public/certificates/*` |
 | Navigation labels | `src/config/site.ts` |
-
-Contact emails are listed in `contactEmails` inside `content.ts` — edit them manually there.
 
 ## Scripts
 
