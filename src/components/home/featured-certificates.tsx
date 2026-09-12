@@ -53,7 +53,7 @@ export function FeaturedCertificates({
                     className="object-contain transition duration-500 group-hover:scale-[1.02]"
                   />
                 </span>
-                <span className="block border-t border-steel/15 bg-card px-4 py-3 text-sm font-semibold text-text-dark">
+                <span className="block border-t border-steel/15 bg-card px-4 py-3 text-center text-sm font-semibold text-text-dark">
                   {pickLocalized(item, locale, "title")}
                 </span>
               </Link>

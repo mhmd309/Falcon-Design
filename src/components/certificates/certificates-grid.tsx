@@ -83,7 +83,7 @@ export function CertificatesGrid({
                         className="object-contain transition duration-500 group-hover:scale-[1.02]"
                       />
                     </span>
-                    <span className="block space-y-1 border-t border-steel/15 bg-card px-4 py-4">
+                    <span className="block space-y-1 border-t border-steel/15 bg-card px-4 py-4 text-center">
                       <span className="block text-sm font-semibold text-text-dark">
                         {pickLocalized(item, locale, "title")}
                       </span>
