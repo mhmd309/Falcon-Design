@@ -1,11 +1,14 @@
 @import "tailwindcss";
 
-:root {
+:root,
+[data-theme="light"] {
+  color-scheme: light;
   --bg: #0b0d10;
   --bg-elevated: #12161c;
   --bg-soft: #1a2029;
   --surface: #f4f6f8;
   --surface-muted: #e8ecf0;
+  --card: #ffffff;
   --text: #f3f5f7;
   --text-muted: #a8b0bb;
   --text-dark: #12161c;
@@ -18,8 +21,37 @@
   --danger: #c45c5c;
   --success: #3f8f6b;
   --radius: 0.75rem;
+  --page-bg-a: #f7f8fa;
+  --page-bg-b: #eef1f5;
+  --page-glow-1: rgba(198, 161, 91, 0.12);
+  --page-glow-2: rgba(61, 70, 84, 0.18);
   --font-en: var(--font-beiruti), var(--font-roboto), "Beiruti", "Roboto", sans-serif;
   --font-ar: var(--font-beiruti), "Beiruti", sans-serif;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #07090c;
+  --bg-elevated: #10151c;
+  --bg-soft: #171d26;
+  --surface: #12161c;
+  --surface-muted: #1a2029;
+  --card: #151a22;
+  --text: #f3f5f7;
+  --text-muted: #a8b0bb;
+  --text-dark: #f3f5f7;
+  --text-dark-muted: #a8b0bb;
+  --steel: #7a8492;
+  --steel-dark: #c6a15b;
+  --gold: #c6a15b;
+  --gold-soft: #d4b87a;
+  --border: rgba(198, 161, 91, 0.3);
+  --danger: #c45c5c;
+  --success: #3f8f6b;
+  --page-bg-a: #0b0d10;
+  --page-bg-b: #12161c;
+  --page-glow-1: rgba(198, 161, 91, 0.1);
+  --page-glow-2: rgba(61, 70, 84, 0.35);
 }
 
 @theme inline {
@@ -28,6 +60,7 @@
   --color-bg-soft: var(--bg-soft);
   --color-surface: var(--surface);
   --color-surface-muted: var(--surface-muted);
+  --color-card: var(--card);
   --color-text: var(--text);
   --color-text-muted: var(--text-muted);
   --color-text-dark: var(--text-dark);
@@ -58,10 +91,11 @@ body {
   min-height: 100vh;
   color: var(--text-dark);
   background:
-    radial-gradient(1200px 600px at 10% -10%, rgba(198, 161, 91, 0.12), transparent 55%),
-    radial-gradient(900px 500px at 100% 0%, rgba(61, 70, 84, 0.18), transparent 50%),
-    linear-gradient(180deg, #f7f8fa 0%, #eef1f5 100%);
+    radial-gradient(1200px 600px at 10% -10%, var(--page-glow-1), transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, var(--page-glow-2), transparent 50%),
+    linear-gradient(180deg, var(--page-bg-a) 0%, var(--page-bg-b) 100%);
   font-family: "Beiruti", var(--font-beiruti), var(--font-roboto), sans-serif;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 html[lang="ar"] body,

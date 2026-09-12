@@ -39,7 +39,7 @@ export function FilterTabs({
               "cursor-pointer rounded-md px-3.5 py-2 text-sm font-medium transition",
               active
                 ? "bg-bg text-gold shadow-sm"
-                : "border border-steel/25 bg-white text-text-dark hover:border-gold/40 hover:text-steel-dark",
+                : "border border-steel/25 bg-card text-text-dark hover:border-gold/40 hover:text-steel-dark",
             )}
           >
             {tab.label}

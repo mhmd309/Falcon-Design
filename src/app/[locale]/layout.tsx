@@ -4,6 +4,7 @@ import { localeDirection, siteConfig, type Locale } from "@/config/site";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { LocaleHtmlAttributes } from "@/components/layout/locale-html";
+import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import {
   getContactEmails,
   getContactSettings,
@@ -47,6 +48,7 @@ export default async function LocaleLayout({
         contact={contact}
         emails={emails}
       />
+      <ScrollToTop locale={locale} />
     </div>
   );
 }

@@ -17,7 +17,7 @@ export function Label({
 }
 
 const fieldClass =
-  "w-full rounded-md border border-steel/25 bg-white px-3 py-2.5 text-sm text-text-dark placeholder:text-text-dark-muted/70 focus:border-gold focus:ring-2 focus:ring-gold/20 disabled:cursor-not-allowed disabled:opacity-60";
+  "w-full rounded-md border border-steel/25 bg-card px-3 py-2.5 text-sm text-text-dark placeholder:text-text-dark-muted/70 focus:border-gold focus:ring-2 focus:ring-gold/20 disabled:cursor-not-allowed disabled:opacity-60";
 
 export function Input({
   className,

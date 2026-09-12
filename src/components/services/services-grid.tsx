@@ -98,7 +98,7 @@ export function ServicesGrid({
             {filtered.map((service) => (
               <article
                 key={service.id}
-                className="overflow-hidden rounded-xl border border-steel/15 bg-white shadow-sm"
+                className="overflow-hidden rounded-xl border border-steel/15 bg-card shadow-sm"
               >
                 <div className="relative aspect-[16/10] bg-surface-muted">
                   {service.image_url ? (

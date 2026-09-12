@@ -51,7 +51,7 @@ export function FeaturedServices({
               <Reveal key={service.id} delay={index * 0.06}>
                 <article
                   className={cn(
-                    "group flex h-full flex-col overflow-hidden rounded-xl border border-steel/15 bg-white shadow-sm transition duration-300",
+                    "group flex h-full flex-col overflow-hidden rounded-xl border border-steel/15 bg-card shadow-sm transition duration-300",
                     "hover:scale-[1.02] hover:border-gold/50 hover:shadow-[0_16px_40px_rgba(198,161,91,0.12)]",
                   )}
                 >

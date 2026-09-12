@@ -40,6 +40,9 @@ export const ui = {
     previous: "Previous",
     next: "Next",
     pageOf: "Page {current} of {total}",
+    backToTop: "Back to top",
+    themeLight: "Light mode",
+    themeDark: "Dark mode",
   },
   ar: {
     navCta: "اطلب عرض سعر",
@@ -80,6 +83,9 @@ export const ui = {
     previous: "السابق",
     next: "التالي",
     pageOf: "صفحة {current} من {total}",
+    backToTop: "الذهاب إلى الأعلى",
+    themeLight: "الوضع الفاتح",
+    themeDark: "الوضع الداكن",
   },
 } as const;
 

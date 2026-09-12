@@ -121,7 +121,7 @@ export function GalleryGrid({
                 <button
                   key={item.id}
                   type="button"
-                  className="group cursor-pointer overflow-hidden rounded-xl border border-steel/15 bg-white text-start shadow-sm transition hover:border-gold/40 focus-visible:outline-none"
+                  className="group cursor-pointer overflow-hidden rounded-xl border border-steel/15 bg-card text-start shadow-sm transition hover:border-gold/40 focus-visible:outline-none"
                   onClick={() => setActiveIndex(index)}
                   aria-label={pickLocalized(item, locale, "title")}
                 >
@@ -152,7 +152,7 @@ export function GalleryGrid({
                     setActiveIndex(null);
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
-                  className="inline-flex items-center gap-2 rounded-md border border-steel/25 bg-white px-4 py-2.5 text-sm font-semibold text-text-dark transition hover:border-gold/50 disabled:pointer-events-none disabled:opacity-40"
+                  className="inline-flex items-center gap-2 rounded-md border border-steel/25 bg-card px-4 py-2.5 text-sm font-semibold text-text-dark transition hover:border-gold/50 disabled:pointer-events-none disabled:opacity-40"
                 >
                   <ChevronRight
                     size={16}
@@ -170,7 +170,7 @@ export function GalleryGrid({
                     setActiveIndex(null);
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
-                  className="inline-flex items-center gap-2 rounded-md border border-steel/25 bg-white px-4 py-2.5 text-sm font-semibold text-text-dark transition hover:border-gold/50 disabled:pointer-events-none disabled:opacity-40"
+                  className="inline-flex items-center gap-2 rounded-md border border-steel/25 bg-card px-4 py-2.5 text-sm font-semibold text-text-dark transition hover:border-gold/50 disabled:pointer-events-none disabled:opacity-40"
                 >
                   {copy.next}
                   <ChevronLeft

@@ -8,6 +8,7 @@ import type { Locale } from "@/config/site";
 import { publicNav } from "@/config/site";
 import { localizedPath } from "@/lib/utils";
 import { LanguageSwitcher } from "./language-switcher";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { t } from "@/lib/i18n/ui";
 
 export function Navbar({
@@ -51,6 +52,7 @@ export function Navbar({
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
+          <ThemeToggle locale={locale} />
           <LanguageSwitcher locale={locale} />
           <Link
             href={localizedPath(locale, "/contact")}
@@ -61,6 +63,7 @@ export function Navbar({
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
+          <ThemeToggle locale={locale} />
           <LanguageSwitcher locale={locale} />
           <button
             type="button"

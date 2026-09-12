@@ -57,7 +57,7 @@ export function EmptyState({
   description?: string;
 }) {
   return (
-    <div className="rounded-xl border border-dashed border-steel/30 bg-white/60 px-6 py-12 text-center">
+    <div className="rounded-xl border border-dashed border-steel/30 bg-card/60 px-6 py-12 text-center">
       <p className="text-lg font-medium text-text-dark">{title}</p>
       {description ? (
         <p className="mt-2 text-sm text-text-dark-muted">{description}</p>

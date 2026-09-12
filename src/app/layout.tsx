@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Beiruti, Roboto } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/config/site";
+import { ThemeProvider } from "@/components/theme/theme-provider";
 
 const beiruti = Beiruti({
   subsets: ["arabic", "latin"],
@@ -33,15 +34,20 @@ export const metadata: Metadata = {
   },
 };
 
+const themeBootScript = `(function(){try{var k='falcon-theme';var t=localStorage.getItem(k);if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" suppressHydrationWarning>
+    <html lang="ar" suppressHydrationWarning data-theme="light">
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
+      </head>
       <body className={`${beiruti.variable} ${roboto.variable} antialiased`}>
-        {children}
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );

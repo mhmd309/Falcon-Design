@@ -9,6 +9,7 @@ import type {
   ContactSettings,
   SiteSettings,
 } from "@/types/database";
+import { LanguageSwitcher } from "./language-switcher";
 
 export function Footer({
   locale,
@@ -58,15 +59,15 @@ export function Footer({
 
   return (
     <footer className="bg-[#0b0d10] text-text">
-      <div className="container-page py-14 sm:py-16 md:py-18">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8 xl:gap-10">
+      <div className="container-page py-14 sm:py-16">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
           <div className="sm:col-span-2 lg:col-span-4">
             <Image
               src="/logo.png"
               alt={company || "Falcon Design"}
               width={1152}
               height={1408}
-              className="h-16 w-auto object-contain sm:h-20"
+              className="h-24 w-auto object-contain sm:h-28"
             />
             <p className="mt-5 max-w-sm text-sm leading-7 text-text-muted">
               {pickLocalized(settings, locale, "tagline") ||
@@ -163,6 +164,7 @@ export function Footer({
           <p className="text-center text-xs text-text-muted sm:text-start">
             {copyright}
           </p>
+          <LanguageSwitcher locale={locale} />
         </div>
       </div>
     </footer>

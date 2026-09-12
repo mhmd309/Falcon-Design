@@ -74,7 +74,7 @@ export default async function ContactPage({
         <div className="container-page grid items-start gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16">
           <ContactInfo locale={locale} settings={settings} emails={emails} />
           <Reveal delay={0.08}>
-            <div className="rounded-2xl border border-steel/15 bg-white/80 p-6 shadow-[0_20px_60px_rgba(18,22,28,0.06)] backdrop-blur-sm sm:p-8">
+            <div className="rounded-2xl border border-steel/15 bg-card/90 p-6 shadow-[0_20px_60px_rgba(18,22,28,0.06)] backdrop-blur-sm sm:p-8">
               <ContactForm locale={locale} />
             </div>
           </Reveal>
