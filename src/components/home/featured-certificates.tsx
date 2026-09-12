@@ -39,7 +39,7 @@ export function FeaturedCertificates({
             <Reveal key={item.id} delay={index * 0.05}>
               <Link
                 href={localizedPath(locale, "/certificates")}
-                className="group block overflow-hidden rounded-xl border border-steel/15 bg-white transition hover:border-gold/40"
+                className="group block overflow-hidden rounded-xl border border-steel/15 bg-[#0b0d10] transition hover:border-gold/40"
               >
                 <span className="relative block aspect-[4/3] bg-[#16202b]">
                   <Image
@@ -53,7 +53,7 @@ export function FeaturedCertificates({
                     className="object-cover transition duration-500 group-hover:scale-[1.02]"
                   />
                 </span>
-                <span className="block px-4 py-3 text-sm font-semibold text-text-dark">
+                <span className="block bg-[#0b0d10] px-4 py-3 text-sm font-semibold text-white">
                   {pickLocalized(item, locale, "title")}
                 </span>
               </Link>
