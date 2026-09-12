@@ -1,6 +1,7 @@
 import { z } from "zod";
 
-const noControlChars = (value: string) => !/[\0\r\n]/.test(value);
+const noControlChars = (value: string) => !/[\0\r]/.test(value);
+const noHeaderControlChars = (value: string) => !/[\0\r\n]/.test(value);
 
 export const contactFormSchema = z.object({
   name: z
@@ -8,13 +9,13 @@ export const contactFormSchema = z.object({
     .trim()
     .min(2)
     .max(120)
-    .refine(noControlChars, { message: "Invalid characters." }),
+    .refine(noHeaderControlChars, { message: "Invalid characters." }),
   email: z
     .string()
     .trim()
     .email()
     .max(200)
-    .refine(noControlChars, { message: "Invalid characters." }),
+    .refine(noHeaderControlChars, { message: "Invalid characters." }),
   phone: z
     .string()
     .trim()
@@ -29,7 +30,7 @@ export const contactFormSchema = z.object({
     .trim()
     .min(2)
     .max(200)
-    .refine(noControlChars, { message: "Invalid characters." }),
+    .refine(noHeaderControlChars, { message: "Invalid characters." }),
   message: z
     .string()
     .trim()

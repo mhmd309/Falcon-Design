@@ -8,6 +8,10 @@ function sanitizeHeaderValue(value: string) {
   return value.replace(/[\0\r\n]+/g, " ").trim();
 }
 
+function sanitizeBodyValue(value: string) {
+  return value.replace(/\0/g, "").replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+}
+
 function extractEmailAddress(value: string) {
   const trimmed = value.trim();
   const angled = trimmed.match(/<([^>]+)>/);
@@ -44,13 +48,20 @@ function resolveFromEmail() {
   return null;
 }
 
-function isEmailConfigured() {
-  if (process.env.RESEND_API_KEY?.trim()) return true;
+function isSmtpConfigured() {
   return Boolean(
     process.env.SMTP_HOST?.trim() &&
       process.env.SMTP_USER?.trim() &&
       process.env.SMTP_PASS?.trim(),
   );
+}
+
+function isResendConfigured() {
+  return Boolean(process.env.RESEND_API_KEY?.trim());
+}
+
+function isEmailConfigured() {
+  return isSmtpConfigured() || isResendConfigured();
 }
 
 function buildEmailBody(data: ContactFormInput) {
@@ -62,15 +73,35 @@ function buildEmailBody(data: ContactFormInput) {
     `Subject: ${sanitizeHeaderValue(data.subject)}`,
     "",
     "Message:",
-    sanitizeHeaderValue(data.message),
+    sanitizeBodyValue(data.message),
   ];
   return lines.join("\n");
 }
 
+/**
+ * Resend only allows verified domains. Consumer mailboxes (Gmail, etc.)
+ * must use Resend's onboarding sender unless RESEND_FROM_EMAIL is set.
+ */
+function resolveResendFrom() {
+  const configured =
+    process.env.RESEND_FROM_EMAIL?.trim() ||
+    process.env.CONTACT_FROM_EMAIL?.trim();
+
+  if (configured) {
+    const email = extractEmailAddress(configured);
+    if (
+      email &&
+      !/@(gmail|googlemail|yahoo|outlook|hotmail|live|icloud)\./i.test(email)
+    ) {
+      return `Falcon Design <${email}>`;
+    }
+  }
+
+  return "Falcon Design <onboarding@resend.dev>";
+}
+
 async function sendWithResend(data: ContactFormInput, recipients: string[]) {
   const apiKey = process.env.RESEND_API_KEY!.trim();
-  const fromEmail = resolveFromEmail() || "onboarding@resend.dev";
-  const from = `Falcon Design <${fromEmail}>`;
   const subject = `[Falcon Design] ${sanitizeHeaderValue(data.subject)}`;
 
   const response = await fetch("https://api.resend.com/emails", {
@@ -80,7 +111,7 @@ async function sendWithResend(data: ContactFormInput, recipients: string[]) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from,
+      from: resolveResendFrom(),
       to: recipients,
       reply_to: sanitizeHeaderValue(data.email),
       subject,
@@ -89,7 +120,10 @@ async function sendWithResend(data: ContactFormInput, recipients: string[]) {
   });
 
   if (!response.ok) {
-    throw new Error(`Resend failed: ${response.status}`);
+    const detail = await response.text().catch(() => "");
+    throw new Error(
+      `Resend failed: ${response.status}${detail ? ` ${detail.slice(0, 200)}` : ""}`,
+    );
   }
 }
 
@@ -100,14 +134,23 @@ async function sendWithSmtp(data: ContactFormInput, recipients: string[]) {
     throw new Error("Invalid CONTACT_FROM_EMAIL / SMTP_USER");
   }
 
+  // Gmail app passwords are often copied with spaces.
+  const pass = (process.env.SMTP_PASS || "").replace(/\s+/g, "");
+  if (!pass) {
+    throw new Error("SMTP_PASS is empty");
+  }
+
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port,
     secure: port === 465,
     requireTLS: port === 587,
+    connectionTimeout: 20_000,
+    greetingTimeout: 20_000,
+    socketTimeout: 20_000,
     auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
+      user: process.env.SMTP_USER?.trim(),
+      pass,
     },
   });
 
@@ -122,23 +165,43 @@ async function sendWithSmtp(data: ContactFormInput, recipients: string[]) {
 
 export async function sendContactEmail(data: ContactFormInput) {
   if (!isEmailConfigured()) {
+    console.error("[contact-email] not_configured");
     return { ok: false as const, reason: "not_configured" as const };
   }
 
   const recipients = getRecipients();
   if (!recipients.length) {
+    console.error("[contact-email] no_recipients");
     return { ok: false as const, reason: "no_recipients" as const };
   }
 
-  try {
-    if (process.env.RESEND_API_KEY?.trim()) {
-      await sendWithResend(data, recipients);
-    } else {
-      await sendWithSmtp(data, recipients);
+  const attempts: Array<"smtp" | "resend"> = [];
+  // Prefer SMTP for Gmail/app-password setups used in production.
+  if (isSmtpConfigured()) attempts.push("smtp");
+  if (isResendConfigured()) attempts.push("resend");
+
+  let lastError: unknown;
+
+  for (const attempt of attempts) {
+    try {
+      if (attempt === "smtp") {
+        await sendWithSmtp(data, recipients);
+      } else {
+        await sendWithResend(data, recipients);
+      }
+      return { ok: true as const };
+    } catch (error) {
+      lastError = error;
+      console.error(
+        `[contact-email] ${attempt}_failed`,
+        error instanceof Error ? error.message : "send_failed",
+      );
     }
-    return { ok: true as const };
-  } catch (error) {
-    console.error("[contact-email]", error instanceof Error ? error.message : "send_failed");
-    return { ok: false as const, reason: "send_failed" as const };
   }
+
+  console.error(
+    "[contact-email] send_failed",
+    lastError instanceof Error ? lastError.message : "send_failed",
+  );
+  return { ok: false as const, reason: "send_failed" as const };
 }
