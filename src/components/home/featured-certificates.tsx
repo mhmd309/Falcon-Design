@@ -50,7 +50,7 @@ export function FeaturedCertificates({
                     }
                     fill
                     sizes="(max-width:640px) 100vw, 33vw"
-                    className="object-contain p-4 transition duration-500 group-hover:scale-[1.02]"
+                    className="object-cover transition duration-500 group-hover:scale-[1.02]"
                   />
                 </span>
                 <span className="block px-4 py-3 text-sm font-semibold text-text-dark">

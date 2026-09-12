@@ -62,7 +62,7 @@ export function CertificatesGrid({
                       }
                       fill
                       sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
-                      className="object-contain p-4 transition duration-500 group-hover:scale-[1.02]"
+                      className="object-cover transition duration-500 group-hover:scale-[1.02]"
                     />
                   </span>
                   <span className="block space-y-1 px-4 py-4">
