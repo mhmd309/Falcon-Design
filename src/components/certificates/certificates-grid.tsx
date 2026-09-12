@@ -1,14 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
-import { X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import type { Locale } from "@/config/site";
 import type { Certificate } from "@/types/database";
 import { Reveal } from "@/components/ui/motion";
 import { SectionHeading, EmptyState } from "@/components/ui/section";
 import { pickLocalized } from "@/lib/utils";
 import { t } from "@/lib/i18n/ui";
+
+const PAGE_SIZE = 6;
 
 export function CertificatesGrid({
   locale,
@@ -22,7 +24,19 @@ export function CertificatesGrid({
   description?: string | null;
 }) {
   const copy = t(locale);
+  const [page, setPage] = useState(1);
   const [active, setActive] = useState<Certificate | null>(null);
+
+  const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+
+  const pageItems = useMemo(() => {
+    const start = (page - 1) * PAGE_SIZE;
+    return items.slice(start, start + PAGE_SIZE);
+  }, [items, page]);
+
+  useEffect(() => {
+    if (page > totalPages) setPage(totalPages);
+  }, [page, totalPages]);
 
   return (
     <section className="section-space" aria-labelledby="certificates-heading">
@@ -44,43 +58,88 @@ export function CertificatesGrid({
             <EmptyState title={copy.empty} />
           </div>
         ) : (
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {items.map((item, index) => (
-              <Reveal key={item.id} delay={index * 0.05}>
+          <>
+            <div
+              key={page}
+              className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            >
+              {pageItems.map((item, index) => (
+                <Reveal key={item.id} delay={index * 0.05}>
+                  <button
+                    type="button"
+                    className="group w-full cursor-pointer overflow-hidden rounded-xl border border-steel/15 bg-[#0b0d10] text-start shadow-sm transition hover:border-gold/40 focus-visible:outline-none"
+                    onClick={() => setActive(item)}
+                    aria-label={pickLocalized(item, locale, "title")}
+                  >
+                    <span className="relative block aspect-[2/3] overflow-hidden bg-white">
+                      <Image
+                        src={item.image_url}
+                        alt={
+                          pickLocalized(item, locale, "alt_text") ||
+                          pickLocalized(item, locale, "title")
+                        }
+                        fill
+                        sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
+                        className="object-contain transition duration-500 group-hover:scale-[1.02]"
+                      />
+                    </span>
+                    <span className="block space-y-1 bg-[#0b0d10] px-4 py-4">
+                      <span className="block text-sm font-semibold text-white">
+                        {pickLocalized(item, locale, "title")}
+                      </span>
+                      {(item.issuer_ar || item.issuer_en || item.year) && (
+                        <span className="block text-xs text-white/70">
+                          {[pickLocalized(item, locale, "issuer"), item.year]
+                            .filter(Boolean)
+                            .join(" · ")}
+                        </span>
+                      )}
+                    </span>
+                  </button>
+                </Reveal>
+              ))}
+            </div>
+
+            {totalPages > 1 ? (
+              <div className="mt-10 flex flex-wrap items-center justify-between gap-4">
                 <button
                   type="button"
-                  className="group w-full cursor-pointer overflow-hidden rounded-xl border border-steel/15 bg-[#0b0d10] text-start shadow-sm transition hover:border-gold/40 focus-visible:outline-none"
-                  onClick={() => setActive(item)}
-                  aria-label={pickLocalized(item, locale, "title")}
+                  disabled={page <= 1}
+                  onClick={() => {
+                    setPage((p) => Math.max(1, p - 1));
+                    setActive(null);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className="inline-flex items-center gap-2 rounded-md border border-steel/25 bg-card px-4 py-2.5 text-sm font-semibold text-text-dark transition hover:border-gold/50 disabled:pointer-events-none disabled:opacity-40"
                 >
-                  <span className="relative block aspect-[2/3] overflow-hidden bg-white">
-                    <Image
-                      src={item.image_url}
-                      alt={
-                        pickLocalized(item, locale, "alt_text") ||
-                        pickLocalized(item, locale, "title")
-                      }
-                      fill
-                      sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
-                      className="object-contain transition duration-500 group-hover:scale-[1.02]"
-                    />
-                  </span>
-                  <span className="block space-y-1 bg-[#0b0d10] px-4 py-4">
-                    <span className="block text-sm font-semibold text-white">
-                      {pickLocalized(item, locale, "title")}
-                    </span>
-                    {(item.issuer_ar || item.issuer_en || item.year) && (
-                      <span className="block text-xs text-white/70">
-                        {[pickLocalized(item, locale, "issuer"), item.year]
-                          .filter(Boolean)
-                          .join(" · ")}
-                      </span>
-                    )}
-                  </span>
+                  <ChevronRight
+                    size={16}
+                    className={locale === "ar" ? "" : "rotate-180"}
+                    aria-hidden
+                  />
+                  {copy.previous}
                 </button>
-              </Reveal>
-            ))}
-          </div>
+
+                <button
+                  type="button"
+                  disabled={page >= totalPages}
+                  onClick={() => {
+                    setPage((p) => Math.min(totalPages, p + 1));
+                    setActive(null);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className="inline-flex items-center gap-2 rounded-md border border-steel/25 bg-card px-4 py-2.5 text-sm font-semibold text-text-dark transition hover:border-gold/50 disabled:pointer-events-none disabled:opacity-40"
+                >
+                  {copy.next}
+                  <ChevronLeft
+                    size={16}
+                    className={locale === "ar" ? "" : "rotate-180"}
+                    aria-hidden
+                  />
+                </button>
+              </div>
+            ) : null}
+          </>
         )}
       </div>
 
