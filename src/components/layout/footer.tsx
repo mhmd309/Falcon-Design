@@ -9,7 +9,6 @@ import type {
   ContactSettings,
   SiteSettings,
 } from "@/types/database";
-import { LanguageSwitcher } from "./language-switcher";
 
 export function Footer({
   locale,
@@ -67,7 +66,7 @@ export function Footer({
               alt={company || "Falcon Design"}
               width={1152}
               height={1408}
-              className="h-24 w-auto object-contain sm:h-28"
+              className="h-16 w-auto object-contain sm:h-20"
             />
             <p className="mt-5 max-w-sm text-sm leading-7 text-text-muted">
               {pickLocalized(settings, locale, "tagline") ||
@@ -164,7 +163,6 @@ export function Footer({
           <p className="text-center text-xs text-text-muted sm:text-start">
             {copyright}
           </p>
-          <LanguageSwitcher locale={locale} />
         </div>
       </div>
     </footer>

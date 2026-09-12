@@ -25,7 +25,7 @@ export function Navbar({
       <div className="container-page flex h-16 items-center justify-between gap-4 md:h-20">
         <Link
           href={localizedPath(locale)}
-          className="flex h-14 w-14 shrink-0 items-center justify-center md:h-16 md:w-16"
+          className="flex h-11 w-11 shrink-0 items-center justify-center md:h-14 md:w-14"
         >
           <Image
             src="/logo.png"
