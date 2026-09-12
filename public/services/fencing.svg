@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" role="img" aria-label="Fence and security works">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8eef4"/>
+      <stop offset="100%" stop-color="#cfd8e3"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="600" fill="url(#g)"/>
+  <rect x="0" y="430" width="960" height="170" fill="#3d4654"/>
+  <path d="M60 430 V180 M180 430 V160 M300 430 V180 M420 430 V160 M540 430 V180 M660 430 V160 M780 430 V180 M900 430 V160" stroke="#5b6572" stroke-width="14" stroke-linecap="round"/>
+  <path d="M50 200 H910 M50 270 H910 M50 340 H910" stroke="#c6a15b" stroke-width="6" stroke-linecap="round"/>
+  <path d="M60 160 l0 -30 M180 140 l0 -30 M300 160 l0 -30 M420 140 l0 -30 M540 160 l0 -30 M660 140 l0 -30 M780 160 l0 -30 M900 140 l0 -30" stroke="#8a93a0" stroke-width="4"/>
+  <text x="480" y="505" text-anchor="middle" fill="#f3f5f7" font-family="Arial, sans-serif" font-size="28" font-weight="700">Fencing &amp; Security Works</text>
+  <text x="480" y="540" text-anchor="middle" fill="#c6a15b" font-family="Arial, sans-serif" font-size="16">Falcon Design</text>
+</svg>

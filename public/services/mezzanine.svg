@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" role="img" aria-label="Mezzanine floors">
+  <defs>
+    <linearGradient id="hall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f5f7fa"/>
+      <stop offset="100%" stop-color="#dbe3ec"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="600" fill="url(#hall)"/>
+  <rect x="80" y="360" width="800" height="24" fill="#c6a15b"/>
+  <rect x="100" y="200" width="760" height="160" fill="#e8eef4" stroke="#8a93a0" stroke-width="4"/>
+  <path d="M140 360 V520 M300 360 V520 M480 360 V520 M660 360 V520 M820 360 V520" stroke="#5b6572" stroke-width="16"/>
+  <path d="M120 280 H840" stroke="#aeb6c2" stroke-width="8"/>
+  <rect x="160" y="230" width="180" height="100" fill="#ffffff" stroke="#c6a15b" stroke-width="3"/>
+  <rect x="390" y="230" width="180" height="100" fill="#ffffff" stroke="#c6a15b" stroke-width="3"/>
+  <rect x="620" y="230" width="180" height="100" fill="#ffffff" stroke="#c6a15b" stroke-width="3"/>
+  <text x="480" y="560" text-anchor="middle" fill="#12161c" font-family="Arial, sans-serif" font-size="28" font-weight="700">Mezzanine Floors</text>
+</svg>

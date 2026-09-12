@@ -62,7 +62,11 @@ export function FeaturedServices({
                         alt={alt}
                         fill
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        className="object-cover transition duration-500 group-hover:scale-105"
+                        className={
+                          service.image_url.endsWith(".svg")
+                            ? "object-contain p-3 transition duration-500 group-hover:scale-105"
+                            : "object-cover transition duration-500 group-hover:scale-105"
+                        }
                       />
                     ) : (
                       <div className="absolute inset-0 bg-gradient-to-br from-steel/20 to-steel-dark/30" aria-hidden />
