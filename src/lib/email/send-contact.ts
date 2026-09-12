@@ -69,7 +69,6 @@ function buildEmailBody(data: ContactFormInput) {
     `Name: ${sanitizeHeaderValue(data.name)}`,
     `Email: ${sanitizeHeaderValue(data.email)}`,
     `Phone: ${data.phone ? sanitizeHeaderValue(data.phone) : "-"}`,
-    `Locale: ${data.locale || "-"}`,
     `Subject: ${sanitizeHeaderValue(data.subject)}`,
     "",
     "Message:",
