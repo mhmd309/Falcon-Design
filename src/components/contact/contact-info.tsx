@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { MapPin, Phone, Clock, Mail, MessageCircle } from "lucide-react";
 import type { Locale } from "@/config/site";
 import type { ContactEmail, ContactSettings } from "@/types/database";
-import { pickLocalized } from "@/lib/utils";
+import { phoneDigits, pickLocalized, whatsappChatUrl } from "@/lib/utils";
 import { t } from "@/lib/i18n/ui";
 import { Reveal } from "@/components/ui/motion";
 
@@ -16,6 +16,8 @@ export function ContactInfo({
   emails: ContactEmail[];
 }) {
   const copy = t(locale);
+  const phoneHref = phoneDigits(settings.phone);
+  const whatsappHref = whatsappChatUrl(settings.whatsapp);
 
   const rows = [
     {
@@ -32,30 +34,32 @@ export function ContactInfo({
         </>
       ),
     },
-    settings.phone
+    settings.phone && phoneHref
       ? {
           icon: Phone,
           label: copy.phone,
           content: (
             <a
               className="text-text-dark transition hover:text-gold"
-              href={`tel:${settings.phone.replace(/\s/g, "")}`}
+              href={`tel:+${phoneHref}`}
+              dir="ltr"
             >
               {settings.phone}
             </a>
           ),
         }
       : null,
-    settings.whatsapp
+    settings.whatsapp && whatsappHref
       ? {
           icon: MessageCircle,
           label: copy.whatsapp,
           content: (
             <a
               className="text-text-dark transition hover:text-gold"
-              href={`https://wa.me/${settings.whatsapp.replace(/[^\d]/g, "")}`}
+              href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
+              dir="ltr"
             >
               {settings.whatsapp}
             </a>

@@ -51,3 +51,16 @@ export function safeExternalUrl(url: string | null | undefined) {
   }
   return null;
 }
+
+/** Digits only — for tel:/WhatsApp links (keeps country code order). */
+export function phoneDigits(phone: string | null | undefined) {
+  if (!phone) return "";
+  return phone.replace(/\D/g, "");
+}
+
+/** Opens WhatsApp chat for an international number (e.g. +971 56 …). */
+export function whatsappChatUrl(phone: string | null | undefined) {
+  const digits = phoneDigits(phone);
+  if (!digits) return null;
+  return `https://api.whatsapp.com/send?phone=${digits}`;
+}
