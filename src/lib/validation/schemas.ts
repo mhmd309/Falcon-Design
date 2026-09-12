@@ -3,7 +3,13 @@ import { z } from "zod";
 export const contactFormSchema = z.object({
   name: z.string().trim().min(2).max(120),
   email: z.string().trim().email().max(200),
-  phone: z.string().trim().max(40).optional().or(z.literal("")),
+  phone: z
+    .string()
+    .trim()
+    .refine((value) => value.replace(/\D/g, "").length <= 15, {
+      message: "Phone number must contain at most 15 digits.",
+    })
+    .optional(),
   subject: z.string().trim().min(2).max(200),
   message: z.string().trim().min(10).max(5000),
   locale: z.enum(["en", "ar"]).optional(),

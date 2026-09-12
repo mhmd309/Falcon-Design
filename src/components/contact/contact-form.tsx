@@ -19,6 +19,13 @@ const emptyValues: ContactFields = {
   message: "",
 };
 
+const MAX_PHONE_DIGITS = 15;
+
+function normalizePhoneInput(value: string) {
+  const digits = value.replace(/\D/g, "").slice(0, MAX_PHONE_DIGITS);
+  return value.trimStart().startsWith("+") ? `+${digits}` : digits;
+}
+
 export function ContactForm({ locale }: { locale: Locale }) {
   const copy = t(locale);
   const formRef = useRef<HTMLFormElement>(null);
@@ -177,8 +184,13 @@ export function ContactForm({ locale }: { locale: Locale }) {
             name="phone"
             type="tel"
             autoComplete="tel"
+            inputMode="tel"
+            maxLength={MAX_PHONE_DIGITS + 1}
+            dir="ltr"
             value={values.phone}
-            onChange={(e) => updateField("phone", e.target.value)}
+            onChange={(e) =>
+              updateField("phone", normalizePhoneInput(e.target.value))
+            }
           />
           <FieldError message={fieldErrors.phone} />
         </div>
