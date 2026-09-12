@@ -35,7 +35,7 @@ export function switchLocalePath(pathname: string, nextLocale: Locale) {
 export function absoluteUrl(path: string) {
   const base =
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-    "https://falcon-design.vercel.app/";
+    "https://falcon-design.vercel.app";
   return `${base}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
@@ -50,6 +50,24 @@ export function safeExternalUrl(url: string | null | undefined) {
     return null;
   }
   return null;
+}
+
+/** Resolve CMS/content hrefs to a safe internal path or allowlisted external URL. */
+export function resolveContentHref(
+  locale: Locale,
+  href: string | null | undefined,
+  fallbackPath = "",
+) {
+  if (!href) return localizedPath(locale, fallbackPath);
+
+  const external = safeExternalUrl(href);
+  if (external) return external;
+
+  if (href.startsWith("/") && !href.startsWith("//")) {
+    return localizedPath(locale, href);
+  }
+
+  return localizedPath(locale, fallbackPath);
 }
 
 /** Digits only — for tel:/WhatsApp links (keeps country code order). */

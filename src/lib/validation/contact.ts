@@ -25,8 +25,13 @@ export function validateContactField(
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)
         ? undefined
         : messages.emailInvalid;
-    case "phone":
+    case "phone": {
+      if (!trimmed) return undefined;
+      if (trimmed.length > 20) return messages.phoneInvalid;
+      if (!/^\+?[0-9\s()-]*$/.test(trimmed)) return messages.phoneInvalid;
+      if (trimmed.replace(/\D/g, "").length > 15) return messages.phoneInvalid;
       return undefined;
+    }
     case "subject":
       return trimmed.length < 2 ? messages.subjectRequired : undefined;
     case "message":

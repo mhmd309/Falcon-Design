@@ -1,16 +1,21 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { siteConfig } from "@/config/site";
 
-const PUBLIC_FILE = /\.(.*)$/;
+const STATIC_FILE = /\.[a-z0-9]+$/i;
+
+function isPassthrough(pathname: string) {
+  return (
+    pathname.startsWith("/_next/") ||
+    pathname === "/api" ||
+    pathname.startsWith("/api/") ||
+    STATIC_FILE.test(pathname)
+  );
+}
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (
-    pathname.startsWith("/_next") ||
-    pathname.startsWith("/api") ||
-    PUBLIC_FILE.test(pathname)
-  ) {
+  if (isPassthrough(pathname)) {
     return NextResponse.next();
   }
 

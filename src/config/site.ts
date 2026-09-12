@@ -28,6 +28,6 @@ export const publicNav = [
 export function getSiteUrl() {
   return (
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-    "https://falcon-design.vercel.app/"
+    "https://falcon-design.vercel.app"
   );
 }

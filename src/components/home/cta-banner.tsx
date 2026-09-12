@@ -1,12 +1,10 @@
 import Link from "next/link";
 import type { Locale } from "@/config/site";
 import type { SiteSection } from "@/types/content";
-import { localizedPath, pickLocalized } from "@/lib/utils";
+import { pickLocalized, resolveContentHref } from "@/lib/utils";
 
 function resolveHref(locale: Locale, href: string | null) {
-  if (!href) return localizedPath(locale, "/contact");
-  if (href.startsWith("http://") || href.startsWith("https://")) return href;
-  return localizedPath(locale, href);
+  return resolveContentHref(locale, href, "/contact");
 }
 
 export function CtaBanner({
