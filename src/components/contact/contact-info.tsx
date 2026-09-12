@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import { MapPin, Phone, Clock, Mail, MessageCircle } from "lucide-react";
 import type { Locale } from "@/config/site";
 import { t } from "@/lib/i18n/ui";
@@ -42,62 +41,6 @@ const CONTACT = {
 export function ContactInfo({ locale }: { locale: Locale }) {
   const copy = t(locale);
 
-  const rows = [
-    {
-      icon: MapPin,
-      label: copy.address,
-      content: (
-        <>
-          <span className="block font-medium text-text-dark">
-            {locale === "ar" ? CONTACT.company_ar : CONTACT.company_en}
-          </span>
-          <span className="mt-1 block text-text-dark-muted">
-            {locale === "ar" ? CONTACT.address_ar : CONTACT.address_en}
-          </span>
-        </>
-      ),
-    },
-    {
-      icon: Phone,
-      label: copy.phone,
-      content: (
-        <a
-          className="text-text-dark transition hover:text-gold"
-          href={`tel:${CONTACT.phoneTel}`}
-          dir="ltr"
-        >
-          {CONTACT.phoneDisplay}
-        </a>
-      ),
-    },
-    {
-      icon: MessageCircle,
-      label: copy.whatsapp,
-      content: (
-        <a
-          className="text-text-dark transition hover:text-gold"
-          href={CONTACT.whatsappUrl}
-          dir="ltr"
-        >
-          {CONTACT.phoneDisplay}
-        </a>
-      ),
-    },
-    {
-      icon: Clock,
-      label: copy.hours,
-      content: (
-        <span className="text-text-dark-muted">
-          {locale === "ar" ? CONTACT.hours_ar : CONTACT.hours_en}
-        </span>
-      ),
-    },
-  ] as Array<{
-    icon: typeof MapPin;
-    label: string;
-    content: ReactNode;
-  }>;
-
   return (
     <div className="space-y-10">
       <Reveal>
@@ -111,20 +54,86 @@ export function ContactInfo({ locale }: { locale: Locale }) {
 
       <Reveal delay={0.06}>
         <ul className="space-y-0 divide-y divide-steel/15 border-y border-steel/15">
-          {rows.map((row) => (
-            <li key={row.label} className="flex gap-4 py-5">
-              <row.icon
+          <li className="flex gap-4 py-5">
+            <MapPin className="mt-0.5 size-5 shrink-0 text-gold" aria-hidden />
+            <div className="min-w-0">
+              <p className="text-xs font-semibold tracking-wide text-text-dark-muted uppercase">
+                {copy.address}
+              </p>
+              <div className="mt-1.5 text-sm sm:text-base">
+                <span className="block font-medium text-text-dark">
+                  {locale === "ar" ? CONTACT.company_ar : CONTACT.company_en}
+                </span>
+                <span className="mt-1 block text-text-dark-muted">
+                  {locale === "ar" ? CONTACT.address_ar : CONTACT.address_en}
+                </span>
+              </div>
+            </div>
+          </li>
+
+          <li className="flex gap-4 py-5">
+            <Phone className="mt-0.5 size-5 shrink-0 text-gold" aria-hidden />
+            <div className="min-w-0">
+              <p className="text-xs font-semibold tracking-wide text-text-dark-muted uppercase">
+                {copy.phone}
+              </p>
+              <div className="mt-1.5 text-sm sm:text-base">
+                <a
+                  className="text-text-dark transition hover:text-gold"
+                  href={`tel:${CONTACT.phoneTel}`}
+                  dir="ltr"
+                >
+                  {CONTACT.phoneDisplay}
+                </a>
+              </div>
+            </div>
+          </li>
+
+          <li className="py-5">
+            <a
+              href={CONTACT.whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex gap-4 rounded-lg outline-none transition hover:bg-gold/5 focus-visible:ring-2 focus-visible:ring-gold/40"
+              aria-label={
+                locale === "ar"
+                  ? "فتح واتساب في تبويب جديد"
+                  : "Open WhatsApp in a new tab"
+              }
+            >
+              <MessageCircle
                 className="mt-0.5 size-5 shrink-0 text-gold"
                 aria-hidden
               />
               <div className="min-w-0">
                 <p className="text-xs font-semibold tracking-wide text-text-dark-muted uppercase">
-                  {row.label}
+                  {copy.whatsapp}
                 </p>
-                <div className="mt-1.5 text-sm sm:text-base">{row.content}</div>
+                <div className="mt-1.5 text-sm sm:text-base">
+                  <span
+                    dir="ltr"
+                    className="text-text-dark transition group-hover:text-gold"
+                  >
+                    {CONTACT.phoneDisplay}
+                  </span>
+                </div>
               </div>
-            </li>
-          ))}
+            </a>
+          </li>
+
+          <li className="flex gap-4 py-5">
+            <Clock className="mt-0.5 size-5 shrink-0 text-gold" aria-hidden />
+            <div className="min-w-0">
+              <p className="text-xs font-semibold tracking-wide text-text-dark-muted uppercase">
+                {copy.hours}
+              </p>
+              <div className="mt-1.5 text-sm sm:text-base">
+                <span className="text-text-dark-muted">
+                  {locale === "ar" ? CONTACT.hours_ar : CONTACT.hours_en}
+                </span>
+              </div>
+            </div>
+          </li>
         </ul>
       </Reveal>
 
