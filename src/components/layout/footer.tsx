@@ -24,7 +24,15 @@ export function Footer({
     pickLocalized(settings, locale, "address");
   const phone = contact?.phone || settings.phone;
   const year = new Date().getFullYear();
+  const copyright =
+    locale === "ar"
+      ? `2019-${year} \u00a9 \u062c\u0645\u064a\u0639 \u0627\u0644\u062d\u0642\u0648\u0642 \u0645\u062d\u0641\u0648\u0638\u0629 \u0644\u062f\u0649 \u0634\u0631\u0643\u0629 \u0641\u0627\u0644\u0643\u0648\u0646 \u062f\u064a\u0632\u0627\u064a\u0646`
+      : `2019-${year} \u00a9 All rights reserved to Falcon Design`; /*
+    locale === "ar"
+      ? `2019–${year} © \u062c\u0645\u064a\u0639 \u0627\u0644\u062d\u0642\u0648\u0642 \u0645\u062d\u0641\u0648\u0638\u0629 \u0644\u062f\u0649 \u0634\u0631\u0643\u0629 \u0641\u0627\u0644\u0643\u0648\u0646 \u062f\u064a\u0632\u0627\u064a\u0646`
+      : `2019–${year} © All rights reserved to Falcon Design`;
 
+  */
   const social = [
     { label: "Facebook", href: safeExternalUrl(contact?.facebook_url || settings.facebook_url) },
     { label: "Instagram", href: safeExternalUrl(contact?.instagram_url || settings.instagram_url) },
@@ -34,23 +42,23 @@ export function Footer({
   ].filter((s) => s.href);
 
   return (
-    <footer className="border-t border-white/10 bg-[#0b0d10] text-text">
-      <div className="container-page section-space grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+    <footer className="bg-[#0b0d10] text-text">
+      <div className="container-page grid gap-12 py-20 sm:py-24 md:grid-cols-2 lg:grid-cols-4 lg:gap-16">
         <div>
           <p className="text-lg font-semibold tracking-[0.08em]">
             <span className="text-gold">FALCON</span> DESIGN
           </p>
-          <p className="mt-3 text-sm leading-relaxed text-text-muted">
+          <p className="mt-5 max-w-xs text-sm leading-7 text-text-muted">
             {pickLocalized(settings, locale, "tagline") || siteConfig.tagline[locale]}
           </p>
           <p className="mt-4 text-sm text-text-muted">{company}</p>
         </div>
 
         <div>
-          <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-gold">
+          <h3 className="mb-5 text-sm font-semibold text-gold">
             {locale === "ar" ? "التنقل" : "Navigate"}
           </h3>
-          <ul className="space-y-2 text-sm text-text-muted">
+          <ul className="space-y-3 text-sm text-text-muted">
             {publicNav.map((item) => (
               <li key={item.href}>
                 <Link
@@ -65,10 +73,10 @@ export function Footer({
         </div>
 
         <div>
-          <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-gold">
+          <h3 className="mb-5 text-sm font-semibold text-gold">
             {copy.contactEmails}
           </h3>
-          <ul className="space-y-2 text-sm text-text-muted">
+          <ul className="space-y-4 text-sm text-text-muted">
             {emails.map((email) => (
               <li key={email.id}>
                 <a
@@ -86,10 +94,10 @@ export function Footer({
         </div>
 
         <div>
-          <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-gold">
+          <h3 className="mb-5 text-sm font-semibold text-gold">
             {locale === "ar" ? "التواصل" : "Contact"}
           </h3>
-          <ul className="space-y-2 text-sm text-text-muted">
+          <ul className="space-y-3 text-sm text-text-muted">
             {phone ? (
               <li>
                 <a href={`tel:${phone.replace(/\s/g, "")}`} className="hover:text-gold">
@@ -119,13 +127,16 @@ export function Footer({
               </div>
             </div>
           ) : null}
-          <div className="mt-6">
+          <div className="mt-7">
             <LanguageSwitcher locale={locale} />
           </div>
         </div>
       </div>
-      <div className="border-t border-white/10 py-5 text-center text-xs text-text-muted">
+      <div className="hidden" aria-hidden="true">
         © {year} {company}. {copy.rights}
+      </div>
+      <div className="border-t border-white/10 py-6 text-center text-xs text-text-muted">
+        {copyright}
       </div>
     </footer>
   );
