@@ -10,7 +10,6 @@ import {
   services,
   siteSettings,
   statistics,
-  team,
   timeline,
 } from "@/lib/data/content";
 import type {
@@ -25,7 +24,6 @@ import type {
   SiteSection,
   SiteSettings,
   Statistic,
-  TeamMember,
   TimelineItem,
 } from "@/types/database";
 
@@ -69,10 +67,6 @@ export async function getCoreValues(): Promise<CoreValue[]> {
 
 export async function getTimeline(): Promise<TimelineItem[]> {
   return timeline.filter((s) => s.is_active);
-}
-
-export async function getTeam(): Promise<TeamMember[]> {
-  return team.filter((s) => s.is_active);
 }
 
 export async function getGalleryCategories(): Promise<GalleryCategory[]> {

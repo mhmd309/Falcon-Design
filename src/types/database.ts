@@ -112,21 +112,6 @@ export interface TimelineItem {
   is_active: boolean;
 }
 
-export interface TeamMember {
-  id: string;
-  name_ar: string;
-  name_en: string;
-  position_ar: string | null;
-  position_en: string | null;
-  bio_ar: string | null;
-  bio_en: string | null;
-  image_url: string | null;
-  alt_text_ar: string | null;
-  alt_text_en: string | null;
-  sort_order: number;
-  is_active: boolean;
-}
-
 export interface GalleryCategory {
   id: string;
   name_ar: string;

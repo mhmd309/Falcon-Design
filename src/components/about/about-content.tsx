@@ -3,7 +3,6 @@ import type { Locale } from "@/config/site";
 import type {
   CoreValue,
   SiteSection,
-  TeamMember,
   TimelineItem,
 } from "@/types/database";
 import { pickLocalized } from "@/lib/utils";
@@ -17,7 +16,6 @@ export function AboutContent({
   mission,
   values,
   timeline,
-  team,
 }: {
   locale: Locale;
   intro: SiteSection | null;
@@ -25,7 +23,6 @@ export function AboutContent({
   mission: SiteSection | null;
   values: CoreValue[];
   timeline: TimelineItem[];
-  team: TeamMember[];
 }) {
   const copy = t(locale);
   const title = intro
@@ -176,38 +173,6 @@ export function AboutContent({
                 </Reveal>
               ))}
             </ol>
-          </div>
-        </section>
-      ) : null}
-
-      {team.length ? (
-        <section className="section-space">
-          <div className="container-page">
-            <Reveal>
-              <h2 className="text-2xl font-semibold tracking-tight text-text-dark sm:text-3xl md:text-4xl">
-                {copy.team}
-              </h2>
-              <div className="metallic-line mt-5 w-20" />
-            </Reveal>
-            <div className="mt-12 space-y-8">
-              {team.map((member, index) => (
-                <Reveal key={member.id} delay={index * 0.04}>
-                  <article className="grid gap-3 border-b border-steel/15 pb-8 md:grid-cols-[minmax(0,0.4fr)_minmax(0,0.6fr)] md:gap-10">
-                    <div>
-                      <h3 className="text-xl font-semibold text-text-dark sm:text-2xl">
-                        {pickLocalized(member, locale, "name")}
-                      </h3>
-                      <p className="mt-2 text-sm font-medium text-gold">
-                        {pickLocalized(member, locale, "position")}
-                      </p>
-                    </div>
-                    <p className="text-sm leading-relaxed text-text-dark-muted sm:text-base">
-                      {pickLocalized(member, locale, "bio")}
-                    </p>
-                  </article>
-                </Reveal>
-              ))}
-            </div>
           </div>
         </section>
       ) : null}

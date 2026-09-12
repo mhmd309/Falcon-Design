@@ -5,7 +5,6 @@ import {
   getCoreValues,
   getPageBySlug,
   getSection,
-  getTeam,
   getTimeline,
 } from "@/lib/data/queries";
 import {
@@ -31,13 +30,12 @@ export default async function AboutPage({
 }) {
   const { locale: localeParam } = await params;
   const locale = localeParam as Locale;
-  const [intro, vision, mission, values, timeline, team] = await Promise.all([
+  const [intro, vision, mission, values, timeline] = await Promise.all([
     getSection("about", "introduction"),
     getSection("about", "vision"),
     getSection("about", "mission"),
     getCoreValues(),
     getTimeline(),
-    getTeam(),
   ]);
 
   return (
@@ -55,7 +53,6 @@ export default async function AboutPage({
         mission={mission}
         values={values}
         timeline={timeline}
-        team={team}
       />
     </>
   );

@@ -10,7 +10,6 @@ import type {
   SiteSection,
   SiteSettings,
   Statistic,
-  TeamMember,
   TimelineItem,
 } from "@/types/database";
 
@@ -626,25 +625,6 @@ export const timeline: TimelineItem[] = [
     description_en:
       "Raising quality and innovation benchmarks in metal solutions.",
     sort_order: 3,
-    is_active: true,
-  },
-];
-
-export const team: TeamMember[] = [
-  {
-    id: "tm1",
-    name_ar: "فريق الهندسة",
-    name_en: "Engineering Team",
-    position_ar: "مهندسون وحرفيون متخصصون",
-    position_en: "Specialized Engineers & Craftsmen",
-    bio_ar:
-      "فريق نخبة ملتزم بتحويل التحديات المعقدة إلى واقع عالي الجودة.",
-    bio_en:
-      "An elite team dedicated to transforming complex challenges into high-quality realities.",
-    image_url: null,
-    alt_text_ar: null,
-    alt_text_en: null,
-    sort_order: 1,
     is_active: true,
   },
 ];
