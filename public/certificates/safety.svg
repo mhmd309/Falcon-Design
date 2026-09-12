@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="560" viewBox="0 0 800 560" role="img" aria-label="Occupational Safety Certificate">
-  <rect width="800" height="560" fill="#0f1720"/>
-  <rect x="28" y="28" width="744" height="504" fill="none" stroke="#c9a227" stroke-width="3"/>
-  <path d="M400 95 l55 20 v55 c0 45 -30 80 -55 95 c-25 -15 -55 -50 -55 -95 v-55 z" fill="none" stroke="#c9a227" stroke-width="3"/>
-  <text x="400" y="280" text-anchor="middle" fill="#f5f2ea" font-family="Georgia, serif" font-size="30">Safety Certificate</text>
-  <text x="400" y="325" text-anchor="middle" fill="#c9a227" font-family="Arial, sans-serif" font-size="16" letter-spacing="3">OCCUPATIONAL HSE</text>
-  <text x="400" y="380" text-anchor="middle" fill="#d7dde5" font-family="Arial, sans-serif" font-size="16">Falcon Design</text>
-  <text x="400" y="450" text-anchor="middle" fill="#c9a227" font-family="Arial, sans-serif" font-size="13">2023</text>
-</svg>
