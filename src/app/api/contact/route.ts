@@ -4,17 +4,58 @@ import { sendContactEmail } from "@/lib/email/send-contact";
 import { checkRateLimit, contactFormSchema } from "@/lib/validation/schemas";
 import { resolveLocale, v } from "@/lib/i18n/validation";
 
+const MAX_BODY_BYTES = 12_000;
+
+function jsonError(error: string, status: number, extra?: object) {
+  return NextResponse.json(
+    { error, ...extra },
+    {
+      status,
+      headers: {
+        "Cache-Control": "no-store",
+        "X-Content-Type-Options": "nosniff",
+      },
+    },
+  );
+}
+
 export async function POST(request: Request) {
   let locale = resolveLocale(null);
 
   try {
-    const body = await request.json();
+    const contentType = request.headers.get("content-type") || "";
+    if (!contentType.toLowerCase().includes("application/json")) {
+      return jsonError(v(locale).invalidForm, 415);
+    }
+
+    const contentLength = Number(request.headers.get("content-length") || 0);
+    if (contentLength > MAX_BODY_BYTES) {
+      return jsonError(v(locale).invalidForm, 413);
+    }
+
+    const raw = await request.text();
+    if (!raw || raw.length > MAX_BODY_BYTES) {
+      return jsonError(v(locale).invalidForm, 413);
+    }
+
+    let body: unknown;
+    try {
+      body = JSON.parse(raw) as unknown;
+    } catch {
+      return jsonError(v(locale).invalidForm, 400);
+    }
+
+    if (!body || typeof body !== "object" || Array.isArray(body)) {
+      return jsonError(v(locale).invalidForm, 400);
+    }
+
+    const payload = body as Record<string, unknown>;
     locale = resolveLocale(
-      typeof body?.locale === "string" ? body.locale : null,
+      typeof payload.locale === "string" ? payload.locale : null,
     );
     const messages = v(locale);
 
-    const parsed = contactFormSchema.safeParse(body);
+    const parsed = contactFormSchema.safeParse(payload);
     if (!parsed.success) {
       const fieldErrors: Record<string, string> = {};
       for (const issue of parsed.error.issues) {
@@ -27,40 +68,40 @@ export async function POST(request: Request) {
         else fieldErrors[key] = messages.required;
       }
 
+      return jsonError(messages.invalidForm, 400, { fieldErrors });
+    }
+
+    // Honeypot: pretend success for bots.
+    if (parsed.data.website) {
       return NextResponse.json(
-        { error: messages.invalidForm, fieldErrors },
-        { status: 400 },
+        { ok: true },
+        { headers: { "Cache-Control": "no-store" } },
       );
     }
 
-    if (parsed.data.website) {
-      return NextResponse.json({ ok: true });
-    }
-
     const forwarded = request.headers.get("x-forwarded-for") || "local";
-    const ipHash = createHash("sha256").update(forwarded).digest("hex");
+    const ip = forwarded.split(",")[0]?.trim() || "local";
+    const ipHash = createHash("sha256").update(ip).digest("hex");
     const rate = checkRateLimit(`contact:${ipHash}`, 5, 60_000);
     if (!rate.allowed) {
-      return NextResponse.json({ error: messages.rateLimit }, { status: 429 });
+      return jsonError(messages.rateLimit, 429);
     }
 
     const sent = await sendContactEmail(parsed.data);
     if (!sent.ok) {
-      const error =
-        sent.reason === "not_configured" || sent.reason === "no_recipients"
-          ? locale === "ar"
-            ? "إرسال البريد غير مُعدّ. أضف إعدادات SMTP أو Resend."
-            : "Email delivery is not configured. Add SMTP or Resend settings."
-          : messages.sendFailed;
-
-      return NextResponse.json({ error }, { status: 500 });
+      // Never expose SMTP/config details to clients.
+      return jsonError(messages.sendFailed, 500);
     }
 
-    return NextResponse.json({ ok: true });
-  } catch {
     return NextResponse.json(
-      { error: v(locale).sendFailed },
-      { status: 500 },
+      { ok: true },
+      { headers: { "Cache-Control": "no-store" } },
     );
+  } catch {
+    return jsonError(v(locale).sendFailed, 500);
   }
+}
+
+export function GET() {
+  return jsonError("Method not allowed", 405);
 }

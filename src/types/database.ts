@@ -1,5 +1,3 @@
-export type Locale = "en" | "ar";
-
 export interface SiteSettings {
   id: string;
   company_name_ar: string;
@@ -204,9 +202,3 @@ export interface Certificate {
   is_featured: boolean;
   is_active: boolean;
 }
-
-export type Localized<T extends Record<string, unknown>> = {
-  [K in keyof T as K extends `${infer Base}_ar` | `${infer Base}_en`
-    ? Base
-    : K]: T[K];
-};

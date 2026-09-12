@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import type { ReactNode } from "react";
 
 export function SectionHeading({
   eyebrow,
@@ -16,10 +15,7 @@ export function SectionHeading({
 }) {
   return (
     <div
-      className={cn(
-        "max-w-3xl",
-        align === "center" && "mx-auto text-center",
-      )}
+      className={cn("max-w-3xl", align === "center" && "mx-auto text-center")}
     >
       {eyebrow ? (
         <p
@@ -67,24 +63,5 @@ export function EmptyState({
         <p className="mt-2 text-sm text-text-dark-muted">{description}</p>
       ) : null}
     </div>
-  );
-}
-
-export function Badge({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
-  return (
-    <span
-      className={cn(
-        "inline-flex items-center rounded-md border border-gold/30 bg-gold/10 px-2.5 py-1 text-xs font-semibold text-steel-dark",
-        className,
-      )}
-    >
-      {children}
-    </span>
   );
 }
