@@ -19,7 +19,7 @@ export function FeaturedProjects({
 
   if (!items.length) {
     return (
-      <section className="section-space bg-surface/60">
+      <section className="section-space bg-surface">
         <div className="container-page">
           <EmptyState title={copy.empty} />
         </div>
@@ -29,7 +29,7 @@ export function FeaturedProjects({
 
   return (
     <section
-      className="section-space bg-surface/60"
+      className="section-space bg-surface"
       aria-labelledby="featured-projects-heading"
     >
       <div className="container-page">
@@ -54,7 +54,7 @@ export function FeaturedProjects({
                 <Link
                   href={localizedPath(locale, "/gallery")}
                   className={cn(
-                    "group relative block aspect-[4/3] overflow-hidden rounded-xl border border-steel/15 bg-bg-soft shadow-sm transition duration-300",
+                    "group relative block aspect-[4/3] overflow-hidden rounded-xl border border-steel/15 bg-surface-muted shadow-sm transition duration-300",
                     "hover:scale-[1.02] hover:border-gold/50 hover:shadow-[0_16px_40px_rgba(198,161,91,0.15)]",
                   )}
                 >
@@ -65,7 +65,7 @@ export function FeaturedProjects({
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="object-cover transition duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0b0d10]/85 via-[#0b0d10]/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-bg/85 via-bg/20 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 flex items-end justify-end gap-3 p-4 md:p-5">
                     <span className="rounded-full border border-gold/30 bg-gold/10 p-1.5 text-gold transition group-hover:bg-gold/20">
                       <ArrowUpRight size={16} aria-hidden />

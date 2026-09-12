@@ -27,7 +27,7 @@ export function CtaBanner({
 
   return (
     <section
-      className="relative overflow-hidden bg-[#0b0d10] text-text"
+      className="relative overflow-hidden bg-bg text-text"
       aria-labelledby="cta-banner-heading"
     >
       <div

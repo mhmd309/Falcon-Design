@@ -43,7 +43,7 @@ export function HomeHero({
         className="object-cover object-center"
       />
       <div
-        className="absolute inset-0 bg-gradient-to-t from-[#0b0d10] via-[#0b0d10]/78 to-[#0b0d10]/40"
+        className="absolute inset-0 bg-gradient-to-t from-bg via-bg/78 to-bg/40"
         aria-hidden
       />
       <div

@@ -32,7 +32,7 @@ export function Navbar({
   const copy = t(locale);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0b0d10]/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-bg/80 backdrop-blur-md">
       <div className="container-page flex h-16 items-center justify-between gap-4 md:h-20">
         <Link
           href={localizedPath(locale)}
@@ -79,7 +79,7 @@ export function Navbar({
           <LanguageSwitcher locale={locale} />
           <Link
             href={localizedPath(locale, "/contact")}
-            className="rounded-md bg-gold px-4 py-2 text-sm font-semibold text-[#0b0d10] transition hover:bg-gold-soft"
+            className="rounded-md bg-gold px-4 py-2 text-sm font-semibold text-bg transition hover:bg-gold-soft"
           >
             {copy.navCta}
           </Link>
@@ -104,7 +104,7 @@ export function Navbar({
       {open ? (
         <div
           id="mobile-menu"
-          className="border-t border-white/10 bg-[#0b0d10] px-4 py-4 lg:hidden"
+          className="border-t border-white/10 bg-bg px-4 py-4 lg:hidden"
         >
           <nav className="flex flex-col gap-2" aria-label="Mobile">
             {publicNav.map((item) => {
@@ -130,7 +130,7 @@ export function Navbar({
           <div className="mt-4 flex items-center justify-start gap-3">
             <Link
               href={localizedPath(locale, "/contact")}
-              className="rounded-md bg-gold px-4 py-2 text-sm font-semibold text-[#0b0d10]"
+              className="rounded-md bg-gold px-4 py-2 text-sm font-semibold text-bg"
               onClick={() => setOpen(false)}
             >
               {copy.navCta}

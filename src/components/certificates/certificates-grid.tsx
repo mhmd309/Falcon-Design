@@ -67,7 +67,7 @@ export function CertificatesGrid({
                 <Reveal key={item.id} delay={index * 0.05}>
                   <button
                     type="button"
-                    className="group w-full cursor-pointer overflow-hidden rounded-xl border border-steel/15 bg-[#0b0d10] text-start shadow-sm transition hover:border-gold/40 focus-visible:outline-none"
+                    className="group w-full cursor-pointer overflow-hidden rounded-xl border border-steel/15 bg-card text-start shadow-sm transition hover:border-gold/40 focus-visible:outline-none"
                     onClick={() => setActive(item)}
                     aria-label={pickLocalized(item, locale, "title")}
                   >
@@ -83,12 +83,12 @@ export function CertificatesGrid({
                         className="object-contain transition duration-500 group-hover:scale-[1.02]"
                       />
                     </span>
-                    <span className="block space-y-1 bg-[#0b0d10] px-4 py-4">
-                      <span className="block text-sm font-semibold text-white">
+                    <span className="block space-y-1 border-t border-steel/15 bg-card px-4 py-4">
+                      <span className="block text-sm font-semibold text-text-dark">
                         {pickLocalized(item, locale, "title")}
                       </span>
                       {(item.issuer_ar || item.issuer_en || item.year) && (
-                        <span className="block text-xs text-white/70">
+                        <span className="block text-xs text-text-dark-muted">
                           {[pickLocalized(item, locale, "issuer"), item.year]
                             .filter(Boolean)
                             .join(" · ")}
@@ -160,7 +160,7 @@ export function CertificatesGrid({
             <X size={20} />
           </button>
           <div
-            className="relative w-full max-w-4xl overflow-hidden rounded-xl bg-[#0f1720]"
+            className="relative w-full max-w-4xl overflow-hidden rounded-xl bg-bg-elevated"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative mx-auto aspect-[2/3] w-full max-h-[78vh]">

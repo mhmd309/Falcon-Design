@@ -44,7 +44,7 @@ export default async function ContactPage({
           className="pointer-events-none absolute inset-0 opacity-40"
           style={{
             background:
-              "radial-gradient(800px 400px at 80% 20%, rgba(198,161,91,0.18), transparent 60%), linear-gradient(135deg, #0b0d10 0%, #161c24 100%)",
+              "radial-gradient(800px 400px at 80% 20%, rgba(198,161,91,0.18), transparent 60%), linear-gradient(135deg, var(--bg) 0%, var(--bg-elevated) 100%)",
           }}
         />
         <div className="container-page relative py-14 sm:py-18 md:py-20">
@@ -66,7 +66,7 @@ export default async function ContactPage({
         <div className="container-page grid items-start gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16">
           <ContactInfo locale={locale} />
           <Reveal delay={0.08}>
-            <div className="rounded-2xl border border-steel/15 bg-card/90 p-6 shadow-[0_20px_60px_rgba(18,22,28,0.06)] backdrop-blur-sm sm:p-8">
+            <div className="shadow-card rounded-2xl border border-steel/15 bg-card p-6 sm:p-8">
               <ContactForm locale={locale} />
             </div>
           </Reveal>

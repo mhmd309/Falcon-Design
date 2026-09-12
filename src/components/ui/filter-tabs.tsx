@@ -38,7 +38,7 @@ export function FilterTabs({
             className={cn(
               "cursor-pointer rounded-md px-3.5 py-2 text-sm font-medium transition",
               active
-                ? "bg-bg text-gold shadow-sm"
+                ? "bg-text-dark text-card shadow-sm"
                 : "border border-steel/25 bg-card text-text-dark hover:border-gold/40 hover:text-steel-dark",
             )}
           >

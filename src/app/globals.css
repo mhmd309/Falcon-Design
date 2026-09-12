@@ -1,13 +1,18 @@
 @import "tailwindcss";
 
+/*
+  Background roles:
+  - page-bg / surface / card  → theme-aware content UI
+  - bg / bg-elevated / bg-soft → brand chrome (nav, hero, footer bands)
+*/
 :root,
 [data-theme="light"] {
   color-scheme: light;
   --bg: #0b0d10;
   --bg-elevated: #12161c;
   --bg-soft: #1a2029;
-  --surface: #f4f6f8;
-  --surface-muted: #e8ecf0;
+  --surface: #eef1f5;
+  --surface-muted: #e2e7ed;
   --card: #ffffff;
   --text: #f3f5f7;
   --text-muted: #a8b0bb;
@@ -21,11 +26,13 @@
   --danger: #c45c5c;
   --success: #3f8f6b;
   --radius: 0.75rem;
-  --page-bg-a: #f7f8fa;
-  --page-bg-b: #eef1f5;
-  --page-glow-1: rgba(198, 161, 91, 0.12);
-  --page-glow-2: rgba(61, 70, 84, 0.18);
-  --scrollbar-track: #e8ecf0;
+  --page-bg-a: #f6f7f9;
+  --page-bg-b: #eceff3;
+  --page-glow-1: rgba(198, 161, 91, 0.1);
+  --page-glow-2: rgba(61, 70, 84, 0.12);
+  --shadow-card: 0 20px 60px rgba(18, 22, 28, 0.08);
+  --shadow-float: 0 12px 40px rgba(18, 22, 28, 0.14);
+  --scrollbar-track: #e2e7ed;
   --scrollbar-thumb: #c6a15b;
   --scrollbar-thumb-hover: #b08d4a;
   --font-en: var(--font-beiruti), var(--font-roboto), "Beiruti", "Roboto", sans-serif;
@@ -34,12 +41,12 @@
 
 [data-theme="dark"] {
   color-scheme: dark;
-  --bg: #07090c;
-  --bg-elevated: #10151c;
-  --bg-soft: #171d26;
-  --surface: #12161c;
-  --surface-muted: #1a2029;
-  --card: #151a22;
+  --bg: #050709;
+  --bg-elevated: #0e141c;
+  --bg-soft: #151b24;
+  --surface: #10151c;
+  --surface-muted: #161c25;
+  --card: #141a22;
   --text: #f3f5f7;
   --text-muted: #a8b0bb;
   --text-dark: #f3f5f7;
@@ -51,11 +58,13 @@
   --border: rgba(198, 161, 91, 0.3);
   --danger: #c45c5c;
   --success: #3f8f6b;
-  --page-bg-a: #0b0d10;
-  --page-bg-b: #12161c;
-  --page-glow-1: rgba(198, 161, 91, 0.1);
-  --page-glow-2: rgba(61, 70, 84, 0.35);
-  --scrollbar-track: #12161c;
+  --page-bg-a: #07090c;
+  --page-bg-b: #0c1016;
+  --page-glow-1: rgba(198, 161, 91, 0.08);
+  --page-glow-2: rgba(61, 70, 84, 0.28);
+  --shadow-card: 0 20px 60px rgba(0, 0, 0, 0.45);
+  --shadow-float: 0 12px 40px rgba(0, 0, 0, 0.5);
+  --scrollbar-track: #10151c;
   --scrollbar-thumb: #c6a15b;
   --scrollbar-thumb-hover: #d4b87a;
 }
@@ -142,6 +151,14 @@ img {
 
 .section-space {
   padding-block: clamp(2.75rem, 5.5vw, 6rem);
+}
+
+.shadow-card {
+  box-shadow: var(--shadow-card);
+}
+
+.shadow-float {
+  box-shadow: var(--shadow-float);
 }
 
 button,

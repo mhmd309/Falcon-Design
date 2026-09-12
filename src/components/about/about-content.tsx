@@ -47,7 +47,7 @@ export function AboutContent({
             className="object-cover"
           />
         ) : null}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0d10] via-[#0b0d10]/72 to-[#0b0d10]/35" />
+        <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/72 to-bg/35" />
         <div className="container-page relative flex min-h-[70vh] flex-col justify-end pb-14 pt-28 sm:pb-16 md:pb-20">
           <Reveal>
             <p className="text-sm font-semibold tracking-[0.22em] text-gold-soft uppercase">
@@ -148,7 +148,7 @@ export function AboutContent({
       ) : null}
 
       {timeline.length ? (
-        <section className="section-space bg-[#12161c] text-text">
+        <section className="section-space bg-bg-elevated text-text">
           <div className="container-page">
             <Reveal>
               <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl md:text-4xl">
