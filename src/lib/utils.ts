@@ -32,14 +32,6 @@ export function switchLocalePath(pathname: string, nextLocale: Locale) {
   return `/${nextLocale}`;
 }
 
-export function isSupabaseConfigured() {
-  return Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY &&
-      !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("your-project"),
-  );
-}
-
 export function absoluteUrl(path: string) {
   const base =
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||

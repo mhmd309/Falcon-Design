@@ -13,17 +13,6 @@ export const validationMessages = {
     invalidForm: "Please check the form fields and try again.",
     rateLimit: "Too many requests. Please try again later.",
     sendFailed: "Unable to send your message right now.",
-    invalidFile:
-      "Invalid file. Use JPEG, PNG, WebP, GIF, or AVIF under 10 MB.",
-    uploadFailed: "Upload failed. Please try again.",
-    uploadRequiresSupabase: "Upload requires Supabase configuration.",
-    invalidCredentials: "Invalid email or password.",
-    signInFailed: "Unable to sign in. Please try again.",
-    supabaseNotConfigured:
-      "Supabase is not configured. Add environment variables to enable login.",
-    emailPasswordRequired: "Email and password are required.",
-    passwordRequired: "Password is required.",
-    emailFieldRequired: "Email is required.",
   },
   ar: {
     required: "هذا الحقل مطلوب.",
@@ -37,17 +26,6 @@ export const validationMessages = {
     invalidForm: "يرجى مراجعة الحقول والمحاولة مرة أخرى.",
     rateLimit: "عدد كبير من المحاولات. يرجى المحاولة لاحقًا.",
     sendFailed: "تعذر إرسال الرسالة حاليًا.",
-    invalidFile:
-      "ملف غير صالح. استخدم JPEG أو PNG أو WebP أو GIF أو AVIF بحجم أقل من 10 ميجابايت.",
-    uploadFailed: "فشل رفع الملف. حاول مرة أخرى.",
-    uploadRequiresSupabase: "رفع الصور يتطلب إعداد Supabase.",
-    invalidCredentials: "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
-    signInFailed: "تعذر تسجيل الدخول. حاول مرة أخرى.",
-    supabaseNotConfigured:
-      "لم يتم إعداد Supabase. أضف متغيرات البيئة لتفعيل تسجيل الدخول.",
-    emailPasswordRequired: "البريد الإلكتروني وكلمة المرور مطلوبان.",
-    passwordRequired: "كلمة المرور مطلوبة.",
-    emailFieldRequired: "البريد الإلكتروني مطلوب.",
   },
 } as const;
 

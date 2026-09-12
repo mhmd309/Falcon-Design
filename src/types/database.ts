@@ -1,7 +1,5 @@
 export type Locale = "en" | "ar";
 
-export type MessageStatus = "new" | "read" | "replied" | "archived";
-
 export interface SiteSettings {
   id: string;
   company_name_ar: string;
@@ -190,17 +188,21 @@ export interface ContactEmail {
   sort_order: number;
 }
 
-export interface ContactMessage {
+export interface Certificate {
   id: string;
-  name: string;
-  email: string;
-  phone: string | null;
-  subject: string;
-  message: string;
-  status: MessageStatus;
-  locale: string | null;
-  created_at: string;
-  updated_at: string;
+  title_ar: string;
+  title_en: string;
+  description_ar: string | null;
+  description_en: string | null;
+  issuer_ar: string | null;
+  issuer_en: string | null;
+  year: string | null;
+  image_url: string;
+  alt_text_ar: string | null;
+  alt_text_en: string | null;
+  sort_order: number;
+  is_featured: boolean;
+  is_active: boolean;
 }
 
 export type Localized<T extends Record<string, unknown>> = {

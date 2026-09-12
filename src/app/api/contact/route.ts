@@ -1,11 +1,6 @@
 import { NextResponse } from "next/server";
 import { createHash } from "crypto";
-import { createClient } from "@/lib/supabase/server";
-import { isSupabaseConfigured } from "@/lib/utils";
-import {
-  checkRateLimit,
-  contactFormSchema,
-} from "@/lib/validation/schemas";
+import { checkRateLimit, contactFormSchema } from "@/lib/validation/schemas";
 import { resolveLocale, v } from "@/lib/i18n/validation";
 
 export async function POST(request: Request) {
@@ -48,34 +43,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: messages.rateLimit }, { status: 429 });
     }
 
-    if (!isSupabaseConfigured()) {
-      return NextResponse.json({
-        ok: true,
-        persisted: false,
-        message:
-          locale === "ar"
-            ? "تم الاستلام. اربط Supabase لحفظ الرسائل."
-            : "Received. Connect Supabase to persist messages.",
-      });
-    }
-
-    const supabase = await createClient();
-    const { error } = await supabase.from("contact_messages").insert({
+    // Static site: validated successfully (no database persistence).
+    console.info("[contact]", {
+      locale,
       name: parsed.data.name,
       email: parsed.data.email,
-      phone: parsed.data.phone || null,
       subject: parsed.data.subject,
-      message: parsed.data.message,
-      locale: parsed.data.locale || locale,
-      ip_hash: ipHash,
-      status: "new",
     });
 
-    if (error) {
-      return NextResponse.json({ error: messages.sendFailed }, { status: 500 });
-    }
-
-    return NextResponse.json({ ok: true, persisted: true });
+    return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json(
       { error: v(locale).sendFailed },

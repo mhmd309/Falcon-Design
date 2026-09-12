@@ -4,8 +4,10 @@ import { HomeHero } from "@/components/home/hero";
 import { StatsSection } from "@/components/home/stats-section";
 import { FeaturedServices } from "@/components/home/featured-services";
 import { FeaturedProjects } from "@/components/home/featured-projects";
+import { FeaturedCertificates } from "@/components/home/featured-certificates";
 import { CtaBanner } from "@/components/home/cta-banner";
 import {
+  getCertificates,
   getGalleryItems,
   getPageBySlug,
   getSection,
@@ -38,14 +40,16 @@ export default async function HomePage({
   const { locale: localeParam } = await params;
   const locale = localeParam as Locale;
 
-  const [hero, cta, stats, services, projects, settings] = await Promise.all([
-    getSection("home", "hero"),
-    getSection("home", "cta"),
-    getStatistics(),
-    getServices({ featuredOnly: true }),
-    getGalleryItems({ featuredOnly: true }),
-    getSiteSettings(),
-  ]);
+  const [hero, cta, stats, services, projects, certs, settings] =
+    await Promise.all([
+      getSection("home", "hero"),
+      getSection("home", "cta"),
+      getStatistics(),
+      getServices({ featuredOnly: true }),
+      getGalleryItems({ featuredOnly: true }),
+      getCertificates({ featuredOnly: true }),
+      getSiteSettings(),
+    ]);
 
   return (
     <>
@@ -55,6 +59,7 @@ export default async function HomePage({
       <StatsSection locale={locale} stats={stats} />
       <FeaturedServices locale={locale} services={services} />
       <FeaturedProjects locale={locale} items={projects} />
+      <FeaturedCertificates locale={locale} items={certs} />
       <CtaBanner locale={locale} section={cta} />
     </>
   );

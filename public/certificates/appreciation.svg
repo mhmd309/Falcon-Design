@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="560" viewBox="0 0 800 560" role="img" aria-label="Client Appreciation Certificate">
+  <rect width="800" height="560" fill="#1b2430"/>
+  <rect x="28" y="28" width="744" height="504" fill="none" stroke="#c9a227" stroke-width="3"/>
+  <polygon points="400,100 418,145 468,150 430,182 440,230 400,205 360,230 370,182 332,150 382,145" fill="none" stroke="#c9a227" stroke-width="3"/>
+  <text x="400" y="300" text-anchor="middle" fill="#f5f2ea" font-family="Georgia, serif" font-size="28">Appreciation</text>
+  <text x="400" y="345" text-anchor="middle" fill="#c9a227" font-family="Arial, sans-serif" font-size="16" letter-spacing="3">CLIENT RECOGNITION</text>
+  <text x="400" y="400" text-anchor="middle" fill="#d7dde5" font-family="Arial, sans-serif" font-size="16">Falcon Design</text>
+  <text x="400" y="460" text-anchor="middle" fill="#c9a227" font-family="Arial, sans-serif" font-size="13">2024</text>
+</svg>

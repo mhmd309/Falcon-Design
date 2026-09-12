@@ -21,6 +21,7 @@ export const publicNav = [
   { href: "/about", label: { en: "About", ar: "من نحن" } },
   { href: "/services", label: { en: "Services", ar: "خدماتنا" } },
   { href: "/gallery", label: { en: "Gallery", ar: "المشاريع" } },
+  { href: "/certificates", label: { en: "Certificates", ar: "الشهادات" } },
   { href: "/contact", label: { en: "Contact", ar: "تواصل معنا" } },
 ] as const;
 
