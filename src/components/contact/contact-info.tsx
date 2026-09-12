@@ -11,7 +11,7 @@ const CONTACT = {
   address_en: "Al Ain, Abu Dhabi, United Arab Emirates",
   phoneDisplay: "+971 56 233 1020",
   phoneTel: "+971562331020",
-  whatsappUrl: "https://wa.me/971562331020",
+  whatsappUrl: "https://api.whatsapp.com/send?phone=971562331020",
   hours_ar: "الأحد – الخميس: 8:00 ص – 6:00 م",
   hours_en: "Sunday – Thursday: 8:00 AM – 6:00 PM",
   description_ar: "راسلنا لمناقشة مشروعك القادم في أعمال الصلب والألمنيوم.",
