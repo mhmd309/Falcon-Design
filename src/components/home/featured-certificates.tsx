@@ -41,7 +41,7 @@ export function FeaturedCertificates({
                 href={localizedPath(locale, "/certificates")}
                 className="group block overflow-hidden rounded-xl border border-steel/15 bg-[#0b0d10] transition hover:border-gold/40"
               >
-                <span className="relative block aspect-[4/3] bg-[#16202b]">
+                <span className="relative block aspect-[2/3] bg-white">
                   <Image
                     src={item.image_url}
                     alt={
@@ -50,7 +50,7 @@ export function FeaturedCertificates({
                     }
                     fill
                     sizes="(max-width:640px) 100vw, 33vw"
-                    className="object-cover transition duration-500 group-hover:scale-[1.02]"
+                    className="object-contain transition duration-500 group-hover:scale-[1.02]"
                   />
                 </span>
                 <span className="block bg-[#0b0d10] px-4 py-3 text-sm font-semibold text-white">

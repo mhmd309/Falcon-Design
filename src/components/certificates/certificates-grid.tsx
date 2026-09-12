@@ -53,7 +53,7 @@ export function CertificatesGrid({
                   onClick={() => setActive(item)}
                   aria-label={pickLocalized(item, locale, "title")}
                 >
-                  <span className="relative block aspect-[4/3] overflow-hidden bg-[#16202b]">
+                  <span className="relative block aspect-[2/3] overflow-hidden bg-white">
                     <Image
                       src={item.image_url}
                       alt={
@@ -62,7 +62,7 @@ export function CertificatesGrid({
                       }
                       fill
                       sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
-                      className="object-cover transition duration-500 group-hover:scale-[1.02]"
+                      className="object-contain transition duration-500 group-hover:scale-[1.02]"
                     />
                   </span>
                   <span className="block space-y-1 bg-[#0b0d10] px-4 py-4">
@@ -104,7 +104,7 @@ export function CertificatesGrid({
             className="relative w-full max-w-4xl overflow-hidden rounded-xl bg-[#0f1720]"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative mx-auto aspect-[4/3] w-full max-h-[70vh]">
+            <div className="relative mx-auto aspect-[2/3] w-full max-h-[78vh]">
               <Image
                 src={active.image_url}
                 alt={
