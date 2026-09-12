@@ -6,7 +6,7 @@ Content is **static in code** (no database / no admin CMS). Edit `src/lib/data/c
 
 ## Stack
 
-- Next.js 15 (App Router) + TypeScript
+- Next.js 16 (App Router) + TypeScript
 - React 19 + Tailwind CSS 4
 - Framer Motion + Lucide React
 - Zod (contact form validation)
