@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { MapPin, Phone, Clock, Mail, MessageCircle } from "lucide-react";
 import type { Locale } from "@/config/site";
 import type { ContactEmail, ContactSettings } from "@/types/database";
-import { pickLocalized, safeExternalUrl } from "@/lib/utils";
+import { pickLocalized } from "@/lib/utils";
 import { t } from "@/lib/i18n/ui";
 import { Reveal } from "@/components/ui/motion";
 
@@ -16,15 +16,6 @@ export function ContactInfo({
   emails: ContactEmail[];
 }) {
   const copy = t(locale);
-  const mapUrl =
-    safeExternalUrl(settings.google_maps_url) ||
-    (settings.latitude && settings.longitude
-      ? `https://maps.google.com/?q=${settings.latitude},${settings.longitude}`
-      : null);
-  const embedSrc =
-    settings.latitude && settings.longitude
-      ? `https://maps.google.com/maps?q=${settings.latitude},${settings.longitude}&z=12&output=embed`
-      : null;
 
   const rows = [
     {
@@ -143,30 +134,6 @@ export function ContactInfo({
               </ul>
             </div>
           </div>
-        </Reveal>
-      ) : null}
-
-      {embedSrc ? (
-        <Reveal delay={0.12}>
-          <div className="overflow-hidden rounded-2xl border border-steel/15">
-            <iframe
-              title="Google Maps"
-              src={embedSrc}
-              className="h-56 w-full border-0 sm:h-64"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
-          </div>
-          {mapUrl ? (
-            <a
-              href={mapUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-3 inline-flex text-sm font-semibold text-gold transition hover:text-gold-soft"
-            >
-              {locale === "ar" ? "فتح في خرائط جوجل" : "Open in Google Maps"}
-            </a>
-          ) : null}
         </Reveal>
       ) : null}
     </div>
