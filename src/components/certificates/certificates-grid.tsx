@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import type { Locale } from "@/config/site";
-import type { Certificate } from "@/types/database";
+import type { Certificate } from "@/types/content";
 import { Reveal } from "@/components/ui/motion";
 import { SectionHeading, EmptyState } from "@/components/ui/section";
 import { pickLocalized } from "@/lib/utils";

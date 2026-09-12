@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Locale } from "@/config/site";
-import type { SiteSection } from "@/types/database";
+import type { SiteSection } from "@/types/content";
 import { localizedPath, pickLocalized } from "@/lib/utils";
 
 function resolveHref(locale: Locale, href: string | null) {

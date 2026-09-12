@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { Locale } from "@/config/site";
-import type { GalleryItem } from "@/types/database";
+import type { GalleryItem } from "@/types/content";
 import { cn, localizedPath, pickLocalized } from "@/lib/utils";
 import { t } from "@/lib/i18n/ui";
 import { Reveal } from "@/components/ui/motion";

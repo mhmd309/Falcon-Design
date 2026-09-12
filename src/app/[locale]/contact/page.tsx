@@ -3,7 +3,7 @@ import type { Locale } from "@/config/site";
 import { ContactForm } from "@/components/contact/contact-form";
 import { ContactInfo } from "@/components/contact/contact-info";
 import { Reveal } from "@/components/ui/motion";
-import { getPageBySlug } from "@/lib/data/queries";
+import { getPageBySlug } from "@/lib/data";
 import {
   JsonLd,
   breadcrumbJsonLd,

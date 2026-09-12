@@ -5,7 +5,7 @@ import {
   getGalleryCategories,
   getGalleryItems,
   getPageBySlug,
-} from "@/lib/data/queries";
+} from "@/lib/data";
 import {
   JsonLd,
   breadcrumbJsonLd,

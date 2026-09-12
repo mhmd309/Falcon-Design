@@ -14,7 +14,7 @@ import {
   getServices,
   getSiteSettings,
   getStatistics,
-} from "@/lib/data/queries";
+} from "@/lib/data";
 import {
   JsonLd,
   buildPageMetadata,

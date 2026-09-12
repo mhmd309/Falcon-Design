@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { Locale } from "@/config/site";
 import { ServicesGrid } from "@/components/services/services-grid";
-import { getPageBySlug, getSection, getServices } from "@/lib/data/queries";
+import { getPageBySlug, getSection, getServices } from "@/lib/data";
 import {
   JsonLd,
   breadcrumbJsonLd,

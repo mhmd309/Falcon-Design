@@ -1,7 +1,6 @@
 import type {
   Certificate,
   ContactEmail,
-  ContactSettings,
   CoreValue,
   GalleryCategory,
   GalleryItem,
@@ -11,7 +10,7 @@ import type {
   SiteSettings,
   Statistic,
   TimelineItem,
-} from "@/types/database";
+} from "@/types/content";
 
 /**
  * Static site content — edit this file to update the public website.
@@ -47,9 +46,6 @@ const seo = (
   slug,
   title_ar: ar,
   title_en: en,
-  show_in_navigation: true,
-  sort_order: 0,
-  is_published: true,
   seo_title_ar: `${ar} | فالكون ديزاين`,
   seo_title_en: `${en} | Falcon Design`,
   seo_description_ar: descAr,
@@ -73,7 +69,6 @@ export const pages: SitePage[] = [
       "Integrated steel and aluminum solutions in Al Ain and Abu Dhabi.",
       "/gallery/01.jpeg",
     ),
-    sort_order: 1,
     seo_title_ar: "فالكون ديزاين | أعمال الصلب والألمنيوم",
     seo_title_en: "Falcon Design | Steel & Aluminum Works",
   },
@@ -87,7 +82,6 @@ export const pages: SitePage[] = [
       "Learn about Falcon Design vision, mission, and team.",
       "/gallery/05.jpeg",
     ),
-    sort_order: 2,
   },
   {
     id: "page-services",
@@ -99,7 +93,6 @@ export const pages: SitePage[] = [
       "Specialized steel and aluminum solutions for industrial and architectural projects.",
       "/gallery/10.jpeg",
     ),
-    sort_order: 3,
   },
   {
     id: "page-gallery",
@@ -111,7 +104,6 @@ export const pages: SitePage[] = [
       "Explore Falcon Design project portfolio.",
       "/gallery/01.jpeg",
     ),
-    sort_order: 4,
   },
   {
     id: "page-certificates",
@@ -123,7 +115,6 @@ export const pages: SitePage[] = [
       "Accreditations and quality certificates of Falcon Design.",
       "/certificates/01.png",
     ),
-    sort_order: 5,
   },
   {
     id: "page-contact",
@@ -135,7 +126,6 @@ export const pages: SitePage[] = [
       "Get in touch with Falcon Design in Al Ain, Abu Dhabi.",
       "/gallery/03.jpeg",
     ),
-    sort_order: 6,
   },
 ];
 
@@ -165,7 +155,6 @@ function section(
     alt_text_ar: null,
     alt_text_en: null,
     extra: {},
-    is_published: true,
     ...data,
   };
 }
@@ -267,8 +256,6 @@ export const statistics: Statistic[] = [
     suffix: "",
     label_ar: "سنة التأسيس",
     label_en: "Founded",
-    sort_order: 1,
-    is_active: true,
   },
   {
     id: "st2",
@@ -277,8 +264,6 @@ export const statistics: Statistic[] = [
     suffix: "+",
     label_ar: "سنوات خبرة ميدانية",
     label_en: "Years Field Expertise",
-    sort_order: 2,
-    is_active: true,
   },
   {
     id: "st3",
@@ -287,8 +272,6 @@ export const statistics: Statistic[] = [
     suffix: "+",
     label_ar: "مشروع منجز",
     label_en: "Projects Delivered",
-    sort_order: 3,
-    is_active: true,
   },
   {
     id: "st4",
@@ -297,8 +280,6 @@ export const statistics: Statistic[] = [
     suffix: "",
     label_ar: "تخصصات رئيسية",
     label_en: "Core Disciplines",
-    sort_order: 4,
-    is_active: true,
   },
 ];
 
@@ -318,10 +299,7 @@ export const services: Service[] = [
     alt_text_en: "Cranes erecting a steel frame for an industrial building",
     icon: "crane",
     category: "steel",
-    is_active: true,
     is_featured: true,
-    is_published: true,
-    sort_order: 1,
   },
   {
     id: "sv2",
@@ -338,10 +316,7 @@ export const services: Service[] = [
     alt_text_en: "Steel hangar frame on a concrete slab",
     icon: "warehouse",
     category: "steel",
-    is_active: true,
     is_featured: true,
-    is_published: true,
-    sort_order: 2,
   },
   {
     id: "sv3",
@@ -358,10 +333,7 @@ export const services: Service[] = [
     alt_text_en: "Metal construction site with cranes and heavy equipment",
     icon: "building",
     category: "steel",
-    is_active: true,
     is_featured: true,
-    is_published: true,
-    sort_order: 3,
   },
   {
     id: "sv4",
@@ -378,10 +350,7 @@ export const services: Service[] = [
     alt_text_en: "Workers assembling a steel frame on site",
     icon: "wrench",
     category: "steel",
-    is_active: true,
     is_featured: true,
-    is_published: true,
-    sort_order: 4,
   },
   {
     id: "sv5",
@@ -398,10 +367,7 @@ export const services: Service[] = [
     alt_text_en: "Industrial building clad with insulated panels",
     icon: "panels",
     category: "steel",
-    is_active: true,
     is_featured: true,
-    is_published: true,
-    sort_order: 5,
   },
   {
     id: "sv6",
@@ -418,10 +384,7 @@ export const services: Service[] = [
     alt_text_en: "Finished industrial warehouse interior with high-bay lighting",
     icon: "interior",
     category: "steel",
-    is_active: true,
     is_featured: false,
-    is_published: true,
-    sort_order: 6,
   },
   {
     id: "sv7",
@@ -438,10 +401,7 @@ export const services: Service[] = [
     alt_text_en: "Cranes working on a heavy steel structure",
     icon: "hammer",
     category: "steel",
-    is_active: true,
     is_featured: false,
-    is_published: true,
-    sort_order: 7,
   },
   {
     id: "sv8",
@@ -458,10 +418,7 @@ export const services: Service[] = [
     alt_text_en: "Ready industrial hall with steel frame and insulated panels",
     icon: "check",
     category: "steel",
-    is_active: true,
     is_featured: false,
-    is_published: true,
-    sort_order: 8,
   },
   {
     id: "sv9",
@@ -478,10 +435,7 @@ export const services: Service[] = [
     alt_text_en: "Illustration of a steel mezzanine floor",
     icon: "layers",
     category: "steel",
-    is_active: true,
     is_featured: false,
-    is_published: true,
-    sort_order: 9,
   },
   {
     id: "sv10",
@@ -498,10 +452,7 @@ export const services: Service[] = [
     alt_text_en: "Illustration of fencing and security works",
     icon: "shield",
     category: "steel",
-    is_active: true,
     is_featured: false,
-    is_published: true,
-    sort_order: 10,
   },
   {
     id: "sv11",
@@ -518,10 +469,7 @@ export const services: Service[] = [
     alt_text_en: "Illustration of an aluminum handrail system",
     icon: "rail",
     category: "aluminum",
-    is_active: true,
     is_featured: true,
-    is_published: true,
-    sort_order: 11,
   },
   {
     id: "sv12",
@@ -538,10 +486,7 @@ export const services: Service[] = [
     alt_text_en: "Illustration of aluminum doors and windows",
     icon: "door",
     category: "aluminum",
-    is_active: true,
     is_featured: false,
-    is_published: true,
-    sort_order: 12,
   },
 ];
 
@@ -554,8 +499,6 @@ export const coreValues: CoreValue[] = [
     description_en:
       "We forge ongoing relationships that extend for years after delivery.",
     icon: "handshake",
-    sort_order: 1,
-    is_active: true,
   },
   {
     id: "cv2",
@@ -566,8 +509,6 @@ export const coreValues: CoreValue[] = [
     description_en:
       "Heavy steelwork and architectural aluminum in one seamless solution.",
     icon: "layers",
-    sort_order: 2,
-    is_active: true,
   },
   {
     id: "cv3",
@@ -577,8 +518,6 @@ export const coreValues: CoreValue[] = [
     description_en:
       "Rigorous project management for on-time delivery without compromising quality.",
     icon: "clock",
-    sort_order: 3,
-    is_active: true,
   },
   {
     id: "cv4",
@@ -587,8 +526,6 @@ export const coreValues: CoreValue[] = [
     description_ar: "أحدث تقنيات التصنيع ومواد أولية ممتازة.",
     description_en: "Latest fabrication technologies and premium materials.",
     icon: "award",
-    sort_order: 4,
-    is_active: true,
   },
 ];
 
@@ -602,8 +539,6 @@ export const timeline: TimelineItem[] = [
       "بدأت رحلتنا المؤسسية على أساس عقود من الخبرة الميدانية والهندسية.",
     description_en:
       "Our corporate journey began on decades of field and engineering expertise.",
-    sort_order: 1,
-    is_active: true,
   },
   {
     id: "tl2",
@@ -613,8 +548,6 @@ export const timeline: TimelineItem[] = [
     description_ar: "توسيع نطاق أعمال الصلب والألمنيوم عبر العين وأبوظبي.",
     description_en:
       "Expanded steel and aluminum delivery across Al Ain and Abu Dhabi.",
-    sort_order: 2,
-    is_active: true,
   },
   {
     id: "tl3",
@@ -624,8 +557,6 @@ export const timeline: TimelineItem[] = [
     description_ar: "مواصلة رفع معايير الجودة والابتكار في الحلول المعدنية.",
     description_en:
       "Raising quality and innovation benchmarks in metal solutions.",
-    sort_order: 3,
-    is_active: true,
   },
 ];
 
@@ -635,24 +566,18 @@ export const galleryCategories: GalleryCategory[] = [
     name_ar: "هياكل صلب",
     name_en: "Steel Structures",
     slug: "steel-structures",
-    sort_order: 1,
-    is_active: true,
   },
   {
     id: "cat-interiors",
     name_ar: "منشآت داخلية",
     name_en: "Interiors",
     slug: "interiors",
-    sort_order: 2,
-    is_active: true,
   },
   {
     id: "cat-completed",
     name_ar: "مشاريع منفذة",
     name_en: "Completed Projects",
     slug: "completed",
-    sort_order: 3,
-    is_active: true,
   },
 ];
 
@@ -686,10 +611,7 @@ export const galleryItems: GalleryItem[] = Array.from({ length: 23 }, (_, i) => 
     alt_text_en: isZayed
       ? "Zayed Military College project"
       : `Falcon Design project ${n}`,
-    sort_order: n,
     is_featured: [1, 2, 3, 5, 10, 20].includes(n),
-    is_active: true,
-    is_published: true,
   };
 });
 
@@ -703,50 +625,20 @@ export const contactEmails: ContactEmail[] = [
     label_ar: "عام",
     label_en: "General",
     email: "falcondesign20@gmail.com",
-    is_active: true,
-    sort_order: 1,
   },
   {
     id: "email-2",
     label_ar: "المبيعات",
     label_en: "Sales",
     email: "sales@falcondesign.ae",
-    is_active: true,
-    sort_order: 2,
   },
   {
     id: "email-3",
     label_ar: "المشاريع",
     label_en: "Projects",
     email: "projects@falcondesign.ae",
-    is_active: true,
-    sort_order: 3,
   },
 ];
-
-export const contactSettings: ContactSettings = {
-  id: "contact-settings",
-  page_title_ar: "تواصل معنا",
-  page_title_en: "Contact Us",
-  page_description_ar: "راسلنا لمناقشة مشروعك القادم في أعمال الصلب والألمنيوم.",
-  page_description_en: "Reach out to discuss your next steel and aluminum project.",
-  company_name_ar: "فالكون ديزاين للمقاولات العامة — مؤسسة فردية",
-  company_name_en: "Falcon Design General Contracting — Sole Proprietorship",
-  address_ar: "العين، أبوظبي، الإمارات العربية المتحدة",
-  address_en: "Al Ain, Abu Dhabi, United Arab Emirates",
-  phone: "+971 56 233 1020",
-  whatsapp: "+971 56 233 1020",
-  business_hours_ar: "الأحد – الخميس: 8:00 ص – 6:00 م",
-  business_hours_en: "Sunday – Thursday: 8:00 AM – 6:00 PM",
-  latitude: 24.2075,
-  longitude: 55.7447,
-  google_maps_url: "https://maps.google.com/?q=Al+Ain+Abu+Dhabi+UAE",
-  facebook_url: null,
-  instagram_url: null,
-  linkedin_url: null,
-  youtube_url: null,
-  x_url: null,
-};
 
 /**
  * Certificates — labels match the official document titles on each image scan.
@@ -766,9 +658,7 @@ export const certificates: Certificate[] = [
     image_url: "/certificates/01.png",
     alt_text_ar: "شهادة السجل التجاري — الصفحة الأولى",
     alt_text_en: "Commercial Registration Certificate — page 1",
-    sort_order: 1,
     is_featured: true,
-    is_active: true,
   },
   {
     id: "cert-2",
@@ -784,9 +674,7 @@ export const certificates: Certificate[] = [
     image_url: "/certificates/02.png",
     alt_text_ar: "شهادة السجل التجاري — الأنشطة والعنوان",
     alt_text_en: "Commercial Registration Certificate — activities and address",
-    sort_order: 2,
     is_featured: true,
-    is_active: true,
   },
   {
     id: "cert-3",
@@ -802,9 +690,7 @@ export const certificates: Certificate[] = [
     image_url: "/certificates/03.png",
     alt_text_ar: "شهادة السجل التجاري — عمليات الرخصة",
     alt_text_en: "Commercial Registration Certificate — licence transactions",
-    sort_order: 3,
     is_featured: true,
-    is_active: true,
   },
   {
     id: "cert-4",
@@ -820,9 +706,7 @@ export const certificates: Certificate[] = [
     image_url: "/certificates/04.png",
     alt_text_ar: "رخصة أبوظبي الاقتصادية",
     alt_text_en: "Abu Dhabi Economic Licence",
-    sort_order: 4,
     is_featured: false,
-    is_active: true,
   },
   {
     id: "cert-5",
@@ -838,9 +722,7 @@ export const certificates: Certificate[] = [
     image_url: "/certificates/05.png",
     alt_text_ar: "رخصة أبوظبي الاقتصادية — معلومات إضافية",
     alt_text_en: "Abu Dhabi Economic Licence — additional information",
-    sort_order: 5,
     is_featured: false,
-    is_active: true,
   },
   {
     id: "cert-6",
@@ -856,9 +738,7 @@ export const certificates: Certificate[] = [
     image_url: "/certificates/06.png",
     alt_text_ar: "بطاقة منشأة — الهيئة الاتحادية للهوية والجنسية",
     alt_text_en: "Establishment Card — Federal Authority for Identity & Citizenship",
-    sort_order: 6,
     is_featured: false,
-    is_active: true,
   },
   {
     id: "cert-7",
@@ -874,9 +754,7 @@ export const certificates: Certificate[] = [
     image_url: "/certificates/07.png",
     alt_text_ar: "شهادة تسجيل لضريبة القيمة المضافة",
     alt_text_en: "VAT registration certificate",
-    sort_order: 7,
     is_featured: false,
-    is_active: true,
   },
   {
     id: "cert-8",
@@ -892,9 +770,7 @@ export const certificates: Certificate[] = [
     image_url: "/certificates/08.png",
     alt_text_ar: "قائمة المؤسسات ضمن التسجيل الضريبي لضريبة القيمة المضافة",
     alt_text_en: "Establishments list under VAT registration",
-    sort_order: 8,
     is_featured: false,
-    is_active: true,
   },
   {
     id: "cert-9",
@@ -910,9 +786,7 @@ export const certificates: Certificate[] = [
     image_url: "/certificates/09.png",
     alt_text_ar: "شهادة تسجيل لضريبة الشركات",
     alt_text_en: "Corporate tax registration certificate",
-    sort_order: 9,
     is_featured: false,
-    is_active: true,
   },
   {
     id: "cert-10",
@@ -928,9 +802,7 @@ export const certificates: Certificate[] = [
     image_url: "/certificates/10.png",
     alt_text_ar: "قائمة المؤسسات ضمن التسجيل الضريبي لضريبة الشركات",
     alt_text_en: "Establishments list under corporate tax registration",
-    sort_order: 10,
     is_featured: false,
-    is_active: true,
   },
   {
     id: "cert-11",
@@ -946,8 +818,6 @@ export const certificates: Certificate[] = [
     image_url: "/certificates/11.png",
     alt_text_ar: "بطاقة اعتماد التواقيع — وزارة الموارد البشرية والتوطين",
     alt_text_en: "Electronic Company Card — Ministry of Human Resources and Emiratisation",
-    sort_order: 11,
     is_featured: false,
-    is_active: true,
   },
 ];

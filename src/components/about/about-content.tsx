@@ -4,7 +4,7 @@ import type {
   CoreValue,
   SiteSection,
   TimelineItem,
-} from "@/types/database";
+} from "@/types/content";
 import { pickLocalized } from "@/lib/utils";
 import { Reveal } from "@/components/ui/motion";
 import { t } from "@/lib/i18n/ui";

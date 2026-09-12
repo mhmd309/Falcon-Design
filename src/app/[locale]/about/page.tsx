@@ -6,7 +6,7 @@ import {
   getPageBySlug,
   getSection,
   getTimeline,
-} from "@/lib/data/queries";
+} from "@/lib/data";
 import {
   JsonLd,
   breadcrumbJsonLd,

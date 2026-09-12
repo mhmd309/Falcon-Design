@@ -12,7 +12,7 @@ function getRecipients() {
   }
 
   return contactEmails
-    .filter((e) => e.is_active && e.email.includes("@"))
+    .filter((e) => e.email.includes("@"))
     .slice(0, 1)
     .map((e) => e.email);
 }

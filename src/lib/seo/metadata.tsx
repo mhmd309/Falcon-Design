@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { Locale } from "@/config/site";
 import { getSiteUrl, siteConfig } from "@/config/site";
-import type { SitePage } from "@/types/database";
+import type { SitePage } from "@/types/content";
 import { absoluteUrl } from "@/lib/utils";
 
 export function buildPageMetadata(

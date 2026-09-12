@@ -1,3 +1,5 @@
+/** Static website content models (no database). */
+
 export interface SiteSettings {
   id: string;
   company_name_ar: string;
@@ -21,9 +23,6 @@ export interface SitePage {
   slug: string;
   title_ar: string;
   title_en: string;
-  show_in_navigation: boolean;
-  sort_order: number;
-  is_published: boolean;
   seo_title_ar: string | null;
   seo_title_en: string | null;
   seo_description_ar: string | null;
@@ -34,7 +33,6 @@ export interface SitePage {
   og_description_en: string | null;
   og_image: string | null;
   canonical_url: string | null;
-  updated_at?: string;
 }
 
 export interface SiteSection {
@@ -57,7 +55,6 @@ export interface SiteSection {
   alt_text_ar: string | null;
   alt_text_en: string | null;
   extra: Record<string, unknown>;
-  is_published: boolean;
 }
 
 export interface Statistic {
@@ -67,8 +64,6 @@ export interface Statistic {
   suffix: string | null;
   label_ar: string;
   label_en: string;
-  sort_order: number;
-  is_active: boolean;
 }
 
 export interface Service {
@@ -84,10 +79,7 @@ export interface Service {
   alt_text_en: string | null;
   icon: string | null;
   category: string;
-  is_active: boolean;
   is_featured: boolean;
-  is_published: boolean;
-  sort_order: number;
 }
 
 export interface CoreValue {
@@ -97,8 +89,6 @@ export interface CoreValue {
   description_ar: string | null;
   description_en: string | null;
   icon: string | null;
-  sort_order: number;
-  is_active: boolean;
 }
 
 export interface TimelineItem {
@@ -108,8 +98,6 @@ export interface TimelineItem {
   title_en: string;
   description_ar: string | null;
   description_en: string | null;
-  sort_order: number;
-  is_active: boolean;
 }
 
 export interface GalleryCategory {
@@ -117,8 +105,6 @@ export interface GalleryCategory {
   name_ar: string;
   name_en: string;
   slug: string;
-  sort_order: number;
-  is_active: boolean;
 }
 
 export interface GalleryItem {
@@ -131,35 +117,7 @@ export interface GalleryItem {
   image_url: string;
   alt_text_ar: string | null;
   alt_text_en: string | null;
-  sort_order: number;
   is_featured: boolean;
-  is_active: boolean;
-  is_published: boolean;
-  gallery_categories?: GalleryCategory | null;
-}
-
-export interface ContactSettings {
-  id: string;
-  page_title_ar: string | null;
-  page_title_en: string | null;
-  page_description_ar: string | null;
-  page_description_en: string | null;
-  company_name_ar: string | null;
-  company_name_en: string | null;
-  address_ar: string | null;
-  address_en: string | null;
-  phone: string | null;
-  whatsapp: string | null;
-  business_hours_ar: string | null;
-  business_hours_en: string | null;
-  latitude: number | null;
-  longitude: number | null;
-  google_maps_url: string | null;
-  facebook_url: string | null;
-  instagram_url: string | null;
-  linkedin_url: string | null;
-  youtube_url: string | null;
-  x_url: string | null;
 }
 
 export interface ContactEmail {
@@ -167,8 +125,6 @@ export interface ContactEmail {
   label_ar: string;
   label_en: string;
   email: string;
-  is_active: boolean;
-  sort_order: number;
 }
 
 export interface Certificate {
@@ -183,7 +139,5 @@ export interface Certificate {
   image_url: string;
   alt_text_ar: string | null;
   alt_text_en: string | null;
-  sort_order: number;
   is_featured: boolean;
-  is_active: boolean;
 }

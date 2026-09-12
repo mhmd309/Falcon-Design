@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Locale } from "@/config/site";
-import type { Certificate } from "@/types/database";
+import type { Certificate } from "@/types/content";
 import { Reveal } from "@/components/ui/motion";
 import { SectionHeading } from "@/components/ui/section";
 import { localizedPath, pickLocalized } from "@/lib/utils";

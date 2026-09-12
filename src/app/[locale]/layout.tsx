@@ -5,7 +5,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { LocaleHtmlAttributes } from "@/components/layout/locale-html";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
-import { getSiteSettings } from "@/lib/data/queries";
+import { getSiteSettings } from "@/lib/data";
 import { pickLocalized } from "@/lib/utils";
 
 export function generateStaticParams() {

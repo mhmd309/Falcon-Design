@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import type { Locale } from "@/config/site";
-import type { GalleryCategory, GalleryItem } from "@/types/database";
+import type { GalleryCategory, GalleryItem } from "@/types/content";
 import { pickLocalized } from "@/lib/utils";
 import { SectionHeading, EmptyState } from "@/components/ui/section";
 import { FilterTabs } from "@/components/ui/filter-tabs";

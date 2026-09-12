@@ -5,7 +5,7 @@ import {
   getCertificates,
   getPageBySlug,
   getSection,
-} from "@/lib/data/queries";
+} from "@/lib/data";
 import {
   JsonLd,
   breadcrumbJsonLd,

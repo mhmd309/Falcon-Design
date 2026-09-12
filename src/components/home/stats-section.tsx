@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
-import type { Statistic } from "@/types/database";
+import type { Statistic } from "@/types/content";
 import type { Locale } from "@/config/site";
 import { pickLocalized } from "@/lib/utils";
 import { Reveal } from "@/components/ui/motion";

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Locale } from "@/config/site";
-import type { SiteSection } from "@/types/database";
+import type { SiteSection } from "@/types/content";
 import { cn, localizedPath, pickLocalized } from "@/lib/utils";
 import { HeroMotion } from "@/components/ui/motion";
 
