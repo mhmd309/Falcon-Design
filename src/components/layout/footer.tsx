@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Locale } from "@/config/site";
 import { publicNav, siteConfig } from "@/config/site";
 import { localizedPath, pickLocalized, safeExternalUrl } from "@/lib/utils";
@@ -45,9 +46,13 @@ export function Footer({
     <footer className="bg-[#0b0d10] text-text">
       <div className="container-page grid gap-12 py-20 sm:py-24 md:grid-cols-2 lg:grid-cols-[1.1fr_1fr_1fr_1.1fr] lg:gap-x-20 lg:gap-y-16">
         <div>
-          <p className="text-lg font-semibold tracking-[0.08em]">
-            <span className="text-gold">FALCON</span> DESIGN
-          </p>
+          <Image
+            src="/logo.png"
+            alt={company || "Falcon Design"}
+            width={1152}
+            height={1408}
+            className="h-32 w-28 object-contain"
+          />
           <p className="mt-5 max-w-xs text-sm leading-7 text-text-muted">
             {pickLocalized(settings, locale, "tagline") || siteConfig.tagline[locale]}
           </p>

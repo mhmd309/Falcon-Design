@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import type { Locale } from "@/config/site";
@@ -24,9 +25,16 @@ export function Navbar({
       <div className="container-page flex h-16 items-center justify-between gap-4 md:h-20">
         <Link
           href={localizedPath(locale)}
-          className="text-lg font-semibold tracking-[0.08em] text-white md:text-xl"
+          className="flex h-14 w-14 shrink-0 items-center justify-center md:h-16 md:w-16"
         >
-          <span className="text-gold">FALCON</span> DESIGN
+          <Image
+            src="/logo.png"
+            alt={companyName || "Falcon Design"}
+            width={1152}
+            height={1408}
+            priority
+            className="h-full w-full object-contain"
+          />
           <span className="sr-only">{companyName}</span>
         </Link>
 
