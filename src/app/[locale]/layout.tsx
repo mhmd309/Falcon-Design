@@ -2,13 +2,8 @@ import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { localeDirection, siteConfig, type Locale } from "@/config/site";
 import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
 import { LocaleHtmlAttributes } from "@/components/layout/locale-html";
-import {
-  getContactEmails,
-  getContactSettings,
-  getSiteSettings,
-} from "@/lib/data/queries";
+import { getSiteSettings } from "@/lib/data/queries";
 import { pickLocalized } from "@/lib/utils";
 
 export function generateStaticParams() {
@@ -27,11 +22,7 @@ export default async function LocaleLayout({
     notFound();
   }
   const locale = localeParam as Locale;
-  const [settings, contact, emails] = await Promise.all([
-    getSiteSettings(),
-    getContactSettings(),
-    getContactEmails(),
-  ]);
+  const settings = await getSiteSettings();
 
   return (
     <div lang={locale} dir={localeDirection[locale]}>
@@ -41,12 +32,6 @@ export default async function LocaleLayout({
         companyName={pickLocalized(settings, locale, "company_name")}
       />
       <main id="main-content">{children}</main>
-      <Footer
-        locale={locale}
-        settings={settings}
-        contact={contact}
-        emails={emails}
-      />
     </div>
   );
 }
