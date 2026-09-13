@@ -4,9 +4,8 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
-  useState,
+  useSyncExternalStore,
   type ReactNode,
 } from "react";
 
@@ -25,36 +24,34 @@ function applyTheme(theme: Theme) {
   document.documentElement.setAttribute("data-theme", theme);
 }
 
-function readStoredTheme(): Theme | null {
-  try {
-    const value = localStorage.getItem(STORAGE_KEY);
-    if (value === "light" || value === "dark") return value;
-  } catch {
-    /* ignore */
-  }
-  return null;
+function readDomTheme(): Theme {
+  if (typeof document === "undefined") return "light";
+  const value = document.documentElement.getAttribute("data-theme");
+  return value === "dark" ? "dark" : "light";
+}
+
+function subscribeTheme(onStoreChange: () => void) {
+  const observer = new MutationObserver(onStoreChange);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
+  });
+  return () => observer.disconnect();
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("light");
-
-  useEffect(() => {
-    const stored = readStoredTheme();
-    const initial =
-      stored ||
-      (window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light");
-    setThemeState(initial);
-    applyTheme(initial);
-  }, []);
+  const theme = useSyncExternalStore(
+    subscribeTheme,
+    readDomTheme,
+    (): Theme => "light",
+  ) as Theme;
 
   const setTheme = useCallback((next: Theme) => {
-    setThemeState(next);
     applyTheme(next);
     try {
       localStorage.setItem(STORAGE_KEY, next);
     } catch {
+      /* ignore */
     }
   }, []);
 
@@ -62,7 +59,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setTheme(theme === "dark" ? "light" : "dark");
   }, [setTheme, theme]);
 
-  const value = useMemo(
+  const value = useMemo<ThemeContextValue>(
     () => ({ theme, setTheme, toggleTheme }),
     [theme, setTheme, toggleTheme],
   );

@@ -19,15 +19,12 @@ function AnimatedValue({
   const reduce = useReducedMotion();
   const numeric = Number(value.replace(/[^\d.]/g, ""));
   const isNumeric = !Number.isNaN(numeric) && /^\d/.test(value);
-  const [display, setDisplay] = useState(value);
+  const [display, setDisplay] = useState(isNumeric && !reduce ? "0" : value);
   const started = useRef(false);
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    if (reduce || !isNumeric) {
-      setDisplay(value);
-      return;
-    }
+    if (reduce || !isNumeric) return;
 
     const node = ref.current;
     if (!node) return;
@@ -55,6 +52,16 @@ function AnimatedValue({
     observer.observe(node);
     return () => observer.disconnect();
   }, [value, reduce, isNumeric, numeric]);
+
+  if (reduce || !isNumeric) {
+    return (
+      <span>
+        {prefix}
+        {value}
+        {suffix}
+      </span>
+    );
+  }
 
   return (
     <span ref={ref}>

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import type { Locale } from "@/config/site";
 import type { Certificate } from "@/types/content";
@@ -28,15 +28,12 @@ export function CertificatesGrid({
   const [active, setActive] = useState<Certificate | null>(null);
 
   const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
 
   const pageItems = useMemo(() => {
-    const start = (page - 1) * PAGE_SIZE;
+    const start = (currentPage - 1) * PAGE_SIZE;
     return items.slice(start, start + PAGE_SIZE);
-  }, [items, page]);
-
-  useEffect(() => {
-    if (page > totalPages) setPage(totalPages);
-  }, [page, totalPages]);
+  }, [items, currentPage]);
 
   return (
     <section className="section-space" aria-labelledby="certificates-heading">
@@ -104,9 +101,9 @@ export function CertificatesGrid({
               <div className="mt-10 flex flex-wrap items-center justify-between gap-4">
                 <button
                   type="button"
-                  disabled={page <= 1}
+                  disabled={currentPage <= 1}
                   onClick={() => {
-                    setPage((p) => Math.max(1, p - 1));
+                    setPage((p) => Math.max(1, Math.min(p, totalPages) - 1));
                     setActive(null);
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
@@ -122,9 +119,11 @@ export function CertificatesGrid({
 
                 <button
                   type="button"
-                  disabled={page >= totalPages}
+                  disabled={currentPage >= totalPages}
                   onClick={() => {
-                    setPage((p) => Math.min(totalPages, p + 1));
+                    setPage((p) =>
+                      Math.min(totalPages, Math.min(p, totalPages) + 1),
+                    );
                     setActive(null);
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}

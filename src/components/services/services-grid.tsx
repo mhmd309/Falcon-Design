@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Locale } from "@/config/site";
 import type { Service, SiteSection } from "@/types/content";
@@ -57,19 +57,22 @@ export function ServicesGrid({
   }, [services, category, query, locale]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
 
   const pageItems = useMemo(() => {
-    const start = (page - 1) * PAGE_SIZE;
+    const start = (currentPage - 1) * PAGE_SIZE;
     return filtered.slice(start, start + PAGE_SIZE);
-  }, [filtered, page]);
+  }, [filtered, currentPage]);
 
-  useEffect(() => {
+  function handleCategoryChange(next: string) {
+    setCategory(next);
     setPage(1);
-  }, [category, query]);
+  }
 
-  useEffect(() => {
-    if (page > totalPages) setPage(totalPages);
-  }, [page, totalPages]);
+  function handleQueryChange(next: string) {
+    setQuery(next);
+    setPage(1);
+  }
 
   return (
     <section className="section-space">
@@ -92,14 +95,14 @@ export function ServicesGrid({
             <FilterTabs
               tabs={tabs}
               value={category}
-              onChange={setCategory}
+              onChange={handleCategoryChange}
               ariaLabel={locale === "ar" ? "تصفية الخدمات" : "Service filters"}
               className="min-w-max"
             />
           </div>
           <Input
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => handleQueryChange(e.target.value)}
             placeholder={locale === "ar" ? "بحث..." : "Search…"}
             aria-label={locale === "ar" ? "بحث" : "Search"}
             className="w-full lg:max-w-xs"
@@ -113,7 +116,7 @@ export function ServicesGrid({
         ) : (
           <>
             <div
-              key={`${category}-${query}-${page}`}
+              key={`${category}-${query}-${currentPage}`}
               className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3"
             >
               {pageItems.map((service) => (
@@ -156,9 +159,9 @@ export function ServicesGrid({
               <div className="mt-10 flex flex-wrap items-center justify-between gap-4">
                 <button
                   type="button"
-                  disabled={page <= 1}
+                  disabled={currentPage <= 1}
                   onClick={() => {
-                    setPage((p) => Math.max(1, p - 1));
+                    setPage((p) => Math.max(1, Math.min(p, totalPages) - 1));
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                   className="inline-flex items-center gap-2 rounded-md border border-steel/25 bg-card px-4 py-2.5 text-sm font-semibold text-text-dark transition hover:border-gold/50 disabled:pointer-events-none disabled:opacity-40"
@@ -173,9 +176,11 @@ export function ServicesGrid({
 
                 <button
                   type="button"
-                  disabled={page >= totalPages}
+                  disabled={currentPage >= totalPages}
                   onClick={() => {
-                    setPage((p) => Math.min(totalPages, p + 1));
+                    setPage((p) =>
+                      Math.min(totalPages, Math.min(p, totalPages) + 1),
+                    );
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                   className="inline-flex items-center gap-2 rounded-md border border-steel/25 bg-card px-4 py-2.5 text-sm font-semibold text-text-dark transition hover:border-gold/50 disabled:pointer-events-none disabled:opacity-40"

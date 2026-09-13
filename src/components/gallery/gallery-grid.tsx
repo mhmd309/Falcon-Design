@@ -32,11 +32,12 @@ export function GalleryGrid({
   }, [items, categoryId]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
 
   const pageItems = useMemo(() => {
-    const start = (page - 1) * PAGE_SIZE;
+    const start = (currentPage - 1) * PAGE_SIZE;
     return filtered.slice(start, start + PAGE_SIZE);
-  }, [filtered, page]);
+  }, [filtered, currentPage]);
 
   const tabs = useMemo(
     () => [
@@ -68,10 +69,6 @@ export function GalleryGrid({
       i === null || pageItems.length === 0 ? i : (i + 1) % pageItems.length,
     );
   }, [pageItems.length]);
-
-  useEffect(() => {
-    if (page > totalPages) setPage(totalPages);
-  }, [page, totalPages]);
 
   useEffect(() => {
     if (activeIndex === null) return;
@@ -146,9 +143,9 @@ export function GalleryGrid({
               <div className="mt-10 flex flex-wrap items-center justify-between gap-4">
                 <button
                   type="button"
-                  disabled={page <= 1}
+                  disabled={currentPage <= 1}
                   onClick={() => {
-                    setPage((p) => Math.max(1, p - 1));
+                    setPage((p) => Math.max(1, Math.min(p, totalPages) - 1));
                     setActiveIndex(null);
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
@@ -164,9 +161,11 @@ export function GalleryGrid({
 
                 <button
                   type="button"
-                  disabled={page >= totalPages}
+                  disabled={currentPage >= totalPages}
                   onClick={() => {
-                    setPage((p) => Math.min(totalPages, p + 1));
+                    setPage((p) =>
+                      Math.min(totalPages, Math.min(p, totalPages) + 1),
+                    );
                     setActiveIndex(null);
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
