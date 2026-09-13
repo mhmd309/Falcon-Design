@@ -29,7 +29,7 @@ export function HomeHero({
 
   return (
     <section
-      className="relative flex min-h-[min(88vh,820px)] items-end overflow-hidden bg-bg text-text"
+      className="relative flex min-h-[min(88vh,820px)] items-end overflow-hidden bg-bg text-white"
       aria-labelledby="hero-heading"
     >
       <Image
@@ -41,7 +41,7 @@ export function HomeHero({
         className="object-cover object-center"
       />
       <div
-        className="absolute inset-0 bg-gradient-to-t from-bg via-bg/78 to-bg/40"
+        className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-black/35"
         aria-hidden
       />
       <div
@@ -53,19 +53,19 @@ export function HomeHero({
         <HeroMotion>
           <p className="mb-3 text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-gold sm:mb-4 sm:text-xs md:text-sm">
             <span className="text-gold">FALCON</span>{" "}
-            <span className="text-text">DESIGN</span>
+            <span className="text-white">DESIGN</span>
           </p>
           {title ? (
             <h1
               id="hero-heading"
-              className="max-w-4xl text-[1.85rem] font-semibold leading-[1.15] tracking-tight text-text sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl"
+              className="max-w-4xl text-[1.85rem] font-semibold leading-[1.15] tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl"
             >
               {title}
             </h1>
           ) : (
             <h1
               id="hero-heading"
-              className="max-w-4xl text-[1.85rem] font-semibold leading-[1.15] tracking-tight text-text sm:text-4xl md:text-6xl"
+              className="max-w-4xl text-[1.85rem] font-semibold leading-[1.15] tracking-tight text-white sm:text-4xl md:text-6xl"
             >
               <span className="text-gold">FALCON</span> DESIGN
             </h1>
@@ -76,7 +76,7 @@ export function HomeHero({
             </p>
           ) : null}
           {description ? (
-            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-text-muted sm:mt-6 sm:text-base md:text-lg">
+            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/75 sm:mt-6 sm:text-base md:text-lg">
               {description}
             </p>
           ) : null}
@@ -85,7 +85,7 @@ export function HomeHero({
               <Link
                 href={primaryHref}
                 className={cn(
-                  "inline-flex cursor-pointer items-center justify-center rounded-md border border-transparent bg-gold px-6 py-3.5 text-sm font-semibold tracking-wide text-text-dark shadow-[0_10px_30px_rgba(198,161,91,0.25)] transition hover:bg-gold-soft focus-visible:outline-none sm:px-7 sm:text-base",
+                  "inline-flex cursor-pointer items-center justify-center rounded-md border border-transparent bg-gold px-6 py-3.5 text-sm font-semibold tracking-wide text-on-gold shadow-[0_10px_30px_rgba(198,161,91,0.25)] transition hover:bg-gold-soft focus-visible:outline-none sm:px-7 sm:text-base",
                 )}
               >
                 {primaryLabel}
@@ -95,7 +95,7 @@ export function HomeHero({
               <Link
                 href={secondaryHref}
                 className={cn(
-                  "inline-flex cursor-pointer items-center justify-center rounded-md border border-gold/45 bg-transparent px-6 py-3.5 text-sm font-semibold tracking-wide text-text transition hover:border-gold hover:bg-gold/10 focus-visible:outline-none sm:px-7 sm:text-base",
+                  "inline-flex cursor-pointer items-center justify-center rounded-md border border-gold/45 bg-transparent px-6 py-3.5 text-sm font-semibold tracking-wide text-white transition hover:border-gold hover:bg-gold/10 focus-visible:outline-none sm:px-7 sm:text-base",
                 )}
               >
                 {secondaryLabel}

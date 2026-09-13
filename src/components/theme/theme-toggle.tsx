@@ -14,7 +14,7 @@ export function ThemeToggle({ locale }: { locale: Locale }) {
     <button
       type="button"
       onClick={toggleTheme}
-      className="inline-flex size-9 cursor-pointer items-center justify-center rounded-md border border-white/15 bg-white/5 text-white transition hover:border-gold/50 hover:text-gold"
+      className="inline-flex size-9 cursor-pointer items-center justify-center rounded-md border border-steel/25 bg-card text-text transition hover:border-gold/50 hover:text-gold"
       aria-label={isDark ? copy.themeLight : copy.themeDark}
       title={isDark ? copy.themeLight : copy.themeDark}
     >

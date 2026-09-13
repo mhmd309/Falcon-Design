@@ -33,7 +33,7 @@ export function AboutContent({
 
   return (
     <>
-      <section className="relative min-h-[70vh] overflow-hidden bg-bg text-text">
+      <section className="relative min-h-[70vh] overflow-hidden bg-bg text-white">
         {intro?.image_url ? (
           <Image
             src={intro.image_url}
@@ -47,17 +47,17 @@ export function AboutContent({
             className="object-cover"
           />
         ) : null}
-        <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/72 to-bg/35" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-black/35" />
         <div className="container-page relative flex min-h-[70vh] flex-col justify-end pb-14 pt-28 sm:pb-16 md:pb-20">
           <Reveal>
             <p className="text-sm font-semibold tracking-[0.22em] text-gold-soft uppercase">
               Falcon Design
             </p>
-            <h1 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight sm:text-5xl md:text-6xl">
+            <h1 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl">
               {title}
             </h1>
             {intro ? (
-              <p className="mt-4 max-w-2xl text-base text-text-muted sm:text-lg">
+              <p className="mt-4 max-w-2xl text-base text-white/75 sm:text-lg">
                 {pickLocalized(intro, locale, "subtitle")}
               </p>
             ) : null}

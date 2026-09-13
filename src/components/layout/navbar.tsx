@@ -32,7 +32,7 @@ export function Navbar({
   const copy = t(locale);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-bg/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-steel/15 bg-bg/85 backdrop-blur-md">
       <div className="container-page flex h-16 items-center justify-between gap-4 md:h-20">
         <Link
           href={localizedPath(locale)}
@@ -59,7 +59,7 @@ export function Navbar({
                 aria-current={active ? "page" : undefined}
                 className={cn(
                   "relative text-sm font-medium transition hover:cursor-pointer hover:text-gold",
-                  active ? "text-gold" : "text-white/90",
+                  active ? "text-gold" : "text-text",
                 )}
               >
                 {item.label[locale]}
@@ -79,7 +79,7 @@ export function Navbar({
           <LanguageSwitcher locale={locale} />
           <Link
             href={localizedPath(locale, "/contact")}
-            className="rounded-md bg-gold px-4 py-2 text-sm font-semibold text-bg transition hover:bg-gold-soft"
+            className="rounded-md bg-gold px-4 py-2 text-sm font-semibold text-on-gold transition hover:bg-gold-soft"
           >
             {copy.navCta}
           </Link>
@@ -90,7 +90,7 @@ export function Navbar({
           <LanguageSwitcher locale={locale} />
           <button
             type="button"
-            className="inline-flex cursor-pointer rounded-md border border-white/15 p-2 text-white"
+            className="inline-flex cursor-pointer rounded-md border border-steel/25 p-2 text-text"
             aria-expanded={open}
             aria-controls="mobile-menu"
             onClick={() => setOpen((v) => !v)}
@@ -104,7 +104,7 @@ export function Navbar({
       {open ? (
         <div
           id="mobile-menu"
-          className="border-t border-white/10 bg-bg px-4 py-4 lg:hidden"
+          className="border-t border-steel/15 bg-bg px-4 py-4 lg:hidden"
         >
           <nav className="flex flex-col gap-2" aria-label="Mobile">
             {publicNav.map((item) => {
@@ -118,7 +118,7 @@ export function Navbar({
                     "rounded-md px-2 py-2 transition",
                     active
                       ? "bg-gold/15 text-gold"
-                      : "text-white/90 hover:bg-white/5 hover:text-gold",
+                      : "text-text hover:bg-surface-muted hover:text-gold",
                   )}
                   onClick={() => setOpen(false)}
                 >
@@ -130,7 +130,7 @@ export function Navbar({
           <div className="mt-4 flex items-center justify-start gap-3">
             <Link
               href={localizedPath(locale, "/contact")}
-              className="rounded-md bg-gold px-4 py-2 text-sm font-semibold text-bg"
+              className="rounded-md bg-gold px-4 py-2 text-sm font-semibold text-on-gold"
               onClick={() => setOpen(false)}
             >
               {copy.navCta}

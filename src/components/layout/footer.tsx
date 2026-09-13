@@ -8,7 +8,7 @@ export function Footer({ locale }: { locale: Locale }) {
       : `2019-${year} © All rights reserved to Falcon Design`;
 
   return (
-    <footer className="border-t border-white/10 bg-bg text-text-muted">
+    <footer className="border-t border-steel/15 bg-bg text-text-muted">
       <div className="container-page py-5 text-center text-xs">{copyright}</div>
     </footer>
   );

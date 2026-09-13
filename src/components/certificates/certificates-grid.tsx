@@ -160,7 +160,7 @@ export function CertificatesGrid({
             <X size={20} />
           </button>
           <div
-            className="relative w-full max-w-4xl overflow-hidden rounded-xl bg-bg-elevated"
+            className="relative w-full max-w-4xl overflow-hidden rounded-xl bg-card"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative mx-auto aspect-[2/3] w-full max-h-[78vh]">
@@ -176,11 +176,11 @@ export function CertificatesGrid({
                 priority
               />
             </div>
-            <div className="border-t border-white/10 px-5 py-4 text-center text-white">
+            <div className="border-t border-steel/15 px-5 py-4 text-center text-text">
               <p className="text-base font-semibold">
                 {pickLocalized(active, locale, "title")}
               </p>
-              <p className="mt-1 text-sm text-white/70">
+              <p className="mt-1 text-sm text-text-muted">
                 {pickLocalized(active, locale, "description")}
               </p>
             </div>

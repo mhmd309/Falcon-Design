@@ -65,7 +65,7 @@ export function FeaturedProjects({
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="object-cover transition duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-bg/85 via-bg/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 flex items-end justify-end gap-3 p-4 md:p-5">
                     <span className="rounded-full border border-gold/30 bg-gold/10 p-1.5 text-gold transition group-hover:bg-gold/20">
                       <ArrowUpRight size={16} aria-hidden />

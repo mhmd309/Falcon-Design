@@ -45,7 +45,7 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
 
   return (
     <div
-      className="inline-flex items-center gap-1 rounded-md border border-white/15 bg-white/5 px-1 py-1"
+      className="inline-flex items-center gap-1 rounded-md border border-steel/25 bg-card px-1 py-1"
       role="group"
       aria-label="Language switcher"
     >
@@ -63,7 +63,7 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
       >
         <UkFlag className="h-3.5 w-5 rounded-[2px] shadow-sm" />
       </Link>
-      <span className="text-white/30" aria-hidden>
+      <span className="text-steel/50" aria-hidden>
         |
       </span>
       <Link

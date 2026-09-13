@@ -2,22 +2,23 @@
 
 /*
   Background roles:
-  - page-bg / surface / card  → theme-aware content UI
-  - bg / bg-elevated / bg-soft → brand chrome (nav, hero, footer bands)
+  - page-bg / surface / card → content UI
+  - bg / bg-elevated / bg-soft → chrome bands (nav, stats, footer) — theme-aware
 */
 :root,
 [data-theme="light"] {
   color-scheme: light;
-  --bg: #0b0d10;
-  --bg-elevated: #12161c;
-  --bg-soft: #1a2029;
+  --bg: #f6f7f9;
+  --bg-elevated: #eceff3;
+  --bg-soft: #e2e7ed;
   --surface: #eef1f5;
   --surface-muted: #e2e7ed;
   --card: #ffffff;
-  --text: #f3f5f7;
-  --text-muted: #a8b0bb;
+  --text: #12161c;
+  --text-muted: #5b6572;
   --text-dark: #12161c;
   --text-dark-muted: #5b6572;
+  --on-gold: #0b0d10;
   --steel: #8a93a0;
   --steel-dark: #3d4654;
   --gold: #c6a15b;
@@ -51,6 +52,7 @@
   --text-muted: #a8b0bb;
   --text-dark: #f3f5f7;
   --text-dark-muted: #a8b0bb;
+  --on-gold: #0b0d10;
   --steel: #7a8492;
   --steel-dark: #c6a15b;
   --gold: #c6a15b;
@@ -84,6 +86,7 @@
   --color-steel-dark: var(--steel-dark);
   --color-gold: var(--gold);
   --color-gold-soft: var(--gold-soft);
+  --color-on-gold: var(--on-gold);
   --color-border: var(--border);
   --color-danger: var(--danger);
   --color-success: var(--success);

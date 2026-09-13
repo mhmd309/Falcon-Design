@@ -52,7 +52,7 @@ export function CtaBanner({
             <div className="mt-8">
               <Link
                 href={href}
-                className="inline-flex items-center justify-center rounded-md border border-transparent bg-gold px-7 py-3.5 text-base font-semibold tracking-wide text-text-dark shadow-[0_10px_30px_rgba(198,161,91,0.25)] transition hover:bg-gold-soft focus-visible:outline-none"
+                className="inline-flex items-center justify-center rounded-md border border-transparent bg-gold px-7 py-3.5 text-base font-semibold tracking-wide text-on-gold shadow-[0_10px_30px_rgba(198,161,91,0.25)] transition hover:bg-gold-soft focus-visible:outline-none"
               >
                 {buttonLabel}
               </Link>

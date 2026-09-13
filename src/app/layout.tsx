@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Beiruti, Roboto } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { siteConfig } from "@/config/site";
 import { ThemeProvider } from "@/components/theme/theme-provider";
@@ -72,6 +73,7 @@ export default function RootLayout({
       </head>
       <body className={`${beiruti.variable} ${roboto.variable} antialiased`}>
         <ThemeProvider>{children}</ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
