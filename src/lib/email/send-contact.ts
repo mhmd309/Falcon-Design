@@ -133,7 +133,6 @@ async function sendWithSmtp(data: ContactFormInput, recipients: string[]) {
     throw new Error("Invalid CONTACT_FROM_EMAIL / SMTP_USER");
   }
 
-  // Gmail app passwords are often copied with spaces.
   const pass = (process.env.SMTP_PASS || "").replace(/\s+/g, "");
   if (!pass) {
     throw new Error("SMTP_PASS is empty");

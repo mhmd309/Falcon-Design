@@ -202,12 +202,12 @@ export function organizationJsonLd(settings: OrgSettings, locale: Locale) {
       },
       settings.whatsapp
         ? {
-            "@type": "ContactPoint",
-            telephone: settings.whatsapp,
-            contactType: "WhatsApp",
-            areaServed: "AE",
-            availableLanguage: ["ar", "en"],
-          }
+          "@type": "ContactPoint",
+          telephone: settings.whatsapp,
+          contactType: "WhatsApp",
+          areaServed: "AE",
+          availableLanguage: ["ar", "en"],
+        }
         : null,
     ].filter(Boolean),
     sameAs: sameAs.length ? sameAs : undefined,

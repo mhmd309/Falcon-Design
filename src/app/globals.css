@@ -1,10 +1,5 @@
 @import "tailwindcss";
 
-/*
-  Background roles:
-  - page-bg / surface / card → content UI
-  - bg / bg-elevated / bg-soft → chrome bands (nav, stats, footer) — theme-aware
-*/
 :root,
 [data-theme="light"] {
   color-scheme: light;

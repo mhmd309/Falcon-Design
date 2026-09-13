@@ -3,7 +3,6 @@ import type { Locale } from "@/config/site";
 import { t } from "@/lib/i18n/ui";
 import { Reveal } from "@/components/ui/motion";
 
-/** Fully static contact block. */
 const CONTACT = {
   company_ar: "فالكون ديزاين للمقاولات العامة — مؤسسة فردية",
   company_en: "Falcon Design General Contracting — Sole Proprietorship",

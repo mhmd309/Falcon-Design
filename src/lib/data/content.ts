@@ -11,12 +11,6 @@ import type {
   Statistic,
   TimelineItem,
 } from "@/types/content";
-
-/**
- * Static site content — edit this file to update the public website.
- * Images live under /public (e.g. /gallery/*.jpeg, /certificates/*.png).
- */
-
 export const siteSettings: SiteSettings = {
   id: "settings",
   company_name_ar: "فالكون ديزاين",

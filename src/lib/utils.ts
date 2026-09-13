@@ -52,7 +52,6 @@ export function safeExternalUrl(url: string | null | undefined) {
   return null;
 }
 
-/** Resolve CMS/content hrefs to a safe internal path or allowlisted external URL. */
 export function resolveContentHref(
   locale: Locale,
   href: string | null | undefined,
@@ -70,13 +69,11 @@ export function resolveContentHref(
   return localizedPath(locale, fallbackPath);
 }
 
-/** Digits only — for tel:/WhatsApp links (keeps country code order). */
 export function phoneDigits(phone: string | null | undefined) {
   if (!phone) return "";
   return phone.replace(/\D/g, "");
 }
 
-/** Opens WhatsApp chat for an international number (e.g. +971 56 …). */
 export function whatsappChatUrl(phone: string | null | undefined) {
   const digits = phoneDigits(phone);
   if (!digits) return null;

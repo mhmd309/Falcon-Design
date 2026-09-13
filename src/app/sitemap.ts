@@ -7,7 +7,6 @@ type PathConfig = {
   priority: number;
 };
 
-/** Content last reviewed — update when pages/services/gallery change. */
 const CONTENT_LAST_MODIFIED = new Date("2026-09-12");
 
 const paths: PathConfig[] = [

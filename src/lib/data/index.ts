@@ -25,8 +25,6 @@ import type {
   TimelineItem,
 } from "@/types/content";
 
-/** Thin accessors over static content in `content.ts`. */
-
 export function getSiteSettings(): SiteSettings {
   return siteSettings;
 }

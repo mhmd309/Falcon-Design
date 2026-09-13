@@ -93,7 +93,6 @@ export function checkRateLimit(key: string, limit = 5, windowMs = 60_000) {
   };
 }
 
-/** Best-effort client IP for soft rate limiting (platform-aware). */
 export function getRequestIp(request: Request) {
   const vercel =
     request.headers.get("x-vercel-forwarded-for")?.split(",")[0]?.trim() ||
