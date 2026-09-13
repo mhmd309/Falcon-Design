@@ -1,51 +1,52 @@
 "use client";
 
-import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 
-const VIDEO_SRC = "/slidehero.mp4";
-const POSTER_SRC = "/slidehero.jpg";
+const HERO_VIDEOS = ["/slidehero_01.mp4", "/slidehero_02.mp4"] as const;
 
 export function HeroMedia({ alt }: { alt: string }) {
   const reduce = useReducedMotion();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [index, setIndex] = useState(0);
 
-  if (reduce) {
-    return (
-      <Image
-        src={POSTER_SRC}
-        alt={alt}
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-center"
-      />
-    );
-  }
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.src = HERO_VIDEOS[index];
+    video.load();
+
+    if (reduce) {
+      video.pause();
+      return;
+    }
+
+    void video.play().catch(() => {
+      /* muted + playsInline usually allows autoplay */
+    });
+  }, [index, reduce]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || reduce) return;
+
+    const onEnded = () => {
+      setIndex((current) => (current + 1) % HERO_VIDEOS.length);
+    };
+
+    video.addEventListener("ended", onEnded);
+    return () => video.removeEventListener("ended", onEnded);
+  }, [reduce]);
 
   return (
-    <>
-      {/* Poster while the first frame loads */}
-      <Image
-        src={POSTER_SRC}
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-center"
-        aria-hidden
-      />
-      <video
-        className="absolute inset-0 h-full w-full object-cover object-center"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        poster={POSTER_SRC}
-        aria-hidden
-      >
-        <source src={VIDEO_SRC} type="video/mp4" />
-      </video>
-    </>
+    <video
+      ref={videoRef}
+      className="absolute inset-0 h-full w-full object-cover object-center"
+      muted
+      playsInline
+      preload="auto"
+      aria-label={alt}
+    />
   );
 }

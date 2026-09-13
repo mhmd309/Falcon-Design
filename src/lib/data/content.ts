@@ -169,9 +169,9 @@ export const sections: SiteSection[] = [
     secondary_button_ar: "استعرض مشاريعنا",
     secondary_button_en: "View Projects",
     secondary_button_href: "/gallery",
-    image_url: "/slidehero.jpg",
-    alt_text_ar: "هيكل صلب صناعي بإضاءة ذهبية — خلفية فالكون ديزاين",
-    alt_text_en: "Industrial steel structure in golden light — Falcon Design hero",
+    image_url: null,
+    alt_text_ar: "أعمال الصلب والألمنيوم — فالكون ديزاين",
+    alt_text_en: "Steel and aluminum works — Falcon Design",
   }),
   section("s-cta", "home", "cta", {
     title_ar: "هل أنت مستعد لبدء مشروعك؟",
