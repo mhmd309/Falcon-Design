@@ -9,6 +9,27 @@ function resolveHref(locale: Locale, href: string | null) {
   return resolveContentHref(locale, href);
 }
 
+function HeroWave() {
+  return (
+    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 leading-[0]" aria-hidden>
+      <svg
+        className="block h-[72px] w-full sm:h-[96px] md:h-[120px]"
+        viewBox="0 0 1440 120"
+        preserveAspectRatio="none"
+      >
+        <path
+          d="M0,72 C240,120 480,24 720,64 C960,104 1200,32 1440,72 L1440,120 L0,120 Z"
+          className="fill-[var(--bg)]"
+        />
+        <path
+          d="M0,86 C280,118 520,48 760,78 C1000,108 1220,58 1440,86 L1440,120 L0,120 Z"
+          className="fill-[var(--bg)] opacity-70"
+        />
+      </svg>
+    </div>
+  );
+}
+
 export function HomeHero({
   locale,
   section,
@@ -22,14 +43,14 @@ export function HomeHero({
   const primaryLabel = pickLocalized(section, locale, "primary_button");
   const secondaryLabel = pickLocalized(section, locale, "secondary_button");
   const imageAlt = pickLocalized(section, locale, "alt_text") || title;
-  const imageUrl = section.image_url || "/gallery/10.jpeg";
+  const imageUrl = section.image_url || "/slidehero.jpg";
 
   const primaryHref = resolveHref(locale, section.primary_button_href);
   const secondaryHref = resolveHref(locale, section.secondary_button_href);
 
   return (
     <section
-      className="relative flex min-h-[min(88vh,820px)] items-end overflow-hidden bg-bg text-white"
+      className="relative flex min-h-[min(88vh,820px)] items-end overflow-hidden bg-[#12161c] text-white"
       aria-labelledby="hero-heading"
     >
       <Image
@@ -41,15 +62,19 @@ export function HomeHero({
         className="object-cover object-center"
       />
       <div
-        className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-black/35"
+        className="absolute inset-0 bg-gradient-to-t from-[#0b0d10]/92 via-[#0b0d10]/62 to-[#0b0d10]/28"
         aria-hidden
       />
       <div
-        className="absolute inset-0 bg-[radial-gradient(ellipse_at_15%_85%,rgba(198,161,91,0.16),transparent_50%)]"
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_12%_80%,rgba(198,161,91,0.22),transparent_52%)]"
+        aria-hidden
+      />
+      <div
+        className="absolute inset-0 bg-[linear-gradient(105deg,rgba(11,13,16,0.55)_0%,transparent_48%)]"
         aria-hidden
       />
 
-      <div className="container-page relative z-10 pb-12 pt-28 sm:pb-16 sm:pt-32 md:pb-24 md:pt-40">
+      <div className="container-page relative z-10 pb-24 pt-28 sm:pb-28 sm:pt-32 md:pb-36 md:pt-40">
         <HeroMotion>
           <p className="mb-3 text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-gold sm:mb-4 sm:text-xs md:text-sm">
             <span className="text-gold">FALCON</span>{" "}
@@ -104,6 +129,8 @@ export function HomeHero({
           </div>
         </HeroMotion>
       </div>
+
+      <HeroWave />
     </section>
   );
 }

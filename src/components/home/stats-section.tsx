@@ -74,7 +74,7 @@ export function StatsSection({
 }) {
   if (!stats.length) return null;
   return (
-    <section className="border-y border-steel/15 bg-bg text-text">
+    <section className="border-b border-steel/15 bg-bg text-text">
       <div className="container-page grid grid-cols-2 place-items-center gap-6 py-10 md:grid-cols-4 md:py-14">
         {stats.map((stat, index) => (
           <Reveal key={stat.id} delay={index * 0.05} className="w-full">
