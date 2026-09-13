@@ -1,9 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { Locale } from "@/config/site";
 import type { SiteSection } from "@/types/content";
 import { cn, pickLocalized, resolveContentHref } from "@/lib/utils";
 import { HeroMotion } from "@/components/ui/motion";
+import { HeroMedia } from "@/components/home/hero-media";
 
 function resolveHref(locale: Locale, href: string | null) {
   return resolveContentHref(locale, href);
@@ -43,7 +43,6 @@ export function HomeHero({
   const primaryLabel = pickLocalized(section, locale, "primary_button");
   const secondaryLabel = pickLocalized(section, locale, "secondary_button");
   const imageAlt = pickLocalized(section, locale, "alt_text") || title;
-  const imageUrl = section.image_url || "/slidehero.jpg";
 
   const primaryHref = resolveHref(locale, section.primary_button_href);
   const secondaryHref = resolveHref(locale, section.secondary_button_href);
@@ -53,24 +52,21 @@ export function HomeHero({
       className="relative flex min-h-[min(88vh,820px)] items-end overflow-hidden bg-[#12161c] text-white"
       aria-labelledby="hero-heading"
     >
-      <Image
-        src={imageUrl}
-        alt={imageAlt}
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-center"
-      />
+      <div className="absolute inset-0">
+        <HeroMedia alt={imageAlt} />
+      </div>
+
+      {/* Readability overlays */}
       <div
-        className="absolute inset-0 bg-gradient-to-t from-[#0b0d10]/92 via-[#0b0d10]/62 to-[#0b0d10]/28"
+        className="absolute inset-0 bg-gradient-to-t from-[#0b0d10]/92 via-[#0b0d10]/55 to-[#0b0d10]/30"
         aria-hidden
       />
       <div
-        className="absolute inset-0 bg-[radial-gradient(ellipse_at_12%_80%,rgba(198,161,91,0.22),transparent_52%)]"
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_12%_80%,rgba(198,161,91,0.18),transparent_52%)]"
         aria-hidden
       />
       <div
-        className="absolute inset-0 bg-[linear-gradient(105deg,rgba(11,13,16,0.55)_0%,transparent_48%)]"
+        className="absolute inset-0 bg-[linear-gradient(105deg,rgba(11,13,16,0.58)_0%,transparent_48%)]"
         aria-hidden
       />
 
