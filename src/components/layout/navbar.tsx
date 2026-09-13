@@ -9,7 +9,6 @@ import type { Locale } from "@/config/site";
 import { publicNav } from "@/config/site";
 import { cn, localizedPath } from "@/lib/utils";
 import { LanguageSwitcher } from "./language-switcher";
-import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 function isActivePath(pathname: string, locale: Locale, href: string) {
   const base = `/${locale}`;
@@ -73,12 +72,10 @@ export function Navbar({
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <ThemeToggle locale={locale} />
           <LanguageSwitcher locale={locale} />
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
-          <ThemeToggle locale={locale} />
           <LanguageSwitcher locale={locale} />
           <button
             type="button"
