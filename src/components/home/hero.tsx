@@ -58,15 +58,15 @@ export function HomeHero({
 
       {/* Readability overlays */}
       <div
-        className="absolute inset-0 bg-gradient-to-t from-[#0b0d10]/92 via-[#0b0d10]/55 to-[#0b0d10]/30"
+        className="absolute inset-0 bg-gradient-to-t from-[#0b0d10]/96 via-[#0b0d10]/68 to-[#0b0d10]/45"
         aria-hidden
       />
       <div
-        className="absolute inset-0 bg-[radial-gradient(ellipse_at_12%_80%,rgba(198,161,91,0.18),transparent_52%)]"
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_12%_80%,rgba(198,161,91,0.14),transparent_52%)]"
         aria-hidden
       />
       <div
-        className="absolute inset-0 bg-[linear-gradient(105deg,rgba(11,13,16,0.58)_0%,transparent_48%)]"
+        className="absolute inset-0 bg-[linear-gradient(105deg,rgba(11,13,16,0.72)_0%,transparent_48%)]"
         aria-hidden
       />
 
