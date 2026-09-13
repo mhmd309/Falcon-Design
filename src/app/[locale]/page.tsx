@@ -5,6 +5,7 @@ import { StatsSection } from "@/components/home/stats-section";
 import { FeaturedServices } from "@/components/home/featured-services";
 import { FeaturedProjects } from "@/components/home/featured-projects";
 import { FeaturedCertificates } from "@/components/home/featured-certificates";
+import { AppDownload } from "@/components/home/app-download";
 import { CtaBanner } from "@/components/home/cta-banner";
 import {
   getCertificates,
@@ -60,6 +61,7 @@ export default async function HomePage({
       <FeaturedServices locale={locale} services={services} />
       <FeaturedProjects locale={locale} items={projects} />
       <FeaturedCertificates locale={locale} items={certs} />
+      <AppDownload locale={locale} />
       <CtaBanner locale={locale} section={cta} />
     </>
   );

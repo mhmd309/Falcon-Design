@@ -10,7 +10,6 @@ import { publicNav } from "@/config/site";
 import { cn, localizedPath } from "@/lib/utils";
 import { LanguageSwitcher } from "./language-switcher";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
-import { t } from "@/lib/i18n/ui";
 
 function isActivePath(pathname: string, locale: Locale, href: string) {
   const base = `/${locale}`;
@@ -29,7 +28,6 @@ export function Navbar({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const copy = t(locale);
 
   return (
     <header className="sticky top-0 z-50 border-b border-steel/15 bg-bg/85 backdrop-blur-md">
@@ -77,12 +75,6 @@ export function Navbar({
         <div className="hidden items-center gap-3 lg:flex">
           <ThemeToggle locale={locale} />
           <LanguageSwitcher locale={locale} />
-          <Link
-            href={localizedPath(locale, "/contact")}
-            className="rounded-md bg-gold px-4 py-2 text-sm font-semibold text-on-gold transition hover:bg-gold-soft"
-          >
-            {copy.navCta}
-          </Link>
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
@@ -127,15 +119,6 @@ export function Navbar({
               );
             })}
           </nav>
-          <div className="mt-4 flex items-center justify-start gap-3">
-            <Link
-              href={localizedPath(locale, "/contact")}
-              className="rounded-md bg-gold px-4 py-2 text-sm font-semibold text-on-gold"
-              onClick={() => setOpen(false)}
-            >
-              {copy.navCta}
-            </Link>
-          </div>
         </div>
       ) : null}
     </header>

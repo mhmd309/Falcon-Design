@@ -163,8 +163,8 @@ export const sections: SiteSection[] = [
       "نمثل التآزر المثالي بين الابتكار الحديث وعقود من الخبرة الهندسية العميقة. نوفر حلولاً متكاملة تجمع القوة الإنشائية مع الدقة المعمارية.",
     description_en:
       "Falcon Design represents the perfect synergy between modern innovation and decades of deep-rooted engineering expertise. We deliver integrated steel and aluminum solutions with structural power and architectural precision.",
-    primary_button_ar: "اطلب عرض سعر",
-    primary_button_en: "Request a Quote",
+    primary_button_ar: "تواصل معنا",
+    primary_button_en: "Contact Us",
     primary_button_href: "/contact",
     secondary_button_ar: "استعرض مشاريعنا",
     secondary_button_en: "View Projects",

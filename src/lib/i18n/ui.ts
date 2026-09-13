@@ -2,7 +2,6 @@ import type { Locale } from "@/config/site";
 
 export const ui = {
   en: {
-    navCta: "Get a Quote",
     learnMore: "Learn more",
     viewAll: "View all",
     featuredServices: "Featured Services",
@@ -44,7 +43,6 @@ export const ui = {
     themeDark: "Dark mode",
   },
   ar: {
-    navCta: "اطلب عرض سعر",
     learnMore: "اعرف المزيد",
     viewAll: "عرض الكل",
     featuredServices: "خدمات مميزة",
