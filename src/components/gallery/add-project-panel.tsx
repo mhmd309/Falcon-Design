@@ -9,7 +9,6 @@ import {
   useMemo,
   useRef,
   useState,
-  type ReactNode,
 } from "react";
 import {
   Plus,
@@ -44,13 +43,12 @@ export const AddProjectPanel = forwardRef<
   AddProjectPanelHandle,
   {
     locale: Locale;
-    toolbarStart?: ReactNode;
     onAuthChange?: (authenticated: boolean) => void;
     onCreated: (item: GalleryItem) => void;
     onUpdated: (item: GalleryItem) => void;
   }
 >(function AddProjectPanel(
-  { locale, toolbarStart, onAuthChange, onCreated, onUpdated },
+  { locale, onAuthChange, onCreated, onUpdated },
   ref,
 ) {
   const isAr = locale === "ar";
@@ -324,28 +322,23 @@ export const AddProjectPanel = forwardRef<
 
   return (
     <div className="mt-8">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-        <div className="flex shrink-0 flex-wrap items-center gap-3">
-          <Button type="button" onClick={openCreate} disabled={checkingAuth}>
-            <Plus className="size-4" aria-hidden />
-            {isAr ? "إضافة مشروع جديد" : "Add new project"}
+      <div className="flex flex-wrap items-center gap-3">
+        <Button type="button" onClick={openCreate} disabled={checkingAuth}>
+          <Plus className="size-4" aria-hidden />
+          {isAr ? "إضافة مشروع جديد" : "Add new project"}
+        </Button>
+        {authenticated ? (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={handleLogout}
+            disabled={pending}
+          >
+            <LogOut className="size-4" aria-hidden />
+            {isAr ? "تسجيل الخروج" : "Log out"}
           </Button>
-          {authenticated ? (
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={handleLogout}
-              disabled={pending}
-            >
-              <LogOut className="size-4" aria-hidden />
-              {isAr ? "تسجيل الخروج" : "Log out"}
-            </Button>
-          ) : null}
-        </div>
-        <div className="min-w-0 flex-1 overflow-x-auto pb-1 sm:flex sm:justify-end">
-          {toolbarStart}
-        </div>
+        ) : null}
       </div>
 
       {mode !== "closed" ? (

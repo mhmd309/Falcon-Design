@@ -11,10 +11,9 @@ import {
   Loader2,
 } from "lucide-react";
 import type { Locale } from "@/config/site";
-import type { GalleryCategory, GalleryItem } from "@/types/content";
+import type { GalleryItem } from "@/types/content";
 import { pickLocalized } from "@/lib/utils";
 import { SectionHeading, EmptyState } from "@/components/ui/section";
-import { FilterTabs } from "@/components/ui/filter-tabs";
 import {
   AddProjectPanel,
   type AddProjectPanelHandle,
@@ -102,11 +101,9 @@ function ProjectMeta({
 export function GalleryGrid({
   locale,
   items: initialItems,
-  categories,
 }: {
   locale: Locale;
   items: GalleryItem[];
-  categories: GalleryCategory[];
 }) {
   const copy = t(locale);
   const isAr = locale === "ar";
@@ -124,7 +121,6 @@ export function GalleryGrid({
     title: string;
     message: string;
   } | null>(null);
-  const [categoryId, setCategoryId] = useState<string>("all");
   const [page, setPage] = useState(1);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -143,40 +139,17 @@ export function GalleryGrid({
     return sortGalleryItems(merged);
   }, [createdItems, deletedSet, initialItems, updatedItems]);
 
-  const filtered = useMemo(() => {
-    if (categoryId === "all") return items;
-    return items.filter((item) => item.category_id === categoryId);
-  }, [items, categoryId]);
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
 
   const pageItems = useMemo(() => {
     const start = (currentPage - 1) * PAGE_SIZE;
-    return filtered.slice(start, start + PAGE_SIZE);
-  }, [filtered, currentPage]);
-
-  const tabs = useMemo(
-    () => [
-      { id: "all", label: copy.filterAll },
-      ...categories.map((cat) => ({
-        id: cat.id,
-        label: pickLocalized(cat, locale, "name"),
-      })),
-    ],
-    [categories, copy.filterAll, locale],
-  );
-
-  function handleFilter(id: string) {
-    setCategoryId(id);
-    setPage(1);
-    setActiveIndex(null);
-  }
+    return items.slice(start, start + PAGE_SIZE);
+  }, [items, currentPage]);
 
   function handleCreated(item: GalleryItem) {
     setCreatedItems((prev) => [item, ...prev.filter((p) => p.id !== item.id)]);
     setDeletedIds((prev) => prev.filter((id) => id !== item.id));
-    setCategoryId("all");
     setPage(1);
     setActiveIndex(null);
   }
@@ -292,25 +265,16 @@ export function GalleryGrid({
           onAuthChange={setIsAdmin}
           onCreated={handleCreated}
           onUpdated={handleUpdated}
-          toolbarStart={
-            <FilterTabs
-              tabs={tabs}
-              value={categoryId}
-              onChange={handleFilter}
-              ariaLabel={locale === "ar" ? "تصفية المعرض" : "Gallery filters"}
-              className="min-w-max"
-            />
-          }
         />
 
-        {filtered.length === 0 ? (
+        {items.length === 0 ? (
           <div className="mt-10">
             <EmptyState title={copy.empty} />
           </div>
         ) : (
           <>
             <div
-              key={`${categoryId}-${page}`}
+              key={page}
               className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
             >
               {pageItems.map((item, index) => (

@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 import type { Locale } from "@/config/site";
 import { GalleryGrid } from "@/components/gallery/gallery-grid";
-import {
-  getGalleryCategories,
-  getMergedGalleryItems,
-  getPageBySlug,
-} from "@/lib/data";
+import { getMergedGalleryItems, getPageBySlug } from "@/lib/data";
 import {
   JsonLd,
   breadcrumbJsonLd,
@@ -30,10 +26,7 @@ export default async function GalleryPage({
 }) {
   const { locale: localeParam } = await params;
   const locale = localeParam as Locale;
-  const [items, categories] = await Promise.all([
-    getMergedGalleryItems(),
-    Promise.resolve(getGalleryCategories()),
-  ]);
+  const items = await getMergedGalleryItems();
 
   return (
     <>
@@ -47,7 +40,7 @@ export default async function GalleryPage({
         ])}
       />
       <JsonLd data={galleryJsonLd(locale, items)} />
-      <GalleryGrid locale={locale} items={items} categories={categories} />
+      <GalleryGrid locale={locale} items={items} />
     </>
   );
 }
