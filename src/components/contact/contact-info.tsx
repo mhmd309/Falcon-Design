@@ -6,7 +6,6 @@ import {
   Facebook,
   Instagram,
   Youtube,
-  ArrowUpLeft,
 } from "lucide-react";
 import type { Locale } from "@/config/site";
 import type { SiteSettings } from "@/types/content";
@@ -166,26 +165,25 @@ export function ContactInfo({
               <li key={email.id}>
                 <a
                   href={`mailto:${email.email}`}
-                  className="group flex items-center gap-3 border-s-2 border-gold/40 ps-4 transition hover:border-gold"
+                  className="group inline-flex max-w-full items-center gap-2.5 border-s-2 border-gold/40 ps-3 transition hover:border-gold sm:gap-3 sm:ps-4"
                 >
-                  <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-gold/10 text-gold transition group-hover:bg-gold/15">
-                    <Mail className="size-4" aria-hidden />
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-gold/10 text-gold transition group-hover:bg-gold/15 sm:size-9">
+                    <Mail className="size-3.5 sm:size-4" aria-hidden />
                   </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-xs font-semibold tracking-wide text-text-dark-muted">
+                  <span className="min-w-0 text-sm sm:text-base">
+                    <span className="font-semibold text-text-dark">
                       {locale === "ar" ? email.label_ar : email.label_en}
+                    </span>
+                    <span className="mx-1.5 text-text-dark-muted" aria-hidden>
+                      —
                     </span>
                     <span
                       dir="ltr"
-                      className="mt-0.5 block truncate text-sm font-medium text-text-dark transition group-hover:text-gold sm:text-base"
+                      className="font-medium text-text-dark-muted transition group-hover:text-gold"
                     >
                       {email.email}
                     </span>
                   </span>
-                  <ArrowUpLeft
-                    className="size-4 shrink-0 text-steel opacity-0 transition group-hover:opacity-100 group-hover:text-gold"
-                    aria-hidden
-                  />
                 </a>
               </li>
             ))}
