@@ -7,6 +7,7 @@ import { cn, localizedPath, pickLocalized } from "@/lib/utils";
 import { t } from "@/lib/i18n/ui";
 import { Reveal } from "@/components/ui/motion";
 import { SectionHeading, EmptyState } from "@/components/ui/section";
+import { ProjectMeta } from "@/components/gallery/project-meta";
 
 export function FeaturedProjects({
   locale,
@@ -40,6 +41,10 @@ export function FeaturedProjects({
               {items.slice(0, 6).map((item, index) => {
                 const title = pickLocalized(item, locale, "title");
                 const alt = pickLocalized(item, locale, "alt_text") || title;
+                const hasMeta =
+                  Boolean(item.owner_name) ||
+                  Boolean(item.consultant_name) ||
+                  Boolean(item.project_contractor_name);
 
                 return (
                   <Reveal key={item.id} delay={index * 0.05}>
@@ -58,12 +63,41 @@ export function FeaturedProjects({
                         className="object-cover transition duration-500 group-hover:scale-105"
                         unoptimized={item.source === "database"}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                      <div className="absolute inset-x-0 bottom-0 flex items-end justify-end gap-3 p-4 md:p-5">
-                        <span className="rounded-full border border-gold/30 bg-gold/10 p-1.5 text-gold transition group-hover:bg-gold/20">
-                          <ArrowUpRight size={16} aria-hidden />
+                      <div
+                        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(8,10,14,0.35)_100%)]"
+                        aria-hidden
+                      />
+                      {hasMeta ? (
+                        <span className="absolute inset-0 flex items-end">
+                          <span
+                            className="absolute inset-0 bg-gradient-to-t from-[#0b0d10]/95 via-[#0b0d10]/55 to-transparent"
+                            aria-hidden
+                          />
+                          <span
+                            className="absolute inset-0 opacity-80"
+                            style={{
+                              background:
+                                "linear-gradient(135deg, rgba(198,161,91,0.18) 0%, transparent 42%, transparent 100%)",
+                            }}
+                            aria-hidden
+                          />
+                          <span className="relative z-[1] flex w-full items-end justify-between gap-3 p-3 sm:p-4">
+                            <ProjectMeta locale={locale} item={item} />
+                            <span className="shrink-0 rounded-full border border-gold/30 bg-gold/10 p-1.5 text-gold transition group-hover:bg-gold/20">
+                              <ArrowUpRight size={16} aria-hidden />
+                            </span>
+                          </span>
                         </span>
-                      </div>
+                      ) : (
+                        <>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                          <div className="absolute inset-x-0 bottom-0 flex items-end justify-end gap-3 p-4 md:p-5">
+                            <span className="rounded-full border border-gold/30 bg-gold/10 p-1.5 text-gold transition group-hover:bg-gold/20">
+                              <ArrowUpRight size={16} aria-hidden />
+                            </span>
+                          </div>
+                        </>
+                      )}
                     </Link>
                   </Reveal>
                 );
