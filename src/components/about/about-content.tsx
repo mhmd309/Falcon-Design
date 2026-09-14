@@ -1,4 +1,3 @@
-import Image from "next/image";
 import type { Locale } from "@/config/site";
 import type {
   CoreValue,
@@ -7,6 +6,7 @@ import type {
 } from "@/types/content";
 import { pickLocalized } from "@/lib/utils";
 import { Reveal } from "@/components/ui/motion";
+import { SectionHeading } from "@/components/ui/section";
 import { t } from "@/lib/i18n/ui";
 
 export function AboutContent({
@@ -30,62 +30,36 @@ export function AboutContent({
     : locale === "ar"
       ? "من نحن"
       : "About Us";
+  const subtitle = intro ? pickLocalized(intro, locale, "subtitle") : undefined;
+  const description = intro
+    ? pickLocalized(intro, locale, "description")
+    : undefined;
 
   return (
     <>
-      <section className="relative min-h-[70vh] overflow-hidden bg-bg text-white">
-        {intro?.image_url ? (
-          <Image
-            src={intro.image_url}
-            alt={
-              pickLocalized(intro, locale, "alt_text") ||
-              pickLocalized(intro, locale, "title")
-            }
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
-        ) : null}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-black/35" />
-        <div className="container-page relative flex min-h-[70vh] flex-col justify-end pb-14 pt-28 sm:pb-16 md:pb-20">
+      <section className="section-space">
+        <div className="container-page">
           <Reveal>
-            <p className="text-sm font-semibold tracking-[0.22em] text-gold-soft uppercase">
-              Falcon Design
-            </p>
-            <h1 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl">
-              {title}
-            </h1>
-            {intro ? (
-              <p className="mt-4 max-w-2xl text-base text-white/75 sm:text-lg">
-                {pickLocalized(intro, locale, "subtitle")}
+            <SectionHeading
+              eyebrow="Falcon Design"
+              title={title}
+              description={subtitle}
+            />
+            {description ? (
+              <p className="mt-6 max-w-3xl text-base leading-relaxed text-text-dark-muted sm:text-lg md:leading-8">
+                {description}
               </p>
             ) : null}
           </Reveal>
         </div>
       </section>
 
-      {intro ? (
-        <section className="section-space">
-          <div className="container-page">
-            <Reveal>
-              <div className="mx-auto max-w-3xl text-center">
-                <div className="metallic-line mx-auto mb-8 w-24" />
-                <p className="text-lg leading-relaxed text-text-dark-muted sm:text-xl md:leading-8">
-                  {pickLocalized(intro, locale, "description")}
-                </p>
-              </div>
-            </Reveal>
-          </div>
-        </section>
-      ) : null}
-
       {(vision || mission) && (
-        <section className="border-y border-steel/15 bg-bg text-text">
-          <div className="container-page grid gap-0 md:grid-cols-2">
+        <section className="section-space bg-bg text-text">
+          <div className="container-page grid gap-10 md:grid-cols-2 md:gap-0">
             {vision ? (
               <Reveal>
-                <div className="border-steel/15 py-14 md:border-e md:pe-12 md:py-16">
+                <div className="md:border-e md:border-steel/15 md:pe-12">
                   <p className="text-xs font-semibold tracking-[0.22em] text-gold uppercase">
                     {copy.vision}
                   </p>
@@ -100,7 +74,7 @@ export function AboutContent({
             ) : null}
             {mission ? (
               <Reveal delay={0.06}>
-                <div className="py-14 md:ps-12 md:py-16">
+                <div className="md:ps-12">
                   <p className="text-xs font-semibold tracking-[0.22em] text-gold uppercase">
                     {copy.mission}
                   </p>
