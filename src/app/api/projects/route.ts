@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAdminSession } from "@/lib/auth/admin-session";
 import { isDatabaseConfigured, prisma } from "@/lib/db";
-import { getStorageBucket, getSupabaseAdmin } from "@/lib/supabase/admin";
+import { getSupabaseAdmin, ensureStorageBucket } from "@/lib/supabase/admin";
 import type { ProjectRecord } from "@/types/content";
 
 export const runtime = "nodejs";
@@ -116,14 +116,15 @@ export async function POST(request: Request) {
             : "jpg";
 
     const path = `projects/${Date.now()}-${crypto.randomUUID()}.${ext}`;
-    const bucket = getStorageBucket();
     let supabase;
+    let bucket: string;
     try {
       supabase = getSupabaseAdmin();
+      bucket = await ensureStorageBucket();
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Supabase is not configured";
-      console.error("supabase admin config failed", message);
+      console.error("supabase storage setup failed", message);
       return json({ error: message }, 503);
     }
     const buffer = Buffer.from(await image.arrayBuffer());

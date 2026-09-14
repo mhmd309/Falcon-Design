@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getAdminSession } from "@/lib/auth/admin-session";
 import { isDatabaseConfigured, prisma } from "@/lib/db";
 import { storagePathFromPublicUrl } from "@/lib/projects";
-import { getStorageBucket, getSupabaseAdmin } from "@/lib/supabase/admin";
+import { getStorageBucket, getSupabaseAdmin, ensureStorageBucket } from "@/lib/supabase/admin";
 import type { ProjectRecord } from "@/types/content";
 
 export const runtime = "nodejs";
@@ -63,31 +63,38 @@ async function uploadImage(image: File) {
           : "jpg";
 
   const path = `projects/${Date.now()}-${crypto.randomUUID()}.${ext}`;
-  const bucket = getStorageBucket();
-  let supabase;
   try {
-    supabase = getSupabaseAdmin();
+    const bucket = await ensureStorageBucket();
+    const supabase = getSupabaseAdmin();
+    const buffer = Buffer.from(await image.arrayBuffer());
+
+    const { error: uploadError } = await supabase.storage
+      .from(bucket)
+      .upload(path, buffer, {
+        contentType: image.type,
+        upsert: false,
+      });
+
+    if (uploadError) {
+      console.error("storage upload failed", uploadError);
+      throw new Error(uploadError.message || "UPLOAD_FAILED");
+    }
+
+    const { data: publicData } = supabase.storage.from(bucket).getPublicUrl(path);
+    return { imageUrl: publicData.publicUrl, path, bucket };
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Supabase is not configured";
+    if (
+      message === "UNSUPPORTED_TYPE" ||
+      message === "TOO_LARGE" ||
+      message === "UPLOAD_FAILED" ||
+      message.startsWith("SUPABASE_CONFIG:")
+    ) {
+      throw error instanceof Error ? error : new Error(message);
+    }
     throw new Error(`SUPABASE_CONFIG:${message}`);
   }
-  const buffer = Buffer.from(await image.arrayBuffer());
-
-  const { error: uploadError } = await supabase.storage
-    .from(bucket)
-    .upload(path, buffer, {
-      contentType: image.type,
-      upsert: false,
-    });
-
-  if (uploadError) {
-    console.error("storage upload failed", uploadError);
-    throw new Error(uploadError.message || "UPLOAD_FAILED");
-  }
-
-  const { data: publicData } = supabase.storage.from(bucket).getPublicUrl(path);
-  return { imageUrl: publicData.publicUrl, path, bucket };
 }
 
 async function removeStoredImage(imageUrl: string) {
