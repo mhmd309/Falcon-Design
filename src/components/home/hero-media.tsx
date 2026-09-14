@@ -9,40 +9,40 @@ export function HeroMedia({ alt }: { alt: string }) {
   const reduce = useReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [index, setIndex] = useState(0);
+  const src = HERO_VIDEOS[index];
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    video.src = HERO_VIDEOS[index];
-    video.load();
+    const play = () => {
+      if (reduce) {
+        video.pause();
+        return;
+      }
+      void video.play().catch(() => undefined);
+    };
 
-    if (reduce) {
-      video.pause();
-      return;
-    }
-
-    void video.play().catch(() => {
-      /* muted + playsInline usually allows autoplay */
-    });
-  }, [index, reduce]);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || reduce) return;
+    play();
+    video.addEventListener("loadeddata", play);
 
     const onEnded = () => {
       setIndex((current) => (current + 1) % HERO_VIDEOS.length);
     };
-
     video.addEventListener("ended", onEnded);
-    return () => video.removeEventListener("ended", onEnded);
-  }, [reduce]);
+
+    return () => {
+      video.removeEventListener("loadeddata", play);
+      video.removeEventListener("ended", onEnded);
+    };
+  }, [src, reduce]);
 
   return (
     <video
       ref={videoRef}
+      src={src}
       className="absolute inset-0 h-full w-full object-cover object-center"
+      autoPlay={!reduce}
       muted
       playsInline
       preload="auto"

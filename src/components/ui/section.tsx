@@ -7,6 +7,7 @@ export function SectionHeading({
   align = "start",
   light = false,
   className,
+  headingId,
 }: {
   eyebrow?: string;
   title: string;
@@ -14,6 +15,7 @@ export function SectionHeading({
   align?: "start" | "center";
   light?: boolean;
   className?: string;
+  headingId?: string;
 }) {
   return (
     <div
@@ -34,6 +36,7 @@ export function SectionHeading({
         </p>
       ) : null}
       <h2
+        id={headingId}
         className={cn(
           "text-2xl font-semibold tracking-tight text-text-dark sm:text-3xl md:text-4xl",
           light && "text-text",

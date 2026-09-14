@@ -40,6 +40,7 @@ export function CertificatesGrid({
       <div className="container-page">
         <Reveal>
           <SectionHeading
+            headingId="certificates-heading"
             title={title || copy.certificatesTitle}
             description={description || undefined}
           />

@@ -25,6 +25,7 @@ export function FeaturedCertificates({
       <div className="container-page">
         <Reveal>
           <SectionHeading
+            headingId="featured-certificates-heading"
             title={copy.certificates}
             description={
               locale === "ar"

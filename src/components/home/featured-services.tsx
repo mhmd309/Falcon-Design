@@ -32,6 +32,7 @@ export function FeaturedServices({
       <div className="container-page">
         <Reveal>
           <SectionHeading
+            headingId="featured-services-heading"
             title={copy.featuredServices}
             description={
               locale === "ar"

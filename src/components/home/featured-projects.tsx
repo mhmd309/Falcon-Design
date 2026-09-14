@@ -26,6 +26,7 @@ export function FeaturedProjects({
       <div className="container-page">
         <Reveal>
           <SectionHeading
+            headingId="featured-projects-heading"
             title={copy.featuredProjects}
             description={copy.featuredProjectsDesc}
           />
@@ -62,8 +63,9 @@ export function FeaturedProjects({
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         className="object-cover transition duration-500 group-hover:scale-105"
                         unoptimized={item.source === "database"}
+                        priority={index < 2}
                       />
-                      <div
+                      <span
                         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(8,10,14,0.35)_100%)]"
                         aria-hidden
                       />
@@ -81,23 +83,19 @@ export function FeaturedProjects({
                             }}
                             aria-hidden
                           />
-                          <span className="relative z-[1] flex w-full items-end justify-between gap-3 p-3 sm:p-4">
+                          <span className="relative z-[1] w-full p-3 sm:p-4">
                             <ProjectMeta locale={locale} item={item} />
-                            <span className="shrink-0 rounded-full border border-gold/30 bg-gold/10 p-1.5 text-gold transition group-hover:bg-gold/20">
-                              <ArrowUpRight size={16} aria-hidden />
-                            </span>
                           </span>
                         </span>
                       ) : (
-                        <>
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                          <div className="absolute inset-x-0 bottom-0 flex items-end justify-end gap-3 p-4 md:p-5">
-                            <span className="rounded-full border border-gold/30 bg-gold/10 p-1.5 text-gold transition group-hover:bg-gold/20">
-                              <ArrowUpRight size={16} aria-hidden />
-                            </span>
-                          </div>
-                        </>
+                        <span
+                          className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"
+                          aria-hidden
+                        />
                       )}
+                      <span className="absolute end-3 top-3 z-[2] rounded-full border border-gold/30 bg-gold/10 p-1.5 text-gold transition group-hover:bg-gold/20">
+                        <ArrowUpRight size={16} aria-hidden />
+                      </span>
                     </Link>
                   </Reveal>
                 );

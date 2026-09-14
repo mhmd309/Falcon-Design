@@ -9,13 +9,16 @@ const supabaseHost = (() => {
   }
 })();
 
+const isDev = process.env.NODE_ENV !== "production";
+
 const contentSecurityPolicy = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://va.vercel-scripts.com`,
   "style-src 'self' 'unsafe-inline'",
   `img-src 'self' data: blob:${supabaseHost ? ` https://${supabaseHost}` : ""}`,
+  "media-src 'self' blob:",
   "font-src 'self' data:",
-  `connect-src 'self'${supabaseHost ? ` https://${supabaseHost}` : ""}`,
+  `connect-src 'self' https://va.vercel-scripts.com https://vitals.vercel-insights.com${supabaseHost ? ` https://${supabaseHost}` : ""}`,
   "frame-ancestors 'self'",
   "base-uri 'self'",
   "form-action 'self'",
