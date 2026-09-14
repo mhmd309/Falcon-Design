@@ -30,28 +30,10 @@ const CONTACT = {
     },
     {
       id: "email-2",
-      label_ar: "المبيعات",
-      label_en: "Sales",
-      email: "sales@falcondesign.ae",
-    },
-    {
-      id: "email-3",
-      label_ar: "المشاريع",
-      label_en: "Projects",
-      email: "projects@falcondesign.ae",
-    },
-        {
-      id: "email-4",
-      label_ar: "تجريبى",
-      label_en: "Training",
-      email: "training@falcondesign.ae",
-    },
-        {
-      id: "email-5",
-      label_ar: "تيست",
-      label_en: "Test",
-      email: "test@falcondesign.ae",
-    },
+      label_ar: "عام",
+      label_en: "General",
+      email: "falcondesign19@gmail.com",
+    }
   ],
 } as const;
 

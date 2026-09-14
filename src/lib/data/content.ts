@@ -23,7 +23,7 @@ export const siteSettings: SiteSettings = {
   address_ar: "العين، أبوظبي، الإمارات العربية المتحدة",
   address_en: "Al Ain, Abu Dhabi, United Arab Emirates",
   facebook_url: "#",
-  instagram_url: "#",
+  instagram_url: "https://www.instagram.com/falcondesignsteel/",
   linkedin_url: "#",
   youtube_url: "#",
   x_url: "#",
