@@ -113,7 +113,7 @@ export function ContactInfo({
           Falcon Design
         </p>
         <h2 className="mt-3 text-2xl font-semibold tracking-tight text-text-dark sm:text-3xl">
-          {locale === "ar" ? "بيانات التواصل" : "Contact details"}
+          {copy.contactDetails}
         </h2>
         <div className="metallic-line mt-5 w-16" />
         <p className="mt-5 max-w-xl text-base leading-relaxed text-text-dark-muted">

@@ -29,14 +29,8 @@ export function ServicesGrid({
 
   const tabs = [
     { id: "all", label: copy.filterAll },
-    {
-      id: "steel",
-      label: locale === "ar" ? "صلب" : "Steel",
-    },
-    {
-      id: "aluminum",
-      label: locale === "ar" ? "ألمنيوم" : "Aluminum",
-    },
+    { id: "steel", label: copy.steel },
+    { id: "aluminum", label: copy.aluminum },
   ];
 
   const filtered = useMemo(() => {
@@ -79,11 +73,7 @@ export function ServicesGrid({
       <div className="container-page">
         <SectionHeading
           title={
-            intro
-              ? pickLocalized(intro, locale, "title")
-              : locale === "ar"
-                ? "خدماتنا"
-                : "Our Services"
+            intro ? pickLocalized(intro, locale, "title") : copy.ourServices
           }
           description={
             intro ? pickLocalized(intro, locale, "description") : undefined
@@ -96,15 +86,15 @@ export function ServicesGrid({
               tabs={tabs}
               value={category}
               onChange={handleCategoryChange}
-              ariaLabel={locale === "ar" ? "تصفية الخدمات" : "Service filters"}
+              ariaLabel={copy.serviceFilters}
               className="min-w-max"
             />
           </div>
           <Input
             value={query}
             onChange={(e) => handleQueryChange(e.target.value)}
-            placeholder={locale === "ar" ? "بحث..." : "Search…"}
-            aria-label={locale === "ar" ? "بحث" : "Search"}
+            placeholder={copy.searchPlaceholder}
+            aria-label={copy.search}
             className="w-full lg:max-w-xs"
           />
         </div>

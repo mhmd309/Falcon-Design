@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { Locale } from "@/config/site";
+import { t } from "@/lib/i18n/ui";
 import { Reveal } from "@/components/ui/motion";
 
 function AppleIcon({ className }: { className?: string }) {
@@ -24,34 +25,36 @@ function PlayIcon({ className }: { className?: string }) {
   );
 }
 
-function ComingSoonBadge({ locale }: { locale: Locale }) {
+function ComingSoonBadge({ label }: { label: string }) {
   return (
     <span className="absolute -top-2 end-3 inline-flex items-center gap-1.5 rounded-full border border-gold/35 bg-card px-2.5 py-0.5 text-[0.65rem] font-semibold tracking-wide text-gold shadow-sm">
       <span className="size-1.5 animate-pulse rounded-full bg-gold" aria-hidden />
-      {locale === "ar" ? "قريبًا" : "Soon"}
+      {label}
     </span>
   );
 }
 
 function StoreButton({
-  locale,
   label,
   store,
   icon,
+  comingSoon,
+  comingSoonAria,
 }: {
-  locale: Locale;
   label: string;
   store: string;
   icon: ReactNode;
+  comingSoon: string;
+  comingSoonAria: string;
 }) {
   return (
     <div
       role="link"
       aria-disabled="true"
-      aria-label={`${store} — ${locale === "ar" ? "قريبًا" : "Coming soon"}`}
+      aria-label={`${store} — ${comingSoonAria}`}
       className="relative inline-flex min-w-[220px] cursor-not-allowed items-center gap-3 rounded-xl border border-steel/20 bg-card px-5 py-3.5 text-start opacity-70 shadow-sm"
     >
-      <ComingSoonBadge locale={locale} />
+      <ComingSoonBadge label={comingSoon} />
       {icon}
       <span className="min-w-0">
         <span className="block text-[0.65rem] tracking-wide text-text-dark-muted uppercase">
@@ -64,7 +67,7 @@ function StoreButton({
 }
 
 export function AppDownload({ locale }: { locale: Locale }) {
-  const isAr = locale === "ar";
+  const copy = t(locale);
 
   return (
     <section
@@ -81,12 +84,10 @@ export function AppDownload({ locale }: { locale: Locale }) {
               id="app-download-heading"
               className="mt-3 text-2xl font-semibold tracking-tight text-text-dark sm:text-3xl md:text-4xl"
             >
-              {isAr ? "حمّل تطبيقنا" : "Download our app"}
+              {copy.downloadOurApp}
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-text-dark-muted sm:text-base">
-              {isAr
-                ? "تطبيق فالكون ديزاين لأندرويد وiOS قادم قريبًا."
-                : "The Falcon Design app for Android and iOS is coming soon."}
+              {copy.downloadOurAppDesc}
             </p>
           </div>
         </Reveal>
@@ -94,15 +95,17 @@ export function AppDownload({ locale }: { locale: Locale }) {
         <Reveal delay={0.08}>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5">
             <StoreButton
-              locale={locale}
-              label={isAr ? "احصل عليه من" : "Get it on"}
+              label={copy.getItOn}
               store="Google Play"
+              comingSoon={copy.comingSoon}
+              comingSoonAria={copy.comingSoonAria}
               icon={<PlayIcon className="size-9 shrink-0 grayscale" />}
             />
             <StoreButton
-              locale={locale}
-              label={isAr ? "حمّله من" : "Download on the"}
+              label={copy.downloadOnThe}
               store="App Store"
+              comingSoon={copy.comingSoon}
+              comingSoonAria={copy.comingSoonAria}
               icon={<AppleIcon className="size-9 shrink-0 text-text-dark" />}
             />
           </div>

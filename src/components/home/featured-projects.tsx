@@ -26,11 +26,7 @@ export function FeaturedProjects({
         <Reveal>
           <SectionHeading
             title={copy.featuredProjects}
-            description={
-              locale === "ar"
-                ? "نماذج من مشاريعنا المنفذة في الصلب والألمنيوم."
-                : "A selection of delivered steel and aluminum projects."
-            }
+            description={copy.featuredProjectsDesc}
           />
         </Reveal>
 

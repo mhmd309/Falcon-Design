@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { FieldError, Input, Label } from "@/components/ui/form";
 import type { GalleryItem, ProjectRecord } from "@/types/content";
 import { cn } from "@/lib/utils";
+import { t } from "@/lib/i18n/ui";
 import { mapProjectToGalleryItem, projectDbId } from "@/lib/projects";
 
 type PanelMode = "closed" | "login" | "form";
@@ -51,7 +52,7 @@ export const AddProjectPanel = forwardRef<
   { locale, onAuthChange, onCreated, onUpdated },
   ref,
 ) {
-  const isAr = locale === "ar";
+  const copy = t(locale);
   const titleId = useId();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const authenticatedRef = useRef(false);
@@ -194,7 +195,7 @@ export const AddProjectPanel = forwardRef<
   function pickFile(file: File | null | undefined) {
     if (!file) return;
     if (!file.type.startsWith("image/")) {
-      setError(isAr ? "الملف يجب أن يكون صورة" : "File must be an image");
+      setError(copy.fileMustBeImage);
       return;
     }
     setError(null);
@@ -208,13 +209,13 @@ export const AddProjectPanel = forwardRef<
       const file = e.dataTransfer.files?.[0];
       if (!file) return;
       if (!file.type.startsWith("image/")) {
-        setError(isAr ? "الملف يجب أن يكون صورة" : "File must be an image");
+        setError(copy.fileMustBeImage);
         return;
       }
       setError(null);
       setImage(file);
     },
-    [isAr],
+    [copy.fileMustBeImage],
   );
 
   async function handleLogin(e: React.FormEvent) {
@@ -230,9 +231,7 @@ export const AddProjectPanel = forwardRef<
       });
       const data = (await res.json()) as { error?: string };
       if (!res.ok) {
-        setError(
-          data.error || (isAr ? "فشل تسجيل الدخول" : "Login failed"),
-        );
+        setError(data.error || copy.loginFailed);
         return;
       }
       authenticatedRef.current = true;
@@ -242,7 +241,7 @@ export const AddProjectPanel = forwardRef<
       setMode("form");
       setPendingEditAfterLogin(false);
     } catch {
-      setError(isAr ? "تعذر الاتصال بالخادم" : "Could not reach the server");
+      setError(copy.couldNotReachServer);
     } finally {
       setPending(false);
     }
@@ -267,7 +266,7 @@ export const AddProjectPanel = forwardRef<
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!isEditing && !image) {
-      setError(isAr ? "الصورة مطلوبة" : "Image is required");
+      setError(copy.imageRequired);
       return;
     }
 
@@ -298,13 +297,7 @@ export const AddProjectPanel = forwardRef<
       if (!res.ok || !data.project) {
         setError(
           data.error ||
-            (isAr
-              ? isEditing
-                ? "فشل تحديث المشروع"
-                : "فشل حفظ المشروع"
-              : isEditing
-                ? "Failed to update project"
-                : "Failed to save project"),
+            (isEditing ? copy.updateProjectFailed : copy.saveProjectFailed),
         );
         return;
       }
@@ -314,7 +307,7 @@ export const AddProjectPanel = forwardRef<
       else onCreated(mapped);
       closePanel();
     } catch {
-      setError(isAr ? "تعذر الاتصال بالخادم" : "Could not reach the server");
+      setError(copy.couldNotReachServer);
     } finally {
       setPending(false);
     }
@@ -325,7 +318,7 @@ export const AddProjectPanel = forwardRef<
       <div className="flex flex-wrap items-center gap-3 sm:justify-end">
         <Button type="button" onClick={openCreate} disabled={checkingAuth}>
           <Plus className="size-4" aria-hidden />
-          {isAr ? "إضافة مشروع جديد" : "Add new project"}
+          {copy.addNewProject}
         </Button>
         {authenticated ? (
           <Button
@@ -336,7 +329,7 @@ export const AddProjectPanel = forwardRef<
             disabled={pending}
           >
             <LogOut className="size-4" aria-hidden />
-            {isAr ? "تسجيل الخروج" : "Log out"}
+            {copy.logOut}
           </Button>
         ) : null}
       </div>
@@ -358,7 +351,7 @@ export const AddProjectPanel = forwardRef<
               type="button"
               className="absolute end-3 top-3 inline-flex size-9 items-center justify-center rounded-md text-text-dark-muted transition hover:bg-surface-muted hover:text-text-dark"
               onClick={requestClose}
-              aria-label={isAr ? "إغلاق" : "Close"}
+              aria-label={copy.close}
               disabled={pending}
             >
               <X className="size-5" />
@@ -374,17 +367,11 @@ export const AddProjectPanel = forwardRef<
                     id={titleId}
                     className="mt-2 text-xl font-semibold text-text-dark"
                   >
-                    {pendingEditAfterLogin
-                      ? isAr
-                        ? "تسجيل الدخول للتعديل"
-                        : "Sign in to edit"
-                      : isAr
-                        ? "تسجيل الدخول للإضافة"
-                        : "Sign in to add a project"}
+                    {pendingEditAfterLogin ? copy.loginToEdit : copy.loginToAdd}
                   </h2>
                 </div>
                 <div>
-                  <Label htmlFor="admin-email">{isAr ? "البريد" : "Email"}</Label>
+                  <Label htmlFor="admin-email">{copy.email}</Label>
                   <Input
                     id="admin-email"
                     type="email"
@@ -396,9 +383,7 @@ export const AddProjectPanel = forwardRef<
                   />
                 </div>
                 <div>
-                  <Label htmlFor="admin-password">
-                    {isAr ? "كلمة المرور" : "Password"}
-                  </Label>
+                  <Label htmlFor="admin-password">{copy.password}</Label>
                   <Input
                     id="admin-password"
                     type="password"
@@ -415,10 +400,10 @@ export const AddProjectPanel = forwardRef<
                     {pending ? (
                       <Loader2 className="size-4 animate-spin" />
                     ) : null}
-                    {isAr ? "دخول" : "Sign in"}
+                    {copy.signIn}
                   </Button>
                   <Button type="button" variant="ghost" onClick={requestClose}>
-                    {isAr ? "إلغاء" : "Cancel"}
+                    {copy.cancel}
                   </Button>
                 </div>
               </form>
@@ -434,18 +419,12 @@ export const AddProjectPanel = forwardRef<
                     id={titleId}
                     className="mt-2 text-xl font-semibold text-text-dark"
                   >
-                    {isEditing
-                      ? isAr
-                        ? "تعديل المشروع"
-                        : "Edit project"
-                      : isAr
-                        ? "بيانات المشروع الجديد"
-                        : "New project details"}
+                    {isEditing ? copy.editProject : copy.newProjectDetails}
                   </h2>
                 </div>
 
                 <div>
-                  <Label>{isAr ? "الصورة" : "Image"}</Label>
+                  <Label>{copy.image}</Label>
                   <input
                     ref={fileInputRef}
                     type="file"
@@ -495,7 +474,7 @@ export const AddProjectPanel = forwardRef<
                         <div className="relative z-10 space-y-2 text-white">
                           <Upload className="mx-auto size-6" aria-hidden />
                           <p className="text-sm font-semibold">
-                            {isAr ? "تغيير الصورة" : "Change image"}
+                            {copy.changeImage}
                           </p>
                           {image ? (
                             <p className="text-xs text-white/80">
@@ -503,9 +482,7 @@ export const AddProjectPanel = forwardRef<
                             </p>
                           ) : (
                             <p className="text-xs text-white/80">
-                              {isAr
-                                ? "اتركها كما هي أو اختر صورة جديدة"
-                                : "Keep current or choose a new one"}
+                              {copy.keepOrChangeImage}
                             </p>
                           )}
                         </div>
@@ -516,13 +493,10 @@ export const AddProjectPanel = forwardRef<
                           <ImagePlus className="size-6" aria-hidden />
                         </span>
                         <p className="text-sm font-semibold text-text-dark">
-                          {isAr
-                            ? "اسحب الصورة هنا أو اضغط للاختيار"
-                            : "Drag an image here or click to browse"}
+                          {copy.dragImageHere}
                         </p>
                         <p className="mt-1.5 text-xs text-text-dark-muted">
-                          JPG, PNG, WEBP, GIF ·{" "}
-                          {isAr ? "حتى 5 ميجا" : "up to 5MB"}
+                          {copy.imageHint}
                         </p>
                       </>
                     )}
@@ -530,9 +504,7 @@ export const AddProjectPanel = forwardRef<
                 </div>
 
                 <div>
-                  <Label htmlFor="owner-name">
-                    {isAr ? "اسم المالك" : "Owner name"}
-                  </Label>
+                  <Label htmlFor="owner-name">{copy.ownerName}</Label>
                   <Input
                     id="owner-name"
                     required
@@ -542,9 +514,7 @@ export const AddProjectPanel = forwardRef<
                 </div>
 
                 <div>
-                  <Label htmlFor="consultant-name">
-                    {isAr ? "اسم الاستشاري" : "Consultant name"}
-                  </Label>
+                  <Label htmlFor="consultant-name">{copy.consultantName}</Label>
                   <Input
                     id="consultant-name"
                     required
@@ -555,7 +525,7 @@ export const AddProjectPanel = forwardRef<
 
                 <div>
                   <Label htmlFor="project-contractor">
-                    {isAr ? "اسم المقاول الرئيسي" : "Main contractor name"}
+                    {copy.mainContractorName}
                   </Label>
                   <Input
                     id="project-contractor"
@@ -567,9 +537,7 @@ export const AddProjectPanel = forwardRef<
 
                 <div>
                   <Label htmlFor="executing-contractor">
-                    {isAr
-                      ? "اسم مقاول Falcon Design"
-                      : "Falcon Design contractor name"}
+                    {copy.falconContractorName}
                   </Label>
                   <Input
                     id="executing-contractor"
@@ -585,16 +553,10 @@ export const AddProjectPanel = forwardRef<
                     {pending ? (
                       <Loader2 className="size-4 animate-spin" />
                     ) : null}
-                    {isEditing
-                      ? isAr
-                        ? "حفظ التعديلات"
-                        : "Save changes"
-                      : isAr
-                        ? "حفظ المشروع"
-                        : "Save project"}
+                    {isEditing ? copy.saveChanges : copy.saveProject}
                   </Button>
                   <Button type="button" variant="ghost" onClick={requestClose}>
-                    {isAr ? "إلغاء" : "Cancel"}
+                    {copy.cancel}
                   </Button>
                 </div>
               </form>

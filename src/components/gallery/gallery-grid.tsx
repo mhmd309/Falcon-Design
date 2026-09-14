@@ -35,26 +35,13 @@ function ProjectMeta({
   item: GalleryItem;
   tone?: "light" | "dark";
 }) {
-  const rows =
-    locale === "ar"
-      ? [
-          { label: "المالك", value: item.owner_name },
-          { label: "الاستشاري", value: item.consultant_name },
-          { label: "المقاول الرئيسي", value: item.project_contractor_name },
-          {
-            label: "مقاول Falcon Design",
-            value: item.executing_contractor_name,
-          },
-        ]
-      : [
-          { label: "Owner", value: item.owner_name },
-          { label: "Consultant", value: item.consultant_name },
-          { label: "Main contractor", value: item.project_contractor_name },
-          {
-            label: "Falcon Design contractor",
-            value: item.executing_contractor_name,
-          },
-        ];
+  const copy = t(locale);
+  const rows = [
+    { label: copy.owner, value: item.owner_name },
+    { label: copy.consultant, value: item.consultant_name },
+    { label: copy.mainContractor, value: item.project_contractor_name },
+    { label: copy.falconContractor, value: item.executing_contractor_name },
+  ];
 
   const visible = rows.filter((row) => Boolean(row.value));
   if (!visible.length) return null;
@@ -167,10 +154,8 @@ export function GalleryGrid({
         const data = (await res.json()) as { error?: string };
         setFeedback({
           tone: "error",
-          title: isAr ? "تعذر الحذف" : "Delete failed",
-          message:
-            data.error ||
-            (isAr ? "فشل حذف المشروع" : "Failed to delete project"),
+          title: copy.deleteFailed,
+          message: data.error || copy.deleteFailedMessage,
         });
         return;
       }
@@ -181,10 +166,8 @@ export function GalleryGrid({
     } catch {
       setFeedback({
         tone: "error",
-        title: isAr ? "خطأ في الاتصال" : "Connection error",
-        message: isAr
-          ? "تعذر الاتصال بالخادم"
-          : "Could not reach the server",
+        title: copy.connectionError,
+        message: copy.couldNotReachServer,
       });
     } finally {
       setDeletingId(null);
@@ -230,12 +213,8 @@ export function GalleryGrid({
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
           <SectionHeading
             className="min-w-0 flex-1"
-            title={locale === "ar" ? "معرض المشاريع" : "Project Gallery"}
-            description={
-              locale === "ar"
-                ? "استعرض أعمال الصلب والألمنيوم المنفذة."
-                : "Explore delivered steel and aluminum works."
-            }
+            title={copy.projectGallery}
+            description={copy.projectGalleryDesc}
           />
           <AddProjectPanel
             ref={panelRef}
@@ -321,8 +300,8 @@ export function GalleryGrid({
                       <button
                         type="button"
                         className="inline-flex size-9 items-center justify-center rounded-md bg-black/55 text-white backdrop-blur-sm transition hover:bg-gold hover:text-on-gold"
-                        aria-label={isAr ? "تعديل" : "Edit"}
-                        title={isAr ? "تعديل" : "Edit"}
+                        aria-label={copy.edit}
+                        title={copy.edit}
                         onClick={(e) => {
                           e.stopPropagation();
                           panelRef.current?.openEdit(item);
@@ -333,8 +312,8 @@ export function GalleryGrid({
                       <button
                         type="button"
                         className="inline-flex size-9 items-center justify-center rounded-md bg-black/55 text-white backdrop-blur-sm transition hover:bg-danger"
-                        aria-label={isAr ? "حذف" : "Delete"}
-                        title={isAr ? "حذف" : "Delete"}
+                        aria-label={copy.delete}
+                        title={copy.delete}
                         disabled={deletingId === item.id}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -410,7 +389,7 @@ export function GalleryGrid({
             type="button"
             className="absolute end-3 top-3 z-10 cursor-pointer rounded-md bg-white/10 p-2 text-white sm:end-4 sm:top-4"
             onClick={close}
-            aria-label="Close"
+            aria-label={copy.close}
           >
             <X size={20} />
           </button>
@@ -421,7 +400,7 @@ export function GalleryGrid({
               e.stopPropagation();
               prev();
             }}
-            aria-label="Previous"
+            aria-label={copy.previous}
           >
             <ChevronLeft size={22} />
           </button>
@@ -432,7 +411,7 @@ export function GalleryGrid({
               e.stopPropagation();
               next();
             }}
-            aria-label="Next"
+            aria-label={copy.next}
           >
             <ChevronRight size={22} />
           </button>
@@ -466,7 +445,7 @@ export function GalleryGrid({
                   }}
                 >
                   <Pencil className="size-4" />
-                  {isAr ? "تعديل" : "Edit"}
+                  {copy.edit}
                 </button>
                 <button
                   type="button"
@@ -479,7 +458,7 @@ export function GalleryGrid({
                   ) : (
                     <Trash2 className="size-4" />
                   )}
-                  {isAr ? "حذف" : "Delete"}
+                  {copy.delete}
                 </button>
               </div>
             ) : null}
@@ -490,14 +469,10 @@ export function GalleryGrid({
       <ConfirmPopup
         open={Boolean(pendingDelete)}
         dir={isAr ? "rtl" : "ltr"}
-        title={isAr ? "تأكيد الحذف" : "Confirm delete"}
-        message={
-          isAr
-            ? "هل تريد حذف هذا المشروع؟ لا يمكن التراجع عن هذا الإجراء."
-            : "Do you want to delete this project? This action cannot be undone."
-        }
-        confirmLabel={isAr ? "حذف" : "Delete"}
-        cancelLabel={isAr ? "إلغاء" : "Cancel"}
+        title={copy.confirmDelete}
+        message={copy.confirmDeleteMessage}
+        confirmLabel={copy.delete}
+        cancelLabel={copy.cancel}
         pending={Boolean(deletingId)}
         onConfirm={() => void confirmDelete()}
         onCancel={closeDeletePopup}
@@ -508,7 +483,7 @@ export function GalleryGrid({
         tone={feedback?.tone || "error"}
         title={feedback?.title || ""}
         message={feedback?.message || ""}
-        closeLabel={isAr ? "حسناً" : "OK"}
+        closeLabel={copy.ok}
         onClose={closeFeedback}
         dir={isAr ? "rtl" : "ltr"}
       />
