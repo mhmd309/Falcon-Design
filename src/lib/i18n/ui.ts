@@ -61,7 +61,7 @@ export const ui = {
     hours: "ساعات العمل",
     whatsapp: "واتساب",
     followUs: "تابعنا",
-    contactEmails: "عناوين البريد",
+    contactEmails: "عناوين البريد الإلكترونى",
     rights: "جميع الحقوق محفوظة.",
     loading: "جارٍ التحميل…",
     empty: "لا يوجد محتوى حالياً.",
