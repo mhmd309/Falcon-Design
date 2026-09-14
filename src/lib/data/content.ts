@@ -22,11 +22,11 @@ export const siteSettings: SiteSettings = {
   whatsapp: "+971 56 233 1020",
   address_ar: "العين، أبوظبي، الإمارات العربية المتحدة",
   address_en: "Al Ain, Abu Dhabi, United Arab Emirates",
-  facebook_url: null,
-  instagram_url: null,
+  facebook_url: "https://www.facebook.com/falcondesign",
+  instagram_url: "https://www.instagram.com/falcondesign",
   linkedin_url: null,
-  youtube_url: null,
-  x_url: null,
+  youtube_url: "https://www.youtube.com/@falcondesign",
+  x_url: "https://x.com/falcondesign",
 };
 
 const seo = (

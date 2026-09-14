@@ -137,11 +137,19 @@ export function ContactForm({ locale }: { locale: Locale }) {
         lang={locale}
         dir={dir}
       >
-        <div className="mb-2">
-          <h2 className="text-xl font-semibold text-text-dark sm:text-2xl">
+        <div className="mb-6">
+          <p className="text-xs font-semibold tracking-[0.2em] text-gold uppercase">
+            Falcon Design
+          </p>
+          <h2 className="mt-2 text-xl font-semibold tracking-tight text-text-dark sm:text-2xl">
             {copy.sendMessage}
           </h2>
-          <div className="metallic-line mt-4" />
+          <p className="mt-2 text-sm text-text-dark-muted">
+            {locale === "ar"
+              ? "أدخل بياناتك وسنتواصل معك في أقرب وقت."
+              : "Share your details and we will get back to you shortly."}
+          </p>
+          <div className="metallic-line mt-5 w-14" />
         </div>
 
         <div
@@ -159,7 +167,7 @@ export function ContactForm({ locale }: { locale: Locale }) {
           />
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
           <div className="sm:col-span-2">
             <Label htmlFor="name">{copy.name}</Label>
             <Input
@@ -221,15 +229,17 @@ export function ContactForm({ locale }: { locale: Locale }) {
               value={values.message}
               onChange={(e) => updateField("message", e.target.value)}
               onBlur={() => setTouched((prev) => ({ ...prev, message: true }))}
-              className="min-h-40"
+              className="min-h-36"
             />
             <FieldError message={fieldErrors.message} />
           </div>
         </div>
 
-        <Button type="submit" disabled={!canSubmit} className="w-full sm:w-auto">
-          {pending ? copy.loading : copy.sendMessage}
-        </Button>
+        <div className="pt-1">
+          <Button type="submit" disabled={!canSubmit} className="w-full sm:w-auto sm:min-w-44">
+            {pending ? copy.loading : copy.sendMessage}
+          </Button>
+        </div>
       </form>
 
       <FeedbackPopup
