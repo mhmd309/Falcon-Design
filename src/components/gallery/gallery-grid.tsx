@@ -265,7 +265,7 @@ export function GalleryGrid({
                         aria-hidden
                       />
                       {item.source === "database" ? (
-                        <span className="absolute inset-0 flex items-end opacity-0 transition duration-500 group-hover:opacity-100 group-focus-within:opacity-100">
+                        <span className="absolute inset-0 flex items-end">
                           <span
                             className="absolute inset-0 bg-gradient-to-t from-[#0b0d10]/95 via-[#0b0d10]/55 to-transparent"
                             aria-hidden
@@ -286,12 +286,7 @@ export function GalleryGrid({
                             />
                           </span>
                         </span>
-                      ) : (
-                        <span
-                          className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/40 to-transparent opacity-0 transition group-hover:opacity-100"
-                          aria-hidden
-                        />
-                      )}
+                      ) : null}
                     </span>
                   </button>
 
