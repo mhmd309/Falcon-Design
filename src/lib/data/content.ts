@@ -554,60 +554,10 @@ export const timeline: TimelineItem[] = [
   },
 ];
 
-export const galleryCategories: GalleryCategory[] = [
-  {
-    id: "cat-steel",
-    name_ar: "هياكل صلب",
-    name_en: "Steel Structures",
-    slug: "steel-structures",
-  },
-  {
-    id: "cat-interiors",
-    name_ar: "منشآت داخلية",
-    name_en: "Interiors",
-    slug: "interiors",
-  },
-  {
-    id: "cat-completed",
-    name_ar: "مشاريع منفذة",
-    name_en: "Completed Projects",
-    slug: "completed",
-  },
-];
+export const galleryCategories: GalleryCategory[] = [];
 
-const cat = (n: number) =>
-  n <= 4
-    ? "cat-steel"
-    : n === 5 || n === 6 || n === 7 || n === 10
-      ? "cat-interiors"
-      : "cat-completed";
-
-/** Gallery images: files in /public/gallery/01.jpeg … 23.jpeg */
-export const galleryItems: GalleryItem[] = Array.from({ length: 23 }, (_, i) => {
-  const n = i + 1;
-  const pad = String(n).padStart(2, "0");
-  const isZayed = n >= 20;
-  return {
-    id: `gallery-${pad}`,
-    category_id: cat(n),
-    title_ar: isZayed ? `كلية زايد العسكرية ${n}` : `مشروع ${n}`,
-    title_en: isZayed ? `Zayed Military College ${n}` : `Project ${n}`,
-    description_ar: isZayed
-      ? "أعمال منفذة ضمن مشاريع كلية زايد العسكرية."
-      : "أعمال صلب وألمنيوم منجزة.",
-    description_en: isZayed
-      ? "Works delivered for Zayed Military College projects."
-      : "Completed steel and aluminum works.",
-    image_url: `/gallery/${pad}.jpeg`,
-    alt_text_ar: isZayed
-      ? "مشروع كلية زايد العسكرية"
-      : `مشروع فالكون ديزاين ${n}`,
-    alt_text_en: isZayed
-      ? "Zayed Military College project"
-      : `Falcon Design project ${n}`,
-    is_featured: [1, 2, 3, 5, 10, 20].includes(n),
-  };
-});
+/** Dynamic projects come from the database; no static demo gallery items. */
+export const galleryItems: GalleryItem[] = [];
 
 /**
  * Contact emails — edit addresses here manually.

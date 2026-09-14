@@ -19,6 +19,7 @@ import type {
   CoreValue,
   GalleryCategory,
   GalleryItem,
+  ProjectRecord,
   Service,
   SitePage,
   SiteSection,
@@ -78,16 +79,27 @@ export async function getDbGalleryItems(): Promise<GalleryItem[]> {
     const projects = await prisma.project.findMany({
       orderBy: { createdAt: "desc" },
     });
-    return projects.map((project) =>
-      mapProjectToGalleryItem({
-        id: project.id,
-        imageUrl: project.imageUrl,
-        ownerName: project.ownerName,
-        consultantName: project.consultantName,
-        projectContractorName: project.projectContractorName,
-        executingContractorName: project.executingContractorName,
-        createdAt: project.createdAt.toISOString(),
-      }),
+    return projects.map(
+      (project: {
+        id: string;
+        imageUrl: string;
+        ownerName: string;
+        consultantName: string;
+        projectContractorName: string;
+        executingContractorName: string;
+        createdAt: Date;
+      }): GalleryItem => {
+        const record: ProjectRecord = {
+          id: project.id,
+          imageUrl: project.imageUrl,
+          ownerName: project.ownerName,
+          consultantName: project.consultantName,
+          projectContractorName: project.projectContractorName,
+          executingContractorName: project.executingContractorName,
+          createdAt: project.createdAt.toISOString(),
+        };
+        return mapProjectToGalleryItem(record);
+      },
     );
   } catch (error) {
     console.error("getDbGalleryItems failed", error);
@@ -112,19 +124,13 @@ export function getGalleryItems(options?: {
 export async function getMergedGalleryItems(options?: {
   featuredOnly?: boolean;
 }): Promise<GalleryItem[]> {
-  const [dbItems, staticItems] = await Promise.all([
-    getDbGalleryItems(),
-    Promise.resolve(getGalleryItems(options)),
-  ]);
+  const dbItems = await getDbGalleryItems();
 
   if (options?.featuredOnly) {
-    return sortGalleryItems([
-      ...dbItems.filter((i) => i.is_featured),
-      ...staticItems,
-    ]);
+    return sortGalleryItems(dbItems.filter((i) => i.is_featured));
   }
 
-  return sortGalleryItems([...dbItems, ...staticItems]);
+  return sortGalleryItems(dbItems);
 }
 
 export function getContactEmails(): ContactEmail[] {
