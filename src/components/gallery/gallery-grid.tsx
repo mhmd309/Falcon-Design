@@ -1,14 +1,25 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Pencil,
+  Trash2,
+  Loader2,
+} from "lucide-react";
 import type { Locale } from "@/config/site";
 import type { GalleryCategory, GalleryItem } from "@/types/content";
 import { pickLocalized } from "@/lib/utils";
 import { SectionHeading, EmptyState } from "@/components/ui/section";
 import { FilterTabs } from "@/components/ui/filter-tabs";
-import { AddProjectPanel } from "@/components/gallery/add-project-panel";
+import {
+  AddProjectPanel,
+  type AddProjectPanelHandle,
+} from "@/components/gallery/add-project-panel";
+import { projectDbId, sortGalleryItems } from "@/lib/projects";
 import { t } from "@/lib/i18n/ui";
 
 const PAGE_SIZE = 9;
@@ -23,7 +34,6 @@ function ProjectMeta({
   const rows =
     locale === "ar"
       ? [
-          { label: "العميل", value: item.client_name },
           { label: "المالك", value: item.owner_name },
           { label: "الاستشاري", value: item.consultant_name },
           { label: "مقاول المشروع", value: item.project_contractor_name },
@@ -33,7 +43,6 @@ function ProjectMeta({
           },
         ]
       : [
-          { label: "Client", value: item.client_name },
           { label: "Owner", value: item.owner_name },
           { label: "Consultant", value: item.consultant_name },
           { label: "Project contractor", value: item.project_contractor_name },
@@ -70,18 +79,33 @@ export function GalleryGrid({
   categories: GalleryCategory[];
 }) {
   const copy = t(locale);
+  const isAr = locale === "ar";
+  const panelRef = useRef<AddProjectPanelHandle>(null);
   const [createdItems, setCreatedItems] = useState<GalleryItem[]>([]);
+  const [updatedItems, setUpdatedItems] = useState<Record<string, GalleryItem>>(
+    {},
+  );
+  const [deletedIds, setDeletedIds] = useState<string[]>([]);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [categoryId, setCategoryId] = useState<string>("all");
   const [page, setPage] = useState(1);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
+  const deletedSet = useMemo(() => new Set(deletedIds), [deletedIds]);
+
   const items = useMemo(() => {
     const createdIds = new Set(createdItems.map((item) => item.id));
-    return [
-      ...createdItems,
-      ...initialItems.filter((item) => !createdIds.has(item.id)),
+    const merged = [
+      ...createdItems
+        .filter((item) => !deletedSet.has(item.id))
+        .map((item) => updatedItems[item.id] ?? item),
+      ...initialItems
+        .filter((item) => !deletedSet.has(item.id) && !createdIds.has(item.id))
+        .map((item) => updatedItems[item.id] ?? item),
     ];
-  }, [createdItems, initialItems]);
+    return sortGalleryItems(merged);
+  }, [createdItems, deletedSet, initialItems, updatedItems]);
 
   const filtered = useMemo(() => {
     if (categoryId === "all") return items;
@@ -115,9 +139,60 @@ export function GalleryGrid({
 
   function handleCreated(item: GalleryItem) {
     setCreatedItems((prev) => [item, ...prev.filter((p) => p.id !== item.id)]);
+    setDeletedIds((prev) => prev.filter((id) => id !== item.id));
     setCategoryId("all");
     setPage(1);
     setActiveIndex(null);
+  }
+
+  function handleUpdated(item: GalleryItem) {
+    setUpdatedItems((prev) => ({ ...prev, [item.id]: item }));
+    setCreatedItems((prev) =>
+      prev.some((p) => p.id === item.id)
+        ? prev.map((p) => (p.id === item.id ? item : p))
+        : prev,
+    );
+    setActiveIndex(null);
+  }
+
+  async function handleDelete(item: GalleryItem) {
+    const dbId = projectDbId(item.id);
+    if (!dbId) return;
+
+    const confirmed = window.confirm(
+      isAr
+        ? "هل تريد حذف هذا المشروع؟"
+        : "Delete this project?",
+    );
+    if (!confirmed) return;
+
+    setDeletingId(item.id);
+    try {
+      const res = await fetch(`/api/projects/${dbId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!res.ok) {
+        const data = (await res.json()) as { error?: string };
+        window.alert(
+          data.error ||
+            (isAr ? "فشل حذف المشروع" : "Failed to delete project"),
+        );
+        return;
+      }
+      setDeletedIds((prev) => [...prev, item.id]);
+      setCreatedItems((prev) => prev.filter((p) => p.id !== item.id));
+      setUpdatedItems((prev) => {
+        const next = { ...prev };
+        delete next[item.id];
+        return next;
+      });
+      setActiveIndex(null);
+    } catch {
+      window.alert(isAr ? "تعذر الاتصال بالخادم" : "Could not reach the server");
+    } finally {
+      setDeletingId(null);
+    }
   }
 
   const close = useCallback(() => setActiveIndex(null), []);
@@ -158,7 +233,13 @@ export function GalleryGrid({
           }
         />
 
-        <AddProjectPanel locale={locale} onCreated={handleCreated} />
+        <AddProjectPanel
+          ref={panelRef}
+          locale={locale}
+          onAuthChange={setIsAdmin}
+          onCreated={handleCreated}
+          onUpdated={handleUpdated}
+        />
 
         <div className="mt-8 overflow-x-auto pb-1">
           <FilterTabs
@@ -181,33 +262,71 @@ export function GalleryGrid({
               className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
             >
               {pageItems.map((item, index) => (
-                <button
+                <div
                   key={item.id}
-                  type="button"
-                  className="group cursor-pointer overflow-hidden rounded-xl border border-steel/15 bg-card text-start shadow-sm transition hover:border-gold/40 focus-visible:outline-none"
-                  onClick={() => setActiveIndex(index)}
-                  aria-label={pickLocalized(item, locale, "title")}
+                  className="group relative overflow-hidden rounded-xl border border-steel/15 bg-card text-start shadow-sm transition hover:border-gold/40"
                 >
-                  <span className="relative block aspect-[4/3] overflow-hidden bg-surface-muted">
-                    <Image
-                      src={item.image_url}
-                      alt={
-                        pickLocalized(item, locale, "alt_text") ||
-                        pickLocalized(item, locale, "title")
-                      }
-                      fill
-                      sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
-                      className="object-cover transition duration-500 group-hover:scale-[1.04]"
-                      loading="lazy"
-                      unoptimized={item.source === "database"}
-                    />
-                  </span>
-                  {item.source === "database" && item.client_name ? (
-                    <span className="block px-3 py-2.5 text-sm font-medium text-text-dark">
-                      {item.client_name}
+                  <button
+                    type="button"
+                    className="block w-full cursor-pointer text-start focus-visible:outline-none"
+                    onClick={() => setActiveIndex(index)}
+                    aria-label={pickLocalized(item, locale, "title")}
+                  >
+                    <span className="relative block aspect-[4/3] overflow-hidden bg-surface-muted">
+                      <Image
+                        src={item.image_url}
+                        alt={
+                          pickLocalized(item, locale, "alt_text") ||
+                          pickLocalized(item, locale, "title")
+                        }
+                        fill
+                        sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
+                        className="object-cover transition duration-500 group-hover:scale-[1.04]"
+                        loading="lazy"
+                        unoptimized={item.source === "database"}
+                      />
                     </span>
+                    {item.source === "database" && item.owner_name ? (
+                      <span className="block px-3 py-2.5 text-sm font-medium text-text-dark">
+                        {item.owner_name}
+                      </span>
+                    ) : null}
+                  </button>
+
+                  {isAdmin && item.source === "database" ? (
+                    <div className="absolute start-2 top-2 z-10 flex gap-1.5">
+                      <button
+                        type="button"
+                        className="inline-flex size-9 items-center justify-center rounded-md bg-black/55 text-white backdrop-blur-sm transition hover:bg-gold hover:text-on-gold"
+                        aria-label={isAr ? "تعديل" : "Edit"}
+                        title={isAr ? "تعديل" : "Edit"}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          panelRef.current?.openEdit(item);
+                        }}
+                      >
+                        <Pencil className="size-4" />
+                      </button>
+                      <button
+                        type="button"
+                        className="inline-flex size-9 items-center justify-center rounded-md bg-black/55 text-white backdrop-blur-sm transition hover:bg-danger"
+                        aria-label={isAr ? "حذف" : "Delete"}
+                        title={isAr ? "حذف" : "Delete"}
+                        disabled={deletingId === item.id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          void handleDelete(item);
+                        }}
+                      >
+                        {deletingId === item.id ? (
+                          <Loader2 className="size-4 animate-spin" />
+                        ) : (
+                          <Trash2 className="size-4" />
+                        )}
+                      </button>
+                    </div>
                   ) : null}
-                </button>
+                </div>
               ))}
             </div>
 
@@ -313,6 +432,34 @@ export function GalleryGrid({
               />
             </div>
             <ProjectMeta locale={locale} item={active} />
+            {isAdmin && active.source === "database" ? (
+              <div className="flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  className="inline-flex items-center gap-2 rounded-md bg-gold px-4 py-2 text-sm font-semibold text-on-gold"
+                  onClick={() => {
+                    setActiveIndex(null);
+                    panelRef.current?.openEdit(active);
+                  }}
+                >
+                  <Pencil className="size-4" />
+                  {isAr ? "تعديل" : "Edit"}
+                </button>
+                <button
+                  type="button"
+                  className="inline-flex items-center gap-2 rounded-md bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-danger"
+                  disabled={deletingId === active.id}
+                  onClick={() => void handleDelete(active)}
+                >
+                  {deletingId === active.id ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : (
+                    <Trash2 className="size-4" />
+                  )}
+                  {isAr ? "حذف" : "Delete"}
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
       ) : null}

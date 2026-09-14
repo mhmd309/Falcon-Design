@@ -27,7 +27,6 @@ function json(data: object, status = 200) {
 function toProjectRecord(project: {
   id: string;
   imageUrl: string;
-  clientName: string;
   ownerName: string;
   consultantName: string;
   projectContractorName: string;
@@ -37,7 +36,6 @@ function toProjectRecord(project: {
   return {
     id: project.id,
     imageUrl: project.imageUrl,
-    clientName: project.clientName,
     ownerName: project.ownerName,
     consultantName: project.consultantName,
     projectContractorName: project.projectContractorName,
@@ -58,7 +56,10 @@ export async function GET() {
     return json({ projects: projects.map(toProjectRecord) });
   } catch (error) {
     console.error("list projects failed", error);
-    return json({ projects: [] as ProjectRecord[], error: "Failed to load projects" }, 500);
+    return json(
+      { projects: [] as ProjectRecord[], error: "Failed to load projects" },
+      500,
+    );
   }
 }
 
@@ -75,7 +76,6 @@ export async function POST(request: Request) {
   try {
     const form = await request.formData();
     const image = form.get("image");
-    const clientName = String(form.get("clientName") || "").trim();
     const ownerName = String(form.get("ownerName") || "").trim();
     const consultantName = String(form.get("consultantName") || "").trim();
     const projectContractorName = String(
@@ -86,7 +86,6 @@ export async function POST(request: Request) {
     ).trim();
 
     if (
-      !clientName ||
       !ownerName ||
       !consultantName ||
       !projectContractorName ||
@@ -139,7 +138,6 @@ export async function POST(request: Request) {
     const project = await prisma.project.create({
       data: {
         imageUrl,
-        clientName,
         ownerName,
         consultantName,
         projectContractorName,

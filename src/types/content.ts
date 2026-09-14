@@ -110,7 +110,6 @@ export interface GalleryCategory {
 export interface ProjectRecord {
   id: string;
   imageUrl: string;
-  clientName: string;
   ownerName: string;
   consultantName: string;
   projectContractorName: string;
@@ -130,11 +129,11 @@ export interface GalleryItem {
   alt_text_en: string | null;
   is_featured: boolean;
   source?: "static" | "database";
-  client_name?: string | null;
   owner_name?: string | null;
   consultant_name?: string | null;
   project_contractor_name?: string | null;
   executing_contractor_name?: string | null;
+  created_at?: string | null;
 }
 
 export interface ContactEmail {

@@ -12,6 +12,7 @@ import {
   timeline,
 } from "@/lib/data/content";
 import { isDatabaseConfigured, prisma } from "@/lib/db";
+import { mapProjectToGalleryItem, sortGalleryItems } from "@/lib/projects";
 import type {
   Certificate,
   ContactEmail,
@@ -70,36 +71,6 @@ export function getGalleryCategories(): GalleryCategory[] {
   return galleryCategories;
 }
 
-function mapDbProjectToGalleryItem(project: {
-  id: string;
-  imageUrl: string;
-  clientName: string;
-  ownerName: string;
-  consultantName: string;
-  projectContractorName: string;
-  executingContractorName: string;
-}): GalleryItem {
-  const title = project.clientName;
-  return {
-    id: `db-${project.id}`,
-    category_id: null,
-    title_ar: title,
-    title_en: title,
-    description_ar: null,
-    description_en: null,
-    image_url: project.imageUrl,
-    alt_text_ar: title,
-    alt_text_en: title,
-    is_featured: true,
-    source: "database",
-    client_name: project.clientName,
-    owner_name: project.ownerName,
-    consultant_name: project.consultantName,
-    project_contractor_name: project.projectContractorName,
-    executing_contractor_name: project.executingContractorName,
-  };
-}
-
 export async function getDbGalleryItems(): Promise<GalleryItem[]> {
   if (!isDatabaseConfigured()) return [];
 
@@ -107,7 +78,17 @@ export async function getDbGalleryItems(): Promise<GalleryItem[]> {
     const projects = await prisma.project.findMany({
       orderBy: { createdAt: "desc" },
     });
-    return projects.map(mapDbProjectToGalleryItem);
+    return projects.map((project) =>
+      mapProjectToGalleryItem({
+        id: project.id,
+        imageUrl: project.imageUrl,
+        ownerName: project.ownerName,
+        consultantName: project.consultantName,
+        projectContractorName: project.projectContractorName,
+        executingContractorName: project.executingContractorName,
+        createdAt: project.createdAt.toISOString(),
+      }),
+    );
   } catch (error) {
     console.error("getDbGalleryItems failed", error);
     return [];
@@ -137,10 +118,13 @@ export async function getMergedGalleryItems(options?: {
   ]);
 
   if (options?.featuredOnly) {
-    return [...dbItems.filter((i) => i.is_featured), ...staticItems];
+    return sortGalleryItems([
+      ...dbItems.filter((i) => i.is_featured),
+      ...staticItems,
+    ]);
   }
 
-  return [...dbItems, ...staticItems];
+  return sortGalleryItems([...dbItems, ...staticItems]);
 }
 
 export function getContactEmails(): ContactEmail[] {

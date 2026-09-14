@@ -1,0 +1,196 @@
+import { NextResponse } from "next/server";
+import { getAdminSession } from "@/lib/auth/admin-session";
+import { isDatabaseConfigured, prisma } from "@/lib/db";
+import { storagePathFromPublicUrl } from "@/lib/projects";
+import { getStorageBucket, getSupabaseAdmin } from "@/lib/supabase/admin";
+import type { ProjectRecord } from "@/types/content";
+
+export const runtime = "nodejs";
+
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const ALLOWED_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+]);
+
+function json(data: object, status = 200) {
+  return NextResponse.json(data, {
+    status,
+    headers: {
+      "Cache-Control": "no-store",
+      "X-Content-Type-Options": "nosniff",
+    },
+  });
+}
+
+function toProjectRecord(project: {
+  id: string;
+  imageUrl: string;
+  ownerName: string;
+  consultantName: string;
+  projectContractorName: string;
+  executingContractorName: string;
+  createdAt: Date;
+}): ProjectRecord {
+  return {
+    id: project.id,
+    imageUrl: project.imageUrl,
+    ownerName: project.ownerName,
+    consultantName: project.consultantName,
+    projectContractorName: project.projectContractorName,
+    executingContractorName: project.executingContractorName,
+    createdAt: project.createdAt.toISOString(),
+  };
+}
+
+async function uploadImage(image: File) {
+  if (!ALLOWED_TYPES.has(image.type)) {
+    throw new Error("UNSUPPORTED_TYPE");
+  }
+  if (image.size > MAX_IMAGE_BYTES) {
+    throw new Error("TOO_LARGE");
+  }
+
+  const ext =
+    image.type === "image/png"
+      ? "png"
+      : image.type === "image/webp"
+        ? "webp"
+        : image.type === "image/gif"
+          ? "gif"
+          : "jpg";
+
+  const path = `projects/${Date.now()}-${crypto.randomUUID()}.${ext}`;
+  const bucket = getStorageBucket();
+  const supabase = getSupabaseAdmin();
+  const buffer = Buffer.from(await image.arrayBuffer());
+
+  const { error: uploadError } = await supabase.storage
+    .from(bucket)
+    .upload(path, buffer, {
+      contentType: image.type,
+      upsert: false,
+    });
+
+  if (uploadError) {
+    console.error("storage upload failed", uploadError);
+    throw new Error("UPLOAD_FAILED");
+  }
+
+  const { data: publicData } = supabase.storage.from(bucket).getPublicUrl(path);
+  return { imageUrl: publicData.publicUrl, path, bucket };
+}
+
+async function removeStoredImage(imageUrl: string) {
+  try {
+    const bucket = getStorageBucket();
+    const path = storagePathFromPublicUrl(imageUrl, bucket);
+    if (!path) return;
+    const supabase = getSupabaseAdmin();
+    await supabase.storage.from(bucket).remove([path]);
+  } catch (error) {
+    console.error("storage delete failed", error);
+  }
+}
+
+export async function PATCH(
+  request: Request,
+  context: { params: Promise<{ id: string }> },
+) {
+  const session = await getAdminSession();
+  if (!session) return json({ error: "Unauthorized" }, 401);
+  if (!isDatabaseConfigured()) {
+    return json({ error: "Database is not configured" }, 503);
+  }
+
+  const { id } = await context.params;
+
+  try {
+    const existing = await prisma.project.findUnique({ where: { id } });
+    if (!existing) return json({ error: "Project not found" }, 404);
+
+    const form = await request.formData();
+    const image = form.get("image");
+    const ownerName = String(form.get("ownerName") || "").trim();
+    const consultantName = String(form.get("consultantName") || "").trim();
+    const projectContractorName = String(
+      form.get("projectContractorName") || "",
+    ).trim();
+    const executingContractorName = String(
+      form.get("executingContractorName") || "",
+    ).trim();
+
+    if (
+      !ownerName ||
+      !consultantName ||
+      !projectContractorName ||
+      !executingContractorName
+    ) {
+      return json({ error: "All fields are required" }, 400);
+    }
+
+    let imageUrl = existing.imageUrl;
+    if (image instanceof File && image.size > 0) {
+      try {
+        const uploaded = await uploadImage(image);
+        imageUrl = uploaded.imageUrl;
+        if (existing.imageUrl !== imageUrl) {
+          await removeStoredImage(existing.imageUrl);
+        }
+      } catch (error) {
+        const code = error instanceof Error ? error.message : "";
+        if (code === "UNSUPPORTED_TYPE") {
+          return json({ error: "Unsupported image type" }, 400);
+        }
+        if (code === "TOO_LARGE") {
+          return json({ error: "Image must be 5MB or smaller" }, 400);
+        }
+        return json({ error: "Failed to upload image" }, 500);
+      }
+    }
+
+    const project = await prisma.project.update({
+      where: { id },
+      data: {
+        imageUrl,
+        ownerName,
+        consultantName,
+        projectContractorName,
+        executingContractorName,
+      },
+    });
+
+    return json({ project: toProjectRecord(project) });
+  } catch (error) {
+    console.error("update project failed", error);
+    return json({ error: "Failed to update project" }, 500);
+  }
+}
+
+export async function DELETE(
+  _request: Request,
+  context: { params: Promise<{ id: string }> },
+) {
+  const session = await getAdminSession();
+  if (!session) return json({ error: "Unauthorized" }, 401);
+  if (!isDatabaseConfigured()) {
+    return json({ error: "Database is not configured" }, 503);
+  }
+
+  const { id } = await context.params;
+
+  try {
+    const existing = await prisma.project.findUnique({ where: { id } });
+    if (!existing) return json({ error: "Project not found" }, 404);
+
+    await prisma.project.delete({ where: { id } });
+    await removeStoredImage(existing.imageUrl);
+
+    return json({ ok: true });
+  } catch (error) {
+    console.error("delete project failed", error);
+    return json({ error: "Failed to delete project" }, 500);
+  }
+}

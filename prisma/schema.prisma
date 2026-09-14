@@ -10,7 +10,6 @@ datasource db {
 model Project {
   id                      String   @id @default(cuid())
   imageUrl                String
-  clientName              String
   ownerName               String
   consultantName          String
   projectContractorName   String
