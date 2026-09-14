@@ -57,28 +57,40 @@ function ProjectMeta({
   const visible = rows.filter((row) => Boolean(row.value));
   if (!visible.length) return null;
 
-  const isDark = tone === "dark";
+  if (tone === "dark") {
+    return (
+      <div className="w-full">
+        <p className="text-[10px] font-semibold tracking-[0.2em] text-gold uppercase">
+          Falcon Design
+        </p>
+        <div className="metallic-line mt-2 mb-3 w-12" />
+        <dl className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-x-4 sm:gap-y-2.5">
+          {visible.map((row) => (
+            <div
+              key={row.label}
+              className="rounded-md border border-white/10 bg-black/25 px-2.5 py-2 backdrop-blur-[2px]"
+            >
+              <dt className="text-[10px] font-medium tracking-wide text-gold-soft/90">
+                {row.label}
+              </dt>
+              <dd className="mt-0.5 text-sm font-semibold leading-snug text-white">
+                {row.value}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    );
+  }
 
   return (
-    <dl
-      className={
-        isDark
-          ? "grid gap-2 text-sm text-white"
-          : "mt-4 grid gap-2 text-sm text-white/90 sm:grid-cols-2"
-      }
-    >
+    <dl className="mt-4 grid gap-2 text-sm text-white/90 sm:grid-cols-2">
       {visible.map((row) => (
         <div key={row.label}>
-          <dt
-            className={
-              isDark
-                ? "text-[11px] tracking-wide text-white/65"
-                : "text-xs tracking-wide text-white/55 uppercase"
-            }
-          >
+          <dt className="text-xs tracking-wide text-white/55 uppercase">
             {row.label}
           </dt>
-          <dd className="mt-0.5 font-medium leading-snug">{row.value}</dd>
+          <dd className="mt-0.5 font-medium">{row.value}</dd>
         </div>
       ))}
     </dl>
@@ -279,7 +291,7 @@ export function GalleryGrid({
               {pageItems.map((item, index) => (
                 <div
                   key={item.id}
-                  className="group relative overflow-hidden rounded-xl border border-steel/15 bg-card text-start shadow-sm transition hover:border-gold/40"
+                  className="group relative overflow-hidden rounded-xl border border-steel/15 bg-card text-start shadow-[0_10px_30px_rgba(18,22,28,0.06)] transition duration-300 hover:-translate-y-0.5 hover:border-gold/45 hover:shadow-[0_18px_40px_rgba(18,22,28,0.12)]"
                 >
                   <button
                     type="button"
@@ -296,19 +308,43 @@ export function GalleryGrid({
                         }
                         fill
                         sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
-                        className="object-cover transition duration-500 group-hover:scale-[1.04]"
+                        className="object-cover transition duration-700 ease-out group-hover:scale-[1.06]"
                         loading="lazy"
                         unoptimized={item.source === "database"}
                       />
+                      {/* ambient vignette always on */}
+                      <span
+                        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(8,10,14,0.35)_100%)]"
+                        aria-hidden
+                      />
                       {item.source === "database" ? (
-                        <span className="absolute inset-0 flex items-end bg-gradient-to-t from-black/85 via-black/45 to-transparent p-3 opacity-0 transition duration-300 group-hover:opacity-100 group-focus-within:opacity-100 sm:p-4">
-                          <ProjectMeta
-                            locale={locale}
-                            item={item}
-                            tone="dark"
+                        <span className="absolute inset-0 flex items-end opacity-0 transition duration-500 group-hover:opacity-100 group-focus-within:opacity-100">
+                          <span
+                            className="absolute inset-0 bg-gradient-to-t from-[#0b0d10]/95 via-[#0b0d10]/55 to-transparent"
+                            aria-hidden
                           />
+                          <span
+                            className="absolute inset-0 opacity-80"
+                            style={{
+                              background:
+                                "linear-gradient(135deg, rgba(198,161,91,0.18) 0%, transparent 42%, transparent 100%)",
+                            }}
+                            aria-hidden
+                          />
+                          <span className="relative z-[1] w-full p-3 sm:p-4">
+                            <ProjectMeta
+                              locale={locale}
+                              item={item}
+                              tone="dark"
+                            />
+                          </span>
                         </span>
-                      ) : null}
+                      ) : (
+                        <span
+                          className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/40 to-transparent opacity-0 transition group-hover:opacity-100"
+                          aria-hidden
+                        />
+                      )}
                     </span>
                   </button>
 
