@@ -76,7 +76,6 @@ export const AddProjectPanel = forwardRef<
   const [ownerName, setOwnerName] = useState("");
   const [consultantName, setConsultantName] = useState("");
   const [projectContractorName, setProjectContractorName] = useState("");
-  const [executingContractorName, setExecutingContractorName] = useState("");
 
   const isEditing = Boolean(editingItem);
 
@@ -127,7 +126,6 @@ export const AddProjectPanel = forwardRef<
       setOwnerName("");
       setConsultantName("");
       setProjectContractorName("");
-      setExecutingContractorName("");
       return;
     }
     setImage(null);
@@ -135,7 +133,6 @@ export const AddProjectPanel = forwardRef<
     setOwnerName(item.owner_name || "");
     setConsultantName(item.consultant_name || "");
     setProjectContractorName(item.project_contractor_name || "");
-    setExecutingContractorName(item.executing_contractor_name || "");
   }
 
   const closePanel = useCallback(() => {
@@ -151,7 +148,6 @@ export const AddProjectPanel = forwardRef<
     setOwnerName("");
     setConsultantName("");
     setProjectContractorName("");
-    setExecutingContractorName("");
   }, []);
 
   useImperativeHandle(ref, () => ({
@@ -283,7 +279,6 @@ export const AddProjectPanel = forwardRef<
       form.set("ownerName", ownerName);
       form.set("consultantName", consultantName);
       form.set("projectContractorName", projectContractorName);
-      form.set("executingContractorName", executingContractorName);
 
       const dbId = editingItem ? projectDbId(editingItem.id) : null;
       const res = await fetch(
@@ -560,18 +555,6 @@ export const AddProjectPanel = forwardRef<
                     required
                     value={projectContractorName}
                     onChange={(e) => setProjectContractorName(e.target.value)}
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="executing-contractor">
-                    {copy.falconContractorName}
-                  </Label>
-                  <Input
-                    id="executing-contractor"
-                    required
-                    value={executingContractorName}
-                    onChange={(e) => setExecutingContractorName(e.target.value)}
                   />
                 </div>
 

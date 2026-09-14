@@ -113,7 +113,6 @@ export interface ProjectRecord {
   ownerName: string;
   consultantName: string;
   projectContractorName: string;
-  executingContractorName: string;
   createdAt: string;
 }
 
@@ -132,7 +131,6 @@ export interface GalleryItem {
   owner_name?: string | null;
   consultant_name?: string | null;
   project_contractor_name?: string | null;
-  executing_contractor_name?: string | null;
   created_at?: string | null;
 }
 

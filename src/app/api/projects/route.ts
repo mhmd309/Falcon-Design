@@ -31,7 +31,6 @@ function toProjectRecord(project: {
   ownerName: string;
   consultantName: string;
   projectContractorName: string;
-  executingContractorName: string;
   createdAt: Date;
 }): ProjectRecord {
   return {
@@ -40,7 +39,6 @@ function toProjectRecord(project: {
     ownerName: project.ownerName,
     consultantName: project.consultantName,
     projectContractorName: project.projectContractorName,
-    executingContractorName: project.executingContractorName,
     createdAt: project.createdAt.toISOString(),
   };
 }
@@ -82,16 +80,8 @@ export async function POST(request: Request) {
     const projectContractorName = String(
       form.get("projectContractorName") || "",
     ).trim();
-    const executingContractorName = String(
-      form.get("executingContractorName") || "",
-    ).trim();
 
-    if (
-      !ownerName ||
-      !consultantName ||
-      !projectContractorName ||
-      !executingContractorName
-    ) {
+    if (!ownerName || !consultantName || !projectContractorName) {
       return json({ error: "All fields are required" }, 400);
     }
 
@@ -156,7 +146,6 @@ export async function POST(request: Request) {
         ownerName,
         consultantName,
         projectContractorName,
-        executingContractorName,
       },
     });
 

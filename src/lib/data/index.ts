@@ -86,7 +86,6 @@ export async function getDbGalleryItems(): Promise<GalleryItem[]> {
         ownerName: string;
         consultantName: string;
         projectContractorName: string;
-        executingContractorName: string;
         createdAt: Date;
       }): GalleryItem => {
         const record: ProjectRecord = {
@@ -95,7 +94,6 @@ export async function getDbGalleryItems(): Promise<GalleryItem[]> {
           ownerName: project.ownerName,
           consultantName: project.consultantName,
           projectContractorName: project.projectContractorName,
-          executingContractorName: project.executingContractorName,
           createdAt: project.createdAt.toISOString(),
         };
         return mapProjectToGalleryItem(record);

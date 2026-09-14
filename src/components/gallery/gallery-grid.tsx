@@ -40,7 +40,6 @@ function ProjectMeta({
     { label: copy.owner, value: item.owner_name },
     { label: copy.consultant, value: item.consultant_name },
     { label: copy.mainContractor, value: item.project_contractor_name },
-    { label: copy.falconContractor, value: item.executing_contractor_name },
   ];
 
   const visible = rows.filter((row) => Boolean(row.value));

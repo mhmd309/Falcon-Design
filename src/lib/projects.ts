@@ -21,7 +21,6 @@ export function mapProjectToGalleryItem(project: ProjectRecord): GalleryItem {
     owner_name: project.ownerName,
     consultant_name: project.consultantName,
     project_contractor_name: project.projectContractorName,
-    executing_contractor_name: project.executingContractorName,
     created_at: project.createdAt,
   };
 }

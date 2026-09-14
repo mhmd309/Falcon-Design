@@ -19,7 +19,6 @@ export function mapProjectRecordToGalleryItem(
     owner_name: project.ownerName,
     consultant_name: project.consultantName,
     project_contractor_name: project.projectContractorName,
-    executing_contractor_name: project.executingContractorName,
     created_at: project.createdAt,
   };
 }
@@ -34,7 +33,6 @@ export function toProjectRecord(project: {
   ownerName: string;
   consultantName: string;
   projectContractorName: string;
-  executingContractorName: string;
   createdAt: Date;
 }): ProjectRecord {
   return {
@@ -43,7 +41,6 @@ export function toProjectRecord(project: {
     ownerName: project.ownerName,
     consultantName: project.consultantName,
     projectContractorName: project.projectContractorName,
-    executingContractorName: project.executingContractorName,
     createdAt: project.createdAt.toISOString(),
   };
 }
