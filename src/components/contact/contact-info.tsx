@@ -1,12 +1,12 @@
 import {
   MapPin,
-  Phone,
   Clock,
   Mail,
   MessageCircle,
   Facebook,
   Instagram,
   Youtube,
+  ArrowUpLeft,
 } from "lucide-react";
 import type { Locale } from "@/config/site";
 import type { SiteSettings } from "@/types/content";
@@ -71,8 +71,6 @@ export function ContactInfo({
   settings: SiteSettings;
 }) {
   const copy = t(locale);
-  const phoneDisplay = settings.phone || "+971 56 233 1020";
-  const phoneTel = `+${phoneDigits(phoneDisplay)}`;
   const waUrl = whatsappUrl(settings.whatsapp || settings.phone);
 
   const socials = [
@@ -143,58 +141,6 @@ export function ContactInfo({
           </li>
 
           <li className="flex gap-4 py-5">
-            <Phone className="mt-0.5 size-5 shrink-0 text-gold" aria-hidden />
-            <div className="min-w-0">
-              <p className="text-xs font-semibold tracking-wide text-text-dark-muted uppercase">
-                {copy.phone}
-              </p>
-              <div className="mt-1.5 text-sm sm:text-base">
-                <a
-                  className="text-text-dark transition hover:text-gold"
-                  href={`tel:${phoneTel}`}
-                  dir="ltr"
-                >
-                  {phoneDisplay}
-                </a>
-              </div>
-            </div>
-          </li>
-
-          {waUrl ? (
-            <li className="py-5">
-              <a
-                href={waUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex gap-4 rounded-md outline-none transition hover:bg-gold/5 focus-visible:ring-2 focus-visible:ring-gold/40"
-                aria-label={
-                  locale === "ar"
-                    ? "فتح واتساب في تبويب جديد"
-                    : "Open WhatsApp in a new tab"
-                }
-              >
-                <MessageCircle
-                  className="mt-0.5 size-5 shrink-0 text-gold"
-                  aria-hidden
-                />
-                <div className="min-w-0">
-                  <p className="text-xs font-semibold tracking-wide text-text-dark-muted uppercase">
-                    {copy.whatsapp}
-                  </p>
-                  <div className="mt-1.5 text-sm sm:text-base">
-                    <span
-                      dir="ltr"
-                      className="text-text-dark transition group-hover:text-gold"
-                    >
-                      {phoneDisplay}
-                    </span>
-                  </div>
-                </div>
-              </a>
-            </li>
-          ) : null}
-
-          <li className="flex gap-4 py-5">
             <Clock className="mt-0.5 size-5 shrink-0 text-gold" aria-hidden />
             <div className="min-w-0">
               <p className="text-xs font-semibold tracking-wide text-text-dark-muted uppercase">
@@ -211,30 +157,39 @@ export function ContactInfo({
       </Reveal>
 
       <Reveal delay={0.08}>
-        <div className="flex gap-4">
-          <Mail className="mt-0.5 size-5 shrink-0 text-gold" aria-hidden />
-          <div>
-            <p className="text-xs font-semibold tracking-wide text-text-dark-muted uppercase">
-              {copy.contactEmails}
-            </p>
-            <ul className="mt-3 space-y-2.5">
-              {CONTACT.emails.map((email) => (
-                <li key={email.id}>
-                  <a
-                    href={`mailto:${email.email}`}
-                    className="group inline-flex flex-wrap items-baseline gap-x-2 text-sm sm:text-base"
-                  >
-                    <span className="font-medium text-text-dark">
+        <div>
+          <p className="text-xs font-semibold tracking-wide text-text-dark-muted uppercase">
+            {copy.contactEmails}
+          </p>
+          <ul className="mt-4 space-y-3">
+            {CONTACT.emails.map((email) => (
+              <li key={email.id}>
+                <a
+                  href={`mailto:${email.email}`}
+                  className="group flex items-center gap-3 border-s-2 border-gold/40 ps-4 transition hover:border-gold"
+                >
+                  <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-gold/10 text-gold transition group-hover:bg-gold/15">
+                    <Mail className="size-4" aria-hidden />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-xs font-semibold tracking-wide text-text-dark-muted">
                       {locale === "ar" ? email.label_ar : email.label_en}
                     </span>
-                    <span className="text-text-dark-muted transition group-hover:text-gold">
+                    <span
+                      dir="ltr"
+                      className="mt-0.5 block truncate text-sm font-medium text-text-dark transition group-hover:text-gold sm:text-base"
+                    >
                       {email.email}
                     </span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+                  </span>
+                  <ArrowUpLeft
+                    className="size-4 shrink-0 text-steel opacity-0 transition group-hover:opacity-100 group-hover:text-gold"
+                    aria-hidden
+                  />
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </Reveal>
 
