@@ -12,6 +12,7 @@ import {
   buildPageMetadata,
 } from "@/lib/seo/metadata";
 import { pickLocalized } from "@/lib/utils";
+import { t } from "@/lib/i18n/ui";
 
 export async function generateMetadata({
   params,
@@ -30,6 +31,7 @@ export default async function CertificatesPage({
 }) {
   const { locale: localeParam } = await params;
   const locale = localeParam as Locale;
+  const copy = t(locale);
   const [items, intro] = await Promise.all([
     getCertificates(),
     getSection("certificates", "intro"),
@@ -39,11 +41,8 @@ export default async function CertificatesPage({
     <>
       <JsonLd
         data={breadcrumbJsonLd(locale, [
-          { name: locale === "ar" ? "الرئيسية" : "Home", path: "" },
-          {
-            name: locale === "ar" ? "الشهادات" : "Certificates",
-            path: "/certificates",
-          },
+          { name: copy.home, path: "" },
+          { name: copy.certificates, path: "/certificates" },
         ])}
       />
       <CertificatesGrid

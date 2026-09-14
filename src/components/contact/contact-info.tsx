@@ -14,28 +14,10 @@ import { t } from "@/lib/i18n/ui";
 import { Reveal } from "@/components/ui/motion";
 import { pickLocalized } from "@/lib/utils";
 
-const CONTACT = {
-  company_ar: "فالكون ديزاين للمقاولات العامة — مؤسسة فردية",
-  company_en: "Falcon Design General Contracting — Sole Proprietorship",
-  hours_ar: "الأحد – الخميس: 8:00 ص – 6:00 م",
-  hours_en: "Sunday – Thursday: 8:00 AM – 6:00 PM",
-  description_ar: "راسلنا لمناقشة مشروعك القادم في أعمال الصلب والألمنيوم.",
-  description_en: "Reach out to discuss your next steel and aluminum project.",
-  emails: [
-    {
-      id: "email-1",
-      label_ar: "عام",
-      label_en: "General",
-      email: "falcondesign20@gmail.com",
-    },
-    {
-      id: "email-2",
-      label_ar: "عام",
-      label_en: "General",
-      email: "falcondesign19@gmail.com",
-    }
-  ],
-} as const;
+const CONTACT_EMAILS = [
+  { id: "email-1", email: "falcondesign20@gmail.com" },
+  { id: "email-2", email: "falcondesign19@gmail.com" },
+] as const;
 
 function XIcon({ className }: { className?: string }) {
   return (
@@ -117,7 +99,7 @@ export function ContactInfo({
         </h2>
         <div className="metallic-line mt-5 w-16" />
         <p className="mt-5 max-w-xl text-base leading-relaxed text-text-dark-muted">
-          {locale === "ar" ? CONTACT.description_ar : CONTACT.description_en}
+          {copy.contactIntro}
         </p>
       </Reveal>
 
@@ -131,7 +113,7 @@ export function ContactInfo({
               </p>
               <div className="mt-1.5 text-sm sm:text-base">
                 <span className="block font-medium text-text-dark">
-                  {locale === "ar" ? CONTACT.company_ar : CONTACT.company_en}
+                  {copy.contactCompany}
                 </span>
                 <span className="mt-1 block text-text-dark-muted">
                   {pickLocalized(settings, locale, "address")}
@@ -147,9 +129,7 @@ export function ContactInfo({
                 {copy.hours}
               </p>
               <div className="mt-1.5 text-sm sm:text-base">
-                <span className="text-text-dark-muted">
-                  {locale === "ar" ? CONTACT.hours_ar : CONTACT.hours_en}
-                </span>
+                <span className="text-text-dark-muted">{copy.contactHours}</span>
               </div>
             </div>
           </li>
@@ -162,7 +142,7 @@ export function ContactInfo({
             {copy.contactEmails}
           </p>
           <ul className="mt-4 space-y-3">
-            {CONTACT.emails.map((email) => (
+            {CONTACT_EMAILS.map((email) => (
               <li key={email.id}>
                 <a
                   href={`mailto:${email.email}`}
@@ -173,7 +153,7 @@ export function ContactInfo({
                   </span>
                   <span className="min-w-0 text-sm sm:text-base">
                     <span className="font-semibold text-text-dark">
-                      {locale === "ar" ? email.label_ar : email.label_en}
+                      {copy.emailLabelGeneral}
                     </span>
                     <span className="mx-1.5 text-text-dark-muted" aria-hidden>
                       —

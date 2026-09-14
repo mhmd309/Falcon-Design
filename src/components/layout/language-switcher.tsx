@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { switchLocalePath } from "@/lib/utils";
 import type { Locale } from "@/config/site";
+import { t } from "@/lib/i18n/ui";
 
 function UaeFlag({ className }: { className?: string }) {
   return (
@@ -42,12 +43,13 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
   const pathname = usePathname();
   const enHref = switchLocalePath(pathname, "en");
   const arHref = switchLocalePath(pathname, "ar");
+  const copy = t(locale);
 
   return (
     <div
       className="inline-flex items-center gap-1 rounded-md border border-steel/25 bg-card px-1 py-1"
       role="group"
-      aria-label="Language switcher"
+      aria-label={copy.languageSwitcher}
     >
       <Link
         href={enHref}
@@ -58,8 +60,8 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
         }`}
         hrefLang="en"
         lang="en"
-        aria-label="English"
-        title="English"
+        aria-label={copy.langEnglish}
+        title={copy.langEnglish}
       >
         <UkFlag className="h-3.5 w-5 rounded-[2px] shadow-sm" />
       </Link>
@@ -75,8 +77,8 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
         }`}
         hrefLang="ar"
         lang="ar"
-        aria-label="العربية"
-        title="العربية"
+        aria-label={copy.langArabic}
+        title={copy.langArabic}
       >
         <UaeFlag className="h-3.5 w-5 rounded-[2px] shadow-sm" />
       </Link>

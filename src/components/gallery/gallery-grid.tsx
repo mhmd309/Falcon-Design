@@ -22,7 +22,7 @@ import {
 import { projectDbId, sortGalleryItems } from "@/lib/projects";
 import { ConfirmPopup } from "@/components/ui/confirm-popup";
 import { FeedbackPopup } from "@/components/ui/feedback-popup";
-import { t } from "@/lib/i18n/ui";
+import { localizeApiError, t } from "@/lib/i18n/ui";
 
 const PAGE_SIZE = 9;
 
@@ -155,7 +155,8 @@ export function GalleryGrid({
         setFeedback({
           tone: "error",
           title: copy.deleteFailed,
-          message: data.error || copy.deleteFailedMessage,
+          message:
+            localizeApiError(locale, data.error) || copy.deleteFailedMessage,
         });
         return;
       }

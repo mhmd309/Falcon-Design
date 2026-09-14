@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { Locale } from "@/config/site";
 import { GalleryGrid } from "@/components/gallery/gallery-grid";
 import { getMergedGalleryItems, getPageBySlug } from "@/lib/data";
+import { t } from "@/lib/i18n/ui";
 import {
   JsonLd,
   breadcrumbJsonLd,
@@ -29,16 +30,14 @@ export default async function GalleryPage({
   const { locale: localeParam } = await params;
   const locale = localeParam as Locale;
   const items = await getMergedGalleryItems();
+  const copy = t(locale);
 
   return (
     <>
       <JsonLd
         data={breadcrumbJsonLd(locale, [
-          { name: locale === "ar" ? "الرئيسية" : "Home", path: "" },
-          {
-            name: locale === "ar" ? "المشاريع" : "Gallery",
-            path: "/gallery",
-          },
+          { name: copy.home, path: "" },
+          { name: copy.gallery, path: "/gallery" },
         ])}
       />
       <JsonLd data={galleryJsonLd(locale, items)} />

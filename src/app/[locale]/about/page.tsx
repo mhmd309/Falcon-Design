@@ -12,6 +12,7 @@ import {
   breadcrumbJsonLd,
   buildPageMetadata,
 } from "@/lib/seo/metadata";
+import { t } from "@/lib/i18n/ui";
 
 export async function generateMetadata({
   params,
@@ -30,6 +31,7 @@ export default async function AboutPage({
 }) {
   const { locale: localeParam } = await params;
   const locale = localeParam as Locale;
+  const copy = t(locale);
   const [intro, vision, mission, values, timeline] = await Promise.all([
     getSection("about", "introduction"),
     getSection("about", "vision"),
@@ -42,8 +44,8 @@ export default async function AboutPage({
     <>
       <JsonLd
         data={breadcrumbJsonLd(locale, [
-          { name: locale === "ar" ? "الرئيسية" : "Home", path: "" },
-          { name: locale === "ar" ? "من نحن" : "About", path: "/about" },
+          { name: copy.home, path: "" },
+          { name: copy.about, path: "/about" },
         ])}
       />
       <AboutContent

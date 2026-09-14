@@ -40,12 +40,7 @@ export function CertificatesGrid({
       <div className="container-page">
         <Reveal>
           <SectionHeading
-            title={
-              title ||
-              (locale === "ar"
-                ? "الشهادات والاعتمادات"
-                : "Certificates & Accreditations")
-            }
+            title={title || copy.certificatesTitle}
             description={description || undefined}
           />
         </Reveal>
@@ -154,7 +149,7 @@ export function CertificatesGrid({
             type="button"
             className="absolute end-3 top-3 z-10 cursor-pointer rounded-md bg-white/10 p-2 text-white sm:end-4 sm:top-4"
             onClick={() => setActive(null)}
-            aria-label="Close"
+            aria-label={copy.close}
           >
             <X size={20} />
           </button>

@@ -17,13 +17,15 @@ import {
   X,
   ImagePlus,
   Upload,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import type { Locale } from "@/config/site";
 import { Button } from "@/components/ui/button";
 import { FieldError, Input, Label } from "@/components/ui/form";
 import type { GalleryItem, ProjectRecord } from "@/types/content";
 import { cn } from "@/lib/utils";
-import { t } from "@/lib/i18n/ui";
+import { localizeApiError, t } from "@/lib/i18n/ui";
 import { mapProjectToGalleryItem, projectDbId } from "@/lib/projects";
 
 type PanelMode = "closed" | "login" | "form";
@@ -67,6 +69,7 @@ export const AddProjectPanel = forwardRef<
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const [image, setImage] = useState<File | null>(null);
   const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
@@ -139,6 +142,7 @@ export const AddProjectPanel = forwardRef<
     setMode("closed");
     setError(null);
     setPassword("");
+    setShowPassword(false);
     setDragOver(false);
     setPendingEditAfterLogin(false);
     setEditingItem(null);
@@ -231,13 +235,14 @@ export const AddProjectPanel = forwardRef<
       });
       const data = (await res.json()) as { error?: string };
       if (!res.ok) {
-        setError(data.error || copy.loginFailed);
+        setError(localizeApiError(locale, data.error) || copy.loginFailed);
         return;
       }
       authenticatedRef.current = true;
       setAuthenticated(true);
       onAuthChange?.(true);
       setPassword("");
+      setShowPassword(false);
       setMode("form");
       setPendingEditAfterLogin(false);
     } catch {
@@ -296,7 +301,7 @@ export const AddProjectPanel = forwardRef<
 
       if (!res.ok || !data.project) {
         setError(
-          data.error ||
+          localizeApiError(locale, data.error) ||
             (isEditing ? copy.updateProjectFailed : copy.saveProjectFailed),
         );
         return;
@@ -384,15 +389,33 @@ export const AddProjectPanel = forwardRef<
                 </div>
                 <div>
                   <Label htmlFor="admin-password">{copy.password}</Label>
-                  <Input
-                    id="admin-password"
-                    type="password"
-                    autoComplete="current-password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    dir="ltr"
-                  />
+                  <div className="relative">
+                    <Input
+                      id="admin-password"
+                      type={showPassword ? "text" : "password"}
+                      autoComplete="current-password"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      dir="ltr"
+                      className="pe-11"
+                    />
+                    <button
+                      type="button"
+                      className="absolute end-2 top-1/2 inline-flex size-8 -translate-y-1/2 items-center justify-center rounded-md text-text-dark-muted transition hover:bg-surface-muted hover:text-text-dark"
+                      onClick={() => setShowPassword((v) => !v)}
+                      aria-label={
+                        showPassword ? copy.hidePassword : copy.showPassword
+                      }
+                      aria-pressed={showPassword}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="size-4" aria-hidden />
+                      ) : (
+                        <Eye className="size-4" aria-hidden />
+                      )}
+                    </button>
+                  </div>
                 </div>
                 <FieldError message={error || undefined} />
                 <div className="flex flex-wrap gap-3 pt-1">

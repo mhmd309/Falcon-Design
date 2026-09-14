@@ -9,6 +9,7 @@ import type { Locale } from "@/config/site";
 import { publicNav } from "@/config/site";
 import { cn, localizedPath } from "@/lib/utils";
 import { LanguageSwitcher } from "./language-switcher";
+import { t } from "@/lib/i18n/ui";
 
 function isActivePath(pathname: string, locale: Locale, href: string) {
   const base = `/${locale}`;
@@ -27,6 +28,7 @@ export function Navbar({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const copy = t(locale);
 
   return (
     <header className="sticky top-0 z-50 border-b border-steel/15 bg-bg/85 backdrop-blur-md">
@@ -46,7 +48,7 @@ export function Navbar({
           <span className="sr-only">{companyName}</span>
         </Link>
 
-        <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-7 lg:flex" aria-label={copy.primaryNav}>
           {publicNav.map((item) => {
             const active = isActivePath(pathname, locale, item.href);
             return (
@@ -84,7 +86,7 @@ export function Navbar({
             aria-controls="mobile-menu"
             onClick={() => setOpen((v) => !v)}
           >
-            <span className="sr-only">Menu</span>
+            <span className="sr-only">{copy.menu}</span>
             {open ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
@@ -95,7 +97,7 @@ export function Navbar({
           id="mobile-menu"
           className="border-t border-steel/15 bg-bg px-4 py-4 lg:hidden"
         >
-          <nav className="flex flex-col gap-2" aria-label="Mobile">
+          <nav className="flex flex-col gap-2" aria-label={copy.mobileNav}>
             {publicNav.map((item) => {
               const active = isActivePath(pathname, locale, item.href);
               return (

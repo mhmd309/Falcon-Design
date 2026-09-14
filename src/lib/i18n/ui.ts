@@ -12,6 +12,7 @@ export const ui = {
     projectGallery: "Project Gallery",
     projectGalleryDesc: "Explore delivered steel and aluminum works.",
     certificates: "Certificates",
+    certificatesTitle: "Certificates & Accreditations",
     ourValues: "Core Values",
     timeline: "Our Journey",
     filterAll: "All",
@@ -52,6 +53,8 @@ export const ui = {
     logOut: "Log out",
     signIn: "Sign in",
     password: "Password",
+    showPassword: "Show password",
+    hidePassword: "Hide password",
     image: "Image",
     changeImage: "Change image",
     keepOrChangeImage: "Keep current or choose a new one",
@@ -81,10 +84,19 @@ export const ui = {
     connectionError: "Connection error",
     couldNotReachServer: "Could not reach the server",
     loginFailed: "Login failed",
+    invalidCredentials: "Invalid email or password",
+    adminNotConfigured: "Admin credentials are not configured",
+    unauthorized: "Unauthorized",
+    databaseNotConfigured: "Database is not configured",
+    allFieldsRequired: "All fields are required",
     imageRequired: "Image is required",
     fileMustBeImage: "File must be an image",
+    unsupportedImageType: "Unsupported image type",
+    imageTooLarge: "Image must be 5MB or smaller",
+    uploadImageFailed: "Failed to upload image",
     saveProjectFailed: "Failed to save project",
     updateProjectFailed: "Failed to update project",
+    projectNotFound: "Project not found",
     comingSoon: "Soon",
     comingSoonAria: "Coming soon",
     downloadOurApp: "Download our app",
@@ -93,11 +105,31 @@ export const ui = {
     getItOn: "Get it on",
     downloadOnThe: "Download on the",
     contactDetails: "Contact details",
+    contactUs: "Contact Us",
+    contactPageDesc:
+      "Our team in Al Ain and Abu Dhabi is ready to discuss your steel and aluminum requirements.",
+    contactCompany:
+      "Falcon Design General Contracting — Sole Proprietorship",
+    contactHours: "Sunday – Thursday: 8:00 AM – 6:00 PM",
+    contactIntro:
+      "Reach out to discuss your next steel and aluminum project.",
+    emailLabelGeneral: "General",
     steel: "Steel",
     aluminum: "Aluminum",
     serviceFilters: "Service filters",
     search: "Search",
     searchPlaceholder: "Search…",
+    home: "Home",
+    about: "About",
+    services: "Services",
+    gallery: "Gallery",
+    contact: "Contact",
+    primaryNav: "Primary",
+    mobileNav: "Mobile",
+    menu: "Menu",
+    languageSwitcher: "Language switcher",
+    langEnglish: "English",
+    langArabic: "Arabic",
   },
   ar: {
     learnMore: "اعرف المزيد",
@@ -109,6 +141,7 @@ export const ui = {
     projectGallery: "معرض المشاريع",
     projectGalleryDesc: "استعرض أعمال الصلب والألمنيوم المنفذة.",
     certificates: "الشهادات",
+    certificatesTitle: "الشهادات والاعتمادات",
     ourValues: "قيمنا الأساسية",
     timeline: "مسيرتنا",
     filterAll: "الكل",
@@ -149,6 +182,8 @@ export const ui = {
     logOut: "تسجيل الخروج",
     signIn: "دخول",
     password: "كلمة المرور",
+    showPassword: "إظهار كلمة المرور",
+    hidePassword: "إخفاء كلمة المرور",
     image: "الصورة",
     changeImage: "تغيير الصورة",
     keepOrChangeImage: "اتركها كما هي أو اختر صورة جديدة",
@@ -178,10 +213,19 @@ export const ui = {
     connectionError: "خطأ في الاتصال",
     couldNotReachServer: "تعذر الاتصال بالخادم",
     loginFailed: "فشل تسجيل الدخول",
+    invalidCredentials: "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+    adminNotConfigured: "بيانات دخول الأدمن غير مهيأة",
+    unauthorized: "غير مصرح",
+    databaseNotConfigured: "قاعدة البيانات غير مهيأة",
+    allFieldsRequired: "جميع الحقول مطلوبة",
     imageRequired: "الصورة مطلوبة",
     fileMustBeImage: "الملف يجب أن يكون صورة",
+    unsupportedImageType: "نوع الصورة غير مدعوم",
+    imageTooLarge: "يجب ألا يتجاوز حجم الصورة 5 ميجا",
+    uploadImageFailed: "فشل رفع الصورة",
     saveProjectFailed: "فشل حفظ المشروع",
     updateProjectFailed: "فشل تحديث المشروع",
+    projectNotFound: "المشروع غير موجود",
     comingSoon: "قريبًا",
     comingSoonAria: "قريبًا",
     downloadOurApp: "حمّل تطبيقنا",
@@ -189,14 +233,62 @@ export const ui = {
     getItOn: "احصل عليه من",
     downloadOnThe: "حمّله من",
     contactDetails: "بيانات التواصل",
+    contactUs: "تواصل معنا",
+    contactPageDesc:
+      "فريقنا في العين وأبوظبي جاهز لمناقشة متطلبات الصلب والألمنيوم الخاصة بك.",
+    contactCompany: "فالكون ديزاين للمقاولات العامة — مؤسسة فردية",
+    contactHours: "الأحد – الخميس: 8:00 ص – 6:00 م",
+    contactIntro: "راسلنا لمناقشة مشروعك القادم في أعمال الصلب والألمنيوم.",
+    emailLabelGeneral: "عام",
     steel: "صلب",
     aluminum: "ألمنيوم",
     serviceFilters: "تصفية الخدمات",
     search: "بحث",
     searchPlaceholder: "بحث...",
+    home: "الرئيسية",
+    about: "من نحن",
+    services: "خدماتنا",
+    gallery: "المشاريع",
+    contact: "تواصل معنا",
+    primaryNav: "القائمة الرئيسية",
+    mobileNav: "قائمة الجوال",
+    menu: "القائمة",
+    languageSwitcher: "تبديل اللغة",
+    langEnglish: "English",
+    langArabic: "العربية",
   },
 } as const;
 
-export function t(locale: Locale) {
+export type UiCopy = (typeof ui)[Locale];
+
+export function t(locale: Locale): UiCopy {
   return ui[locale];
+}
+
+const API_ERROR_KEYS = {
+  "Invalid email or password": "invalidCredentials",
+  "Login failed": "loginFailed",
+  "Admin credentials are not configured": "adminNotConfigured",
+  Unauthorized: "unauthorized",
+  "Database is not configured": "databaseNotConfigured",
+  "All fields are required": "allFieldsRequired",
+  "Image is required": "imageRequired",
+  "Unsupported image type": "unsupportedImageType",
+  "Image must be 5MB or smaller": "imageTooLarge",
+  "Failed to create project": "saveProjectFailed",
+  "Failed to update project": "updateProjectFailed",
+  "Failed to delete project": "deleteFailedMessage",
+  "Project not found": "projectNotFound",
+} as const satisfies Record<string, keyof UiCopy>;
+
+export function localizeApiError(
+  locale: Locale,
+  error?: string | null,
+): string {
+  const copy = t(locale);
+  if (!error) return copy.error;
+  const key = API_ERROR_KEYS[error as keyof typeof API_ERROR_KEYS];
+  if (key) return copy[key];
+  if (error.startsWith("Failed to upload image")) return copy.uploadImageFailed;
+  return error;
 }

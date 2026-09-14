@@ -4,6 +4,7 @@ import { ContactForm } from "@/components/contact/contact-form";
 import { ContactInfo } from "@/components/contact/contact-info";
 import { Reveal } from "@/components/ui/motion";
 import { getPageBySlug, getSiteSettings } from "@/lib/data";
+import { t } from "@/lib/i18n/ui";
 import {
   JsonLd,
   breadcrumbJsonLd,
@@ -29,16 +30,14 @@ export default async function ContactPage({
   const { locale: localeParam } = await params;
   const locale = localeParam as Locale;
   const settings = await getSiteSettings();
+  const copy = t(locale);
 
   return (
     <>
       <JsonLd
         data={breadcrumbJsonLd(locale, [
-          { name: locale === "ar" ? "الرئيسية" : "Home", path: "" },
-          {
-            name: locale === "ar" ? "تواصل معنا" : "Contact",
-            path: "/contact",
-          },
+          { name: copy.home, path: "" },
+          { name: copy.contact, path: "/contact" },
         ])}
       />
       <JsonLd data={contactPageJsonLd(locale, settings.phone)} />
@@ -57,13 +56,11 @@ export default async function ContactPage({
             Falcon Design
           </p>
           <h1 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
-            {locale === "ar" ? "تواصل معنا" : "Contact Us"}
+            {copy.contactUs}
           </h1>
           <div className="metallic-line mt-5 w-20" />
           <p className="mt-5 max-w-2xl text-sm leading-relaxed text-text-muted sm:text-base">
-            {locale === "ar"
-              ? "فريقنا في العين وأبوظبي جاهز لمناقشة متطلبات الصلب والألمنيوم الخاصة بك."
-              : "Our team in Al Ain and Abu Dhabi is ready to discuss your steel and aluminum requirements."}
+            {copy.contactPageDesc}
           </p>
         </div>
       </section>
