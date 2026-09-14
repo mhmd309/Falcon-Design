@@ -5,6 +5,7 @@ import {
   MessageCircle,
   Facebook,
   Instagram,
+  Linkedin,
   Youtube,
 } from "lucide-react";
 import type { Locale } from "@/config/site";
@@ -38,6 +39,18 @@ const CONTACT = {
       label_ar: "المشاريع",
       label_en: "Projects",
       email: "projects@falcondesign.ae",
+    },
+        {
+      id: "email-4",
+      label_ar: "تجريبى",
+      label_en: "Training",
+      email: "training@falcondesign.ae",
+    },
+        {
+      id: "email-5",
+      label_ar: "تيست",
+      label_en: "Test",
+      email: "test@falcondesign.ae",
     },
   ],
 } as const;
@@ -96,6 +109,12 @@ export function ContactInfo({
       label: "Instagram",
       href: settings.instagram_url,
       icon: Instagram,
+    },
+    {
+      id: "linkedin",
+      label: "LinkedIn",
+      href: settings.linkedin_url,
+      icon: Linkedin,
     },
     {
       id: "x",
