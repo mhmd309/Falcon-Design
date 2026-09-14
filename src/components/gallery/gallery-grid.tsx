@@ -27,9 +27,11 @@ const PAGE_SIZE = 9;
 function ProjectMeta({
   locale,
   item,
+  tone = "light",
 }: {
   locale: Locale;
   item: GalleryItem;
+  tone?: "light" | "dark";
 }) {
   const rows =
     locale === "ar"
@@ -55,14 +57,28 @@ function ProjectMeta({
   const visible = rows.filter((row) => Boolean(row.value));
   if (!visible.length) return null;
 
+  const isDark = tone === "dark";
+
   return (
-    <dl className="mt-4 grid gap-2 text-sm text-white/90 sm:grid-cols-2">
+    <dl
+      className={
+        isDark
+          ? "grid gap-2 text-sm text-white"
+          : "mt-4 grid gap-2 text-sm text-white/90 sm:grid-cols-2"
+      }
+    >
       {visible.map((row) => (
         <div key={row.label}>
-          <dt className="text-xs tracking-wide text-white/55 uppercase">
+          <dt
+            className={
+              isDark
+                ? "text-[11px] tracking-wide text-white/65"
+                : "text-xs tracking-wide text-white/55 uppercase"
+            }
+          >
             {row.label}
           </dt>
-          <dd className="mt-0.5 font-medium">{row.value}</dd>
+          <dd className="mt-0.5 font-medium leading-snug">{row.value}</dd>
         </div>
       ))}
     </dl>
@@ -284,12 +300,16 @@ export function GalleryGrid({
                         loading="lazy"
                         unoptimized={item.source === "database"}
                       />
+                      {item.source === "database" ? (
+                        <span className="absolute inset-0 flex items-end bg-gradient-to-t from-black/85 via-black/45 to-transparent p-3 opacity-0 transition duration-300 group-hover:opacity-100 group-focus-within:opacity-100 sm:p-4">
+                          <ProjectMeta
+                            locale={locale}
+                            item={item}
+                            tone="dark"
+                          />
+                        </span>
+                      ) : null}
                     </span>
-                    {item.source === "database" && item.owner_name ? (
-                      <span className="block px-3 py-2.5 text-sm font-medium text-text-dark">
-                        {item.owner_name}
-                      </span>
-                    ) : null}
                   </button>
 
                   {isAdmin && item.source === "database" ? (
