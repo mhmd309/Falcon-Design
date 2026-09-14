@@ -40,18 +40,18 @@ function ProjectMeta({
       ? [
           { label: "المالك", value: item.owner_name },
           { label: "الاستشاري", value: item.consultant_name },
-          { label: "مقاول المشروع", value: item.project_contractor_name },
+          { label: "المقاول الرئيسي", value: item.project_contractor_name },
           {
-            label: "المقاول المنفذ",
+            label: "مقاول Falcon Design",
             value: item.executing_contractor_name,
           },
         ]
       : [
           { label: "Owner", value: item.owner_name },
           { label: "Consultant", value: item.consultant_name },
-          { label: "Project contractor", value: item.project_contractor_name },
+          { label: "Main contractor", value: item.project_contractor_name },
           {
-            label: "Executing contractor",
+            label: "Falcon Design contractor",
             value: item.executing_contractor_name,
           },
         ];

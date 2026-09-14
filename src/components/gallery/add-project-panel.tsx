@@ -555,7 +555,7 @@ export const AddProjectPanel = forwardRef<
 
                 <div>
                   <Label htmlFor="project-contractor">
-                    {isAr ? "اسم مقاول المشروع" : "Project contractor"}
+                    {isAr ? "اسم المقاول الرئيسي" : "Main contractor name"}
                   </Label>
                   <Input
                     id="project-contractor"
@@ -568,8 +568,8 @@ export const AddProjectPanel = forwardRef<
                 <div>
                   <Label htmlFor="executing-contractor">
                     {isAr
-                      ? "اسم المقاول المنفذ للمشروع"
-                      : "Executing contractor"}
+                      ? "اسم مقاول Falcon Design"
+                      : "Falcon Design contractor name"}
                   </Label>
                   <Input
                     id="executing-contractor"
