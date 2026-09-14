@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   X,
@@ -107,12 +108,9 @@ export function GalleryGrid({
 }) {
   const copy = t(locale);
   const isAr = locale === "ar";
+  const router = useRouter();
   const panelRef = useRef<AddProjectPanelHandle>(null);
-  const [createdItems, setCreatedItems] = useState<GalleryItem[]>([]);
-  const [updatedItems, setUpdatedItems] = useState<Record<string, GalleryItem>>(
-    {},
-  );
-  const [deletedIds, setDeletedIds] = useState<string[]>([]);
+  const [items, setItems] = useState(() => sortGalleryItems(initialItems));
   const [isAdmin, setIsAdmin] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [pendingDelete, setPendingDelete] = useState<GalleryItem | null>(null);
@@ -124,21 +122,6 @@ export function GalleryGrid({
   const [page, setPage] = useState(1);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  const deletedSet = useMemo(() => new Set(deletedIds), [deletedIds]);
-
-  const items = useMemo(() => {
-    const createdIds = new Set(createdItems.map((item) => item.id));
-    const merged = [
-      ...createdItems
-        .filter((item) => !deletedSet.has(item.id))
-        .map((item) => updatedItems[item.id] ?? item),
-      ...initialItems
-        .filter((item) => !deletedSet.has(item.id) && !createdIds.has(item.id))
-        .map((item) => updatedItems[item.id] ?? item),
-    ];
-    return sortGalleryItems(merged);
-  }, [createdItems, deletedSet, initialItems, updatedItems]);
-
   const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
 
@@ -148,20 +131,18 @@ export function GalleryGrid({
   }, [items, currentPage]);
 
   function handleCreated(item: GalleryItem) {
-    setCreatedItems((prev) => [item, ...prev.filter((p) => p.id !== item.id)]);
-    setDeletedIds((prev) => prev.filter((id) => id !== item.id));
+    setItems((prev) => sortGalleryItems([item, ...prev.filter((p) => p.id !== item.id)]));
     setPage(1);
     setActiveIndex(null);
+    router.refresh();
   }
 
   function handleUpdated(item: GalleryItem) {
-    setUpdatedItems((prev) => ({ ...prev, [item.id]: item }));
-    setCreatedItems((prev) =>
-      prev.some((p) => p.id === item.id)
-        ? prev.map((p) => (p.id === item.id ? item : p))
-        : prev,
+    setItems((prev) =>
+      sortGalleryItems(prev.map((p) => (p.id === item.id ? item : p))),
     );
     setActiveIndex(null);
+    router.refresh();
   }
 
   function requestDelete(item: GalleryItem) {
@@ -193,14 +174,10 @@ export function GalleryGrid({
         });
         return;
       }
-      setDeletedIds((prev) => [...prev, item.id]);
-      setCreatedItems((prev) => prev.filter((p) => p.id !== item.id));
-      setUpdatedItems((prev) => {
-        const next = { ...prev };
-        delete next[item.id];
-        return next;
-      });
+      setItems((prev) => prev.filter((p) => p.id !== item.id));
       setPendingDelete(null);
+      setActiveIndex(null);
+      router.refresh();
     } catch {
       setFeedback({
         tone: "error",

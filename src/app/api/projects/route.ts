@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAdminSession } from "@/lib/auth/admin-session";
 import { isDatabaseConfigured, prisma } from "@/lib/db";
+import { revalidateProjectPages } from "@/lib/projects-cache";
 import { getSupabaseAdmin, ensureStorageBucket } from "@/lib/supabase/admin";
 import type { ProjectRecord } from "@/types/content";
 
@@ -159,6 +160,7 @@ export async function POST(request: Request) {
       },
     });
 
+    revalidateProjectPages();
     return json({ project: toProjectRecord(project) }, 201);
   } catch (error) {
     console.error("create project failed", error);

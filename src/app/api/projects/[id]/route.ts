@@ -2,7 +2,12 @@ import { NextResponse } from "next/server";
 import { getAdminSession } from "@/lib/auth/admin-session";
 import { isDatabaseConfigured, prisma } from "@/lib/db";
 import { storagePathFromPublicUrl } from "@/lib/projects";
-import { getStorageBucket, getSupabaseAdmin, ensureStorageBucket } from "@/lib/supabase/admin";
+import { revalidateProjectPages } from "@/lib/projects-cache";
+import {
+  getStorageBucket,
+  getSupabaseAdmin,
+  ensureStorageBucket,
+} from "@/lib/supabase/admin";
 import type { ProjectRecord } from "@/types/content";
 
 export const runtime = "nodejs";
@@ -187,6 +192,7 @@ export async function PATCH(
       },
     });
 
+    revalidateProjectPages();
     return json({ project: toProjectRecord(project) });
   } catch (error) {
     console.error("update project failed", error);
@@ -213,6 +219,7 @@ export async function DELETE(
     await prisma.project.delete({ where: { id } });
     await removeStoredImage(existing.imageUrl);
 
+    revalidateProjectPages();
     return json({ ok: true });
   } catch (error) {
     console.error("delete project failed", error);

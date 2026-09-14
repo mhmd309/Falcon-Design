@@ -23,6 +23,8 @@ import {
   websiteJsonLd,
 } from "@/lib/seo/metadata";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({
   params,
 }: {
@@ -47,7 +49,7 @@ export default async function HomePage({
       getSection("home", "cta"),
       getStatistics(),
       getServices({ featuredOnly: true }),
-      getMergedGalleryItems({ featuredOnly: true }),
+      getMergedGalleryItems(),
       getCertificates({ featuredOnly: true }),
       getSiteSettings(),
     ]);

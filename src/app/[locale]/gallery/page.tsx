@@ -9,6 +9,8 @@ import {
   galleryJsonLd,
 } from "@/lib/seo/metadata";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({
   params,
 }: {
@@ -40,7 +42,11 @@ export default async function GalleryPage({
         ])}
       />
       <JsonLd data={galleryJsonLd(locale, items)} />
-      <GalleryGrid locale={locale} items={items} />
+      <GalleryGrid
+        key={items.map((item) => item.id).join("|") || "empty"}
+        locale={locale}
+        items={items}
+      />
     </>
   );
 }
