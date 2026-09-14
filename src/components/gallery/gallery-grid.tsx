@@ -26,65 +26,6 @@ import { localizeApiError, t } from "@/lib/i18n/ui";
 
 const PAGE_SIZE = 9;
 
-function ProjectMeta({
-  locale,
-  item,
-  tone = "light",
-}: {
-  locale: Locale;
-  item: GalleryItem;
-  tone?: "light" | "dark";
-}) {
-  const copy = t(locale);
-  const rows = [
-    { label: copy.owner, value: item.owner_name },
-    { label: copy.consultant, value: item.consultant_name },
-    { label: copy.mainContractor, value: item.project_contractor_name },
-  ];
-
-  const visible = rows.filter((row) => Boolean(row.value));
-  if (!visible.length) return null;
-
-  if (tone === "dark") {
-    return (
-      <div className="w-full">
-        <p className="text-[10px] font-semibold tracking-[0.2em] text-gold uppercase">
-          Falcon Design
-        </p>
-        <div className="metallic-line mt-2 mb-3 w-12" />
-        <dl className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-x-4 sm:gap-y-2.5">
-          {visible.map((row) => (
-            <div
-              key={row.label}
-              className="rounded-md border border-white/10 bg-black/25 px-2.5 py-2 backdrop-blur-[2px]"
-            >
-              <dt className="text-[10px] font-medium tracking-wide text-gold-soft/90">
-                {row.label}
-              </dt>
-              <dd className="mt-0.5 text-sm font-semibold leading-snug text-white">
-                {row.value}
-              </dd>
-            </div>
-          ))}
-        </dl>
-      </div>
-    );
-  }
-
-  return (
-    <dl className="mt-4 grid gap-2 text-sm text-white/90 sm:grid-cols-2">
-      {visible.map((row) => (
-        <div key={row.label}>
-          <dt className="text-xs tracking-wide text-white/55 uppercase">
-            {row.label}
-          </dt>
-          <dd className="mt-0.5 font-medium">{row.value}</dd>
-        </div>
-      ))}
-    </dl>
-  );
-}
-
 export function GalleryGrid({
   locale,
   items: initialItems,
@@ -264,29 +205,6 @@ export function GalleryGrid({
                         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(8,10,14,0.35)_100%)]"
                         aria-hidden
                       />
-                      {item.source === "database" ? (
-                        <span className="absolute inset-0 flex items-end">
-                          <span
-                            className="absolute inset-0 bg-gradient-to-t from-[#0b0d10]/95 via-[#0b0d10]/55 to-transparent"
-                            aria-hidden
-                          />
-                          <span
-                            className="absolute inset-0 opacity-80"
-                            style={{
-                              background:
-                                "linear-gradient(135deg, rgba(198,161,91,0.18) 0%, transparent 42%, transparent 100%)",
-                            }}
-                            aria-hidden
-                          />
-                          <span className="relative z-[1] w-full p-3 sm:p-4">
-                            <ProjectMeta
-                              locale={locale}
-                              item={item}
-                              tone="dark"
-                            />
-                          </span>
-                        </span>
-                      ) : null}
                     </span>
                   </button>
 
@@ -428,7 +346,6 @@ export function GalleryGrid({
                 unoptimized={active.source === "database"}
               />
             </div>
-            <ProjectMeta locale={locale} item={active} />
             {isAdmin && active.source === "database" ? (
               <div className="flex flex-wrap gap-3">
                 <button
