@@ -117,7 +117,15 @@ export async function POST(request: Request) {
 
     const path = `projects/${Date.now()}-${crypto.randomUUID()}.${ext}`;
     const bucket = getStorageBucket();
-    const supabase = getSupabaseAdmin();
+    let supabase;
+    try {
+      supabase = getSupabaseAdmin();
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Supabase is not configured";
+      console.error("supabase admin config failed", message);
+      return json({ error: message }, 503);
+    }
     const buffer = Buffer.from(await image.arrayBuffer());
 
     const { error: uploadError } = await supabase.storage
@@ -129,7 +137,12 @@ export async function POST(request: Request) {
 
     if (uploadError) {
       console.error("storage upload failed", uploadError);
-      return json({ error: "Failed to upload image" }, 500);
+      return json(
+        {
+          error: `Failed to upload image: ${uploadError.message}`,
+        },
+        500,
+      );
     }
 
     const { data: publicData } = supabase.storage.from(bucket).getPublicUrl(path);

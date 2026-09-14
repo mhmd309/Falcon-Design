@@ -64,7 +64,14 @@ async function uploadImage(image: File) {
 
   const path = `projects/${Date.now()}-${crypto.randomUUID()}.${ext}`;
   const bucket = getStorageBucket();
-  const supabase = getSupabaseAdmin();
+  let supabase;
+  try {
+    supabase = getSupabaseAdmin();
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Supabase is not configured";
+    throw new Error(`SUPABASE_CONFIG:${message}`);
+  }
   const buffer = Buffer.from(await image.arrayBuffer());
 
   const { error: uploadError } = await supabase.storage
@@ -76,7 +83,7 @@ async function uploadImage(image: File) {
 
   if (uploadError) {
     console.error("storage upload failed", uploadError);
-    throw new Error("UPLOAD_FAILED");
+    throw new Error(uploadError.message || "UPLOAD_FAILED");
   }
 
   const { data: publicData } = supabase.storage.from(bucket).getPublicUrl(path);
@@ -147,7 +154,18 @@ export async function PATCH(
         if (code === "TOO_LARGE") {
           return json({ error: "Image must be 5MB or smaller" }, 400);
         }
-        return json({ error: "Failed to upload image" }, 500);
+        if (code.startsWith("SUPABASE_CONFIG:")) {
+          return json({ error: code.replace("SUPABASE_CONFIG:", "") }, 503);
+        }
+        return json(
+          {
+            error:
+              code && code !== "UPLOAD_FAILED"
+                ? `Failed to upload image: ${code}`
+                : "Failed to upload image",
+          },
+          500,
+        );
       }
     }
 

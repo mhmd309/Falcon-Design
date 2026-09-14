@@ -239,17 +239,16 @@ export function GalleryGrid({
           onAuthChange={setIsAdmin}
           onCreated={handleCreated}
           onUpdated={handleUpdated}
+          toolbarStart={
+            <FilterTabs
+              tabs={tabs}
+              value={categoryId}
+              onChange={handleFilter}
+              ariaLabel={locale === "ar" ? "تصفية المعرض" : "Gallery filters"}
+              className="min-w-max"
+            />
+          }
         />
-
-        <div className="mt-8 overflow-x-auto pb-1">
-          <FilterTabs
-            tabs={tabs}
-            value={categoryId}
-            onChange={handleFilter}
-            ariaLabel={locale === "ar" ? "تصفية المعرض" : "Gallery filters"}
-            className="min-w-max"
-          />
-        </div>
 
         {filtered.length === 0 ? (
           <div className="mt-10">
