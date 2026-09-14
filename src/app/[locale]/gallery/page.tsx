@@ -3,7 +3,7 @@ import type { Locale } from "@/config/site";
 import { GalleryGrid } from "@/components/gallery/gallery-grid";
 import {
   getGalleryCategories,
-  getGalleryItems,
+  getMergedGalleryItems,
   getPageBySlug,
 } from "@/lib/data";
 import {
@@ -31,8 +31,8 @@ export default async function GalleryPage({
   const { locale: localeParam } = await params;
   const locale = localeParam as Locale;
   const [items, categories] = await Promise.all([
-    getGalleryItems(),
-    getGalleryCategories(),
+    getMergedGalleryItems(),
+    Promise.resolve(getGalleryCategories()),
   ]);
 
   return (

@@ -8,13 +8,61 @@ import type { GalleryCategory, GalleryItem } from "@/types/content";
 import { pickLocalized } from "@/lib/utils";
 import { SectionHeading, EmptyState } from "@/components/ui/section";
 import { FilterTabs } from "@/components/ui/filter-tabs";
+import { AddProjectPanel } from "@/components/gallery/add-project-panel";
 import { t } from "@/lib/i18n/ui";
 
 const PAGE_SIZE = 9;
 
+function ProjectMeta({
+  locale,
+  item,
+}: {
+  locale: Locale;
+  item: GalleryItem;
+}) {
+  const rows =
+    locale === "ar"
+      ? [
+          { label: "العميل", value: item.client_name },
+          { label: "المالك", value: item.owner_name },
+          { label: "الاستشاري", value: item.consultant_name },
+          { label: "مقاول المشروع", value: item.project_contractor_name },
+          {
+            label: "المقاول المنفذ",
+            value: item.executing_contractor_name,
+          },
+        ]
+      : [
+          { label: "Client", value: item.client_name },
+          { label: "Owner", value: item.owner_name },
+          { label: "Consultant", value: item.consultant_name },
+          { label: "Project contractor", value: item.project_contractor_name },
+          {
+            label: "Executing contractor",
+            value: item.executing_contractor_name,
+          },
+        ];
+
+  const visible = rows.filter((row) => Boolean(row.value));
+  if (!visible.length) return null;
+
+  return (
+    <dl className="mt-4 grid gap-2 text-sm text-white/90 sm:grid-cols-2">
+      {visible.map((row) => (
+        <div key={row.label}>
+          <dt className="text-xs tracking-wide text-white/55 uppercase">
+            {row.label}
+          </dt>
+          <dd className="mt-0.5 font-medium">{row.value}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
 export function GalleryGrid({
   locale,
-  items,
+  items: initialItems,
   categories,
 }: {
   locale: Locale;
@@ -22,9 +70,18 @@ export function GalleryGrid({
   categories: GalleryCategory[];
 }) {
   const copy = t(locale);
+  const [createdItems, setCreatedItems] = useState<GalleryItem[]>([]);
   const [categoryId, setCategoryId] = useState<string>("all");
   const [page, setPage] = useState(1);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const items = useMemo(() => {
+    const createdIds = new Set(createdItems.map((item) => item.id));
+    return [
+      ...createdItems,
+      ...initialItems.filter((item) => !createdIds.has(item.id)),
+    ];
+  }, [createdItems, initialItems]);
 
   const filtered = useMemo(() => {
     if (categoryId === "all") return items;
@@ -52,6 +109,13 @@ export function GalleryGrid({
 
   function handleFilter(id: string) {
     setCategoryId(id);
+    setPage(1);
+    setActiveIndex(null);
+  }
+
+  function handleCreated(item: GalleryItem) {
+    setCreatedItems((prev) => [item, ...prev.filter((p) => p.id !== item.id)]);
+    setCategoryId("all");
     setPage(1);
     setActiveIndex(null);
   }
@@ -94,6 +158,8 @@ export function GalleryGrid({
           }
         />
 
+        <AddProjectPanel locale={locale} onCreated={handleCreated} />
+
         <div className="mt-8 overflow-x-auto pb-1">
           <FilterTabs
             tabs={tabs}
@@ -133,8 +199,14 @@ export function GalleryGrid({
                       sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
                       className="object-cover transition duration-500 group-hover:scale-[1.04]"
                       loading="lazy"
+                      unoptimized={item.source === "database"}
                     />
                   </span>
+                  {item.source === "database" && item.client_name ? (
+                    <span className="block px-3 py-2.5 text-sm font-medium text-text-dark">
+                      {item.client_name}
+                    </span>
+                  ) : null}
                 </button>
               ))}
             </div>
@@ -223,20 +295,24 @@ export function GalleryGrid({
             <ChevronRight size={22} />
           </button>
           <div
-            className="relative h-[min(70vh,560px)] w-full max-w-5xl sm:h-[75vh]"
+            className="relative flex w-full max-w-5xl flex-col gap-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <Image
-              src={active.image_url}
-              alt={
-                pickLocalized(active, locale, "alt_text") ||
-                pickLocalized(active, locale, "title")
-              }
-              fill
-              sizes="100vw"
-              className="object-contain"
-              priority
-            />
+            <div className="relative h-[min(55vh,480px)] w-full sm:h-[65vh]">
+              <Image
+                src={active.image_url}
+                alt={
+                  pickLocalized(active, locale, "alt_text") ||
+                  pickLocalized(active, locale, "title")
+                }
+                fill
+                sizes="100vw"
+                className="object-contain"
+                priority
+                unoptimized={active.source === "database"}
+              />
+            </div>
+            <ProjectMeta locale={locale} item={active} />
           </div>
         </div>
       ) : null}

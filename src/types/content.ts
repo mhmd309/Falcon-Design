@@ -107,6 +107,17 @@ export interface GalleryCategory {
   slug: string;
 }
 
+export interface ProjectRecord {
+  id: string;
+  imageUrl: string;
+  clientName: string;
+  ownerName: string;
+  consultantName: string;
+  projectContractorName: string;
+  executingContractorName: string;
+  createdAt: string;
+}
+
 export interface GalleryItem {
   id: string;
   category_id: string | null;
@@ -118,6 +129,12 @@ export interface GalleryItem {
   alt_text_ar: string | null;
   alt_text_en: string | null;
   is_featured: boolean;
+  source?: "static" | "database";
+  client_name?: string | null;
+  owner_name?: string | null;
+  consultant_name?: string | null;
+  project_contractor_name?: string | null;
+  executing_contractor_name?: string | null;
 }
 
 export interface ContactEmail {

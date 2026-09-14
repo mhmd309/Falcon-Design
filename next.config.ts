@@ -1,12 +1,21 @@
 import type { NextConfig } from "next";
 
+const supabaseHost = (() => {
+  try {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    return url ? new URL(url).hostname : null;
+  } catch {
+    return null;
+  }
+})();
+
 const contentSecurityPolicy = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline'",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob:",
+  `img-src 'self' data: blob:${supabaseHost ? ` https://${supabaseHost}` : ""}`,
   "font-src 'self' data:",
-  "connect-src 'self'",
+  `connect-src 'self'${supabaseHost ? ` https://${supabaseHost}` : ""}`,
   "frame-ancestors 'self'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -19,6 +28,15 @@ const nextConfig: NextConfig = {
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    remotePatterns: supabaseHost
+      ? [
+          {
+            protocol: "https",
+            hostname: supabaseHost,
+            pathname: "/storage/v1/object/public/**",
+          },
+        ]
+      : [],
   },
   poweredByHeader: false,
   async headers() {

@@ -11,6 +11,7 @@ import {
   statistics,
   timeline,
 } from "@/lib/data/content";
+import { isDatabaseConfigured, prisma } from "@/lib/db";
 import type {
   Certificate,
   ContactEmail,
@@ -69,13 +70,77 @@ export function getGalleryCategories(): GalleryCategory[] {
   return galleryCategories;
 }
 
+function mapDbProjectToGalleryItem(project: {
+  id: string;
+  imageUrl: string;
+  clientName: string;
+  ownerName: string;
+  consultantName: string;
+  projectContractorName: string;
+  executingContractorName: string;
+}): GalleryItem {
+  const title = project.clientName;
+  return {
+    id: `db-${project.id}`,
+    category_id: null,
+    title_ar: title,
+    title_en: title,
+    description_ar: null,
+    description_en: null,
+    image_url: project.imageUrl,
+    alt_text_ar: title,
+    alt_text_en: title,
+    is_featured: true,
+    source: "database",
+    client_name: project.clientName,
+    owner_name: project.ownerName,
+    consultant_name: project.consultantName,
+    project_contractor_name: project.projectContractorName,
+    executing_contractor_name: project.executingContractorName,
+  };
+}
+
+export async function getDbGalleryItems(): Promise<GalleryItem[]> {
+  if (!isDatabaseConfigured()) return [];
+
+  try {
+    const projects = await prisma.project.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+    return projects.map(mapDbProjectToGalleryItem);
+  } catch (error) {
+    console.error("getDbGalleryItems failed", error);
+    return [];
+  }
+}
+
 export function getGalleryItems(options?: {
   featuredOnly?: boolean;
 }): GalleryItem[] {
+  const staticItems = galleryItems.map((item) => ({
+    ...item,
+    source: "static" as const,
+  }));
+
   if (options?.featuredOnly) {
-    return galleryItems.filter((g) => g.is_featured);
+    return staticItems.filter((g) => g.is_featured);
   }
-  return galleryItems;
+  return staticItems;
+}
+
+export async function getMergedGalleryItems(options?: {
+  featuredOnly?: boolean;
+}): Promise<GalleryItem[]> {
+  const [dbItems, staticItems] = await Promise.all([
+    getDbGalleryItems(),
+    Promise.resolve(getGalleryItems(options)),
+  ]);
+
+  if (options?.featuredOnly) {
+    return [...dbItems.filter((i) => i.is_featured), ...staticItems];
+  }
+
+  return [...dbItems, ...staticItems];
 }
 
 export function getContactEmails(): ContactEmail[] {

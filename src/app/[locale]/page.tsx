@@ -9,7 +9,7 @@ import { AppDownload } from "@/components/home/app-download";
 import { CtaBanner } from "@/components/home/cta-banner";
 import {
   getCertificates,
-  getGalleryItems,
+  getMergedGalleryItems,
   getPageBySlug,
   getSection,
   getServices,
@@ -47,7 +47,7 @@ export default async function HomePage({
       getSection("home", "cta"),
       getStatistics(),
       getServices({ featuredOnly: true }),
-      getGalleryItems({ featuredOnly: true }),
+      getMergedGalleryItems({ featuredOnly: true }),
       getCertificates({ featuredOnly: true }),
       getSiteSettings(),
     ]);
