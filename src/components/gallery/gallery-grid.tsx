@@ -20,6 +20,8 @@ import {
   type AddProjectPanelHandle,
 } from "@/components/gallery/add-project-panel";
 import { projectDbId, sortGalleryItems } from "@/lib/projects";
+import { ConfirmPopup } from "@/components/ui/confirm-popup";
+import { FeedbackPopup } from "@/components/ui/feedback-popup";
 import { t } from "@/lib/i18n/ui";
 
 const PAGE_SIZE = 9;
@@ -116,6 +118,12 @@ export function GalleryGrid({
   const [deletedIds, setDeletedIds] = useState<string[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<GalleryItem | null>(null);
+  const [feedback, setFeedback] = useState<{
+    tone: "success" | "error";
+    title: string;
+    message: string;
+  } | null>(null);
   const [categoryId, setCategoryId] = useState<string>("all");
   const [page, setPage] = useState(1);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -183,16 +191,17 @@ export function GalleryGrid({
     setActiveIndex(null);
   }
 
-  async function handleDelete(item: GalleryItem) {
+  function requestDelete(item: GalleryItem) {
+    if (!projectDbId(item.id)) return;
+    setActiveIndex(null);
+    setPendingDelete(item);
+  }
+
+  async function confirmDelete() {
+    const item = pendingDelete;
+    if (!item) return;
     const dbId = projectDbId(item.id);
     if (!dbId) return;
-
-    const confirmed = window.confirm(
-      isAr
-        ? "هل تريد حذف هذا المشروع؟"
-        : "Delete this project?",
-    );
-    if (!confirmed) return;
 
     setDeletingId(item.id);
     try {
@@ -202,10 +211,13 @@ export function GalleryGrid({
       });
       if (!res.ok) {
         const data = (await res.json()) as { error?: string };
-        window.alert(
-          data.error ||
+        setFeedback({
+          tone: "error",
+          title: isAr ? "تعذر الحذف" : "Delete failed",
+          message:
+            data.error ||
             (isAr ? "فشل حذف المشروع" : "Failed to delete project"),
-        );
+        });
         return;
       }
       setDeletedIds((prev) => [...prev, item.id]);
@@ -215,13 +227,26 @@ export function GalleryGrid({
         delete next[item.id];
         return next;
       });
-      setActiveIndex(null);
+      setPendingDelete(null);
     } catch {
-      window.alert(isAr ? "تعذر الاتصال بالخادم" : "Could not reach the server");
+      setFeedback({
+        tone: "error",
+        title: isAr ? "خطأ في الاتصال" : "Connection error",
+        message: isAr
+          ? "تعذر الاتصال بالخادم"
+          : "Could not reach the server",
+      });
     } finally {
       setDeletingId(null);
     }
   }
+
+  const closeDeletePopup = useCallback(() => {
+    if (deletingId) return;
+    setPendingDelete(null);
+  }, [deletingId]);
+
+  const closeFeedback = useCallback(() => setFeedback(null), []);
 
   const close = useCallback(() => setActiveIndex(null), []);
   const prev = useCallback(() => {
@@ -370,7 +395,7 @@ export function GalleryGrid({
                         disabled={deletingId === item.id}
                         onClick={(e) => {
                           e.stopPropagation();
-                          void handleDelete(item);
+                          void requestDelete(item);
                         }}
                       >
                         {deletingId === item.id ? (
@@ -504,7 +529,7 @@ export function GalleryGrid({
                   type="button"
                   className="inline-flex items-center gap-2 rounded-md bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-danger"
                   disabled={deletingId === active.id}
-                  onClick={() => void handleDelete(active)}
+                  onClick={() => requestDelete(active)}
                 >
                   {deletingId === active.id ? (
                     <Loader2 className="size-4 animate-spin" />
@@ -518,6 +543,32 @@ export function GalleryGrid({
           </div>
         </div>
       ) : null}
+
+      <ConfirmPopup
+        open={Boolean(pendingDelete)}
+        dir={isAr ? "rtl" : "ltr"}
+        title={isAr ? "تأكيد الحذف" : "Confirm delete"}
+        message={
+          isAr
+            ? "هل تريد حذف هذا المشروع؟ لا يمكن التراجع عن هذا الإجراء."
+            : "Do you want to delete this project? This action cannot be undone."
+        }
+        confirmLabel={isAr ? "حذف" : "Delete"}
+        cancelLabel={isAr ? "إلغاء" : "Cancel"}
+        pending={Boolean(deletingId)}
+        onConfirm={() => void confirmDelete()}
+        onCancel={closeDeletePopup}
+      />
+
+      <FeedbackPopup
+        open={Boolean(feedback)}
+        tone={feedback?.tone || "error"}
+        title={feedback?.title || ""}
+        message={feedback?.message || ""}
+        closeLabel={isAr ? "حسناً" : "OK"}
+        onClose={closeFeedback}
+        dir={isAr ? "rtl" : "ltr"}
+      />
     </section>
   );
 }
