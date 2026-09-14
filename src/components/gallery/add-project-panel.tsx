@@ -398,11 +398,16 @@ export const AddProjectPanel = forwardRef<
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       dir="ltr"
-                      className="pe-11"
+                      className={
+                        locale === "ar" ? "pr-11 text-start" : "pl-11 text-start"
+                      }
                     />
                     <button
                       type="button"
-                      className="absolute end-2 top-1/2 inline-flex size-8 -translate-y-1/2 items-center justify-center rounded-md text-text-dark-muted transition hover:bg-surface-muted hover:text-text-dark"
+                      className={cn(
+                        "absolute top-1/2 inline-flex size-8 -translate-y-1/2 items-center justify-center rounded-md text-text-dark-muted transition hover:bg-surface-muted hover:text-text-dark",
+                        locale === "ar" ? "right-2" : "left-2",
+                      )}
                       onClick={() => setShowPassword((v) => !v)}
                       aria-label={
                         showPassword ? copy.hidePassword : copy.showPassword
