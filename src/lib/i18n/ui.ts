@@ -99,7 +99,7 @@ export const ui = {
     comingSoonAria: "Coming soon",
     downloadOurApp: "Download our app",
     downloadOurAppDesc:
-      "The Falcon Design app for Android and iOS is coming soon.",
+      "The Falcon Design Metal Construction app for Android and iOS is coming soon.",
     getItOn: "Get it on",
     downloadOnThe: "Download on the",
     contactDetails: "Contact details",
@@ -107,7 +107,7 @@ export const ui = {
     contactPageDesc:
       "Our team in Al Ain and Abu Dhabi is ready to discuss your steel and aluminum requirements.",
     contactCompany:
-      "Falcon Design General Contracting — Sole Proprietorship",
+      "Falcon Design Metal Construction — Sole Proprietorship",
     contactHours: "Sunday – Thursday: 8:00 AM – 6:00 PM",
     contactIntro:
       "Reach out to discuss your next steel and aluminum project.",
@@ -225,14 +225,14 @@ export const ui = {
     comingSoon: "قريبًا",
     comingSoonAria: "قريبًا",
     downloadOurApp: "حمّل تطبيقنا",
-    downloadOurAppDesc: "تطبيق فالكون ديزاين لأندرويد وiOS قادم قريبًا.",
+    downloadOurAppDesc: "تطبيق فالكون ديزاين للإنشاءات المعدنيه لأندرويد وiOS قادم قريبًا.",
     getItOn: "احصل عليه من",
     downloadOnThe: "حمّله من",
     contactDetails: "بيانات التواصل",
     contactUs: "تواصل معنا",
     contactPageDesc:
       "فريقنا في العين وأبوظبي جاهز لمناقشة متطلبات الصلب والألمنيوم الخاصة بك.",
-    contactCompany: "فالكون ديزاين للمقاولات العامة — مؤسسة فردية",
+    contactCompany: "فالكون ديزاين للإنشاءات المعدنيه — مؤسسة فردية",
     contactHours: "الأحد – الخميس: 8:00 ص – 6:00 م",
     contactIntro: "راسلنا لمناقشة مشروعك القادم في أعمال الصلب والألمنيوم.",
     emailLabelGeneral: "عام",

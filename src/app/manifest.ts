@@ -3,9 +3,9 @@ import { siteConfig } from "@/config/site";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: siteConfig.name,
-    short_name: "Falcon Design",
-    description: siteConfig.tagline.en,
+    name: siteConfig.nameAr,
+    short_name: siteConfig.nameShortAr,
+    description: siteConfig.tagline.ar,
     start_url: "/ar",
     display: "standalone",
     background_color: "#0f1419",

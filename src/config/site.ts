@@ -1,7 +1,9 @@
 export const siteConfig = {
-  name: "Falcon Design",
-  nameAr: "فالكون ديزاين",
-  legalName: "Falcon Design General Contracting — Sole Proprietorship",
+  name: "Falcon Design Metal Construction",
+  nameAr: "فالكون ديزاين للإنشاءات المعدنيه",
+  nameShort: "Falcon Design",
+  nameShortAr: "فالكون ديزاين",
+  legalName: "Falcon Design Metal Construction — Sole Proprietorship",
   defaultLocale: "ar" as const,
   locales: ["ar", "en"] as const,
   tagline: {
@@ -10,20 +12,22 @@ export const siteConfig = {
   },
   keywords: {
     en: [
+      "Falcon Design Metal Construction",
       "Falcon Design",
       "steel fabrication UAE",
       "aluminum works Al Ain",
       "steel structure erection",
       "metal works Abu Dhabi",
-      "general contracting Al Ain",
+      "metal construction Al Ain",
     ],
     ar: [
+      "فالكون ديزاين للإنشاءات المعدنيه",
       "فالكون ديزاين",
       "أعمال الصلب الإمارات",
       "أعمال الألمنيوم العين",
       "هياكل فولاذية",
       "أعمال معدنية أبوظبي",
-      "مقاولات عامة العين",
+      "إنشاءات معدنية العين",
     ],
   },
   geo: {

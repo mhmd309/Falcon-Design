@@ -5,7 +5,12 @@ import type { GalleryItem, Service, SitePage } from "@/types/content";
 import { absoluteUrl } from "@/lib/utils";
 
 function formatPageTitle(title: string, locale: Locale): string {
-  const brandNames = [siteConfig.name, siteConfig.nameAr];
+  const brandNames = [
+    siteConfig.name,
+    siteConfig.nameAr,
+    siteConfig.nameShort,
+    siteConfig.nameShortAr,
+  ];
   const alreadyBranded = brandNames.some((name) =>
     title.toLowerCase().includes(name.toLowerCase()),
   );
@@ -51,9 +56,9 @@ export function buildPageMetadata(
     },
     description,
     keywords: [...siteConfig.keywords[locale]],
-    authors: [{ name: siteConfig.name, url: siteUrl }],
-    creator: siteConfig.name,
-    publisher: siteConfig.name,
+    authors: [{ name: locale === "ar" ? siteConfig.nameAr : siteConfig.name, url: siteUrl }],
+    creator: locale === "ar" ? siteConfig.nameAr : siteConfig.name,
+    publisher: locale === "ar" ? siteConfig.nameAr : siteConfig.name,
     category: "construction",
     alternates: {
       canonical,
@@ -68,7 +73,7 @@ export function buildPageMetadata(
       locale: locale === "ar" ? "ar_AE" : "en_AE",
       alternateLocale: locale === "ar" ? ["en_AE"] : ["ar_AE"],
       url: absoluteUrl(localizedPath),
-      siteName: siteConfig.name,
+      siteName: locale === "ar" ? siteConfig.nameAr : siteConfig.name,
       title: ogTitle,
       description: ogDescription,
       images: [
@@ -226,8 +231,11 @@ export function websiteJsonLd(locale: Locale) {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "@id": `${siteUrl}/#website`,
-    name: siteConfig.name,
-    alternateName: siteConfig.nameAr,
+    name: locale === "ar" ? siteConfig.nameAr : siteConfig.name,
+    alternateName:
+      locale === "ar"
+        ? [siteConfig.name, siteConfig.nameShortAr]
+        : [siteConfig.nameAr, siteConfig.nameShort],
     url: `${siteUrl}/${locale}`,
     inLanguage: locale === "ar" ? "ar-AE" : "en-AE",
     publisher: {
@@ -264,7 +272,7 @@ export function servicesItemListJsonLd(locale: Locale, services: Service[]) {
     "@context": "https://schema.org",
     "@type": "ItemList",
     "@id": `${siteUrl}/${locale}/services#servicelist`,
-    name: locale === "ar" ? "خدمات فالكون ديزاين" : "Falcon Design Services",
+    name: locale === "ar" ? "خدمات فالكون ديزاين للإنشاءات المعدنيه" : "Falcon Design Metal Construction Services",
     numberOfItems: services.length,
     itemListElement: services.map((service, index) => ({
       "@type": "ListItem",
@@ -291,8 +299,8 @@ export function galleryJsonLd(locale: Locale, items: GalleryItem[]) {
     "@id": `${siteUrl}/${locale}/gallery#gallery`,
     name:
       locale === "ar"
-        ? "معرض مشاريع فالكون ديزاين"
-        : "Falcon Design Project Gallery",
+        ? "معرض مشاريع فالكون ديزاين للإنشاءات المعدنيه"
+        : "Falcon Design Metal Construction Project Gallery",
     url: `${siteUrl}/${locale}/gallery`,
     inLanguage: locale === "ar" ? "ar-AE" : "en-AE",
     isPartOf: { "@id": `${siteUrl}/#website` },

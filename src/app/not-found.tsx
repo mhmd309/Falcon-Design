@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "Page not found | Falcon Design",
+  title: "Page not found | Falcon Design Metal Construction",
   robots: { index: false, follow: true },
 };
 
