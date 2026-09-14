@@ -6,16 +6,22 @@ export function SectionHeading({
   description,
   align = "start",
   light = false,
+  className,
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
   align?: "start" | "center";
   light?: boolean;
+  className?: string;
 }) {
   return (
     <div
-      className={cn("max-w-3xl", align === "center" && "mx-auto text-center")}
+      className={cn(
+        "max-w-3xl",
+        align === "center" && "mx-auto text-center",
+        className,
+      )}
     >
       {eyebrow ? (
         <p

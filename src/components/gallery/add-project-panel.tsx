@@ -321,8 +321,8 @@ export const AddProjectPanel = forwardRef<
   }
 
   return (
-    <div className="mt-8">
-      <div className="flex flex-wrap items-center gap-3">
+    <div className="shrink-0">
+      <div className="flex flex-wrap items-center gap-3 sm:justify-end">
         <Button type="button" onClick={openCreate} disabled={checkingAuth}>
           <Plus className="size-4" aria-hidden />
           {isAr ? "إضافة مشروع جديد" : "Add new project"}

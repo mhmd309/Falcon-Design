@@ -250,22 +250,24 @@ export function GalleryGrid({
   return (
     <section className="section-space">
       <div className="container-page">
-        <SectionHeading
-          title={locale === "ar" ? "معرض المشاريع" : "Project Gallery"}
-          description={
-            locale === "ar"
-              ? "استعرض أعمال الصلب والألمنيوم المنفذة."
-              : "Explore delivered steel and aluminum works."
-          }
-        />
-
-        <AddProjectPanel
-          ref={panelRef}
-          locale={locale}
-          onAuthChange={setIsAdmin}
-          onCreated={handleCreated}
-          onUpdated={handleUpdated}
-        />
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+          <SectionHeading
+            className="min-w-0 flex-1"
+            title={locale === "ar" ? "معرض المشاريع" : "Project Gallery"}
+            description={
+              locale === "ar"
+                ? "استعرض أعمال الصلب والألمنيوم المنفذة."
+                : "Explore delivered steel and aluminum works."
+            }
+          />
+          <AddProjectPanel
+            ref={panelRef}
+            locale={locale}
+            onAuthChange={setIsAdmin}
+            onCreated={handleCreated}
+            onUpdated={handleUpdated}
+          />
+        </div>
 
         {items.length === 0 ? (
           <div className="mt-10">
