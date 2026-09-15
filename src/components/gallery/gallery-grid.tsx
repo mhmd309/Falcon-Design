@@ -25,6 +25,7 @@ import { FeedbackPopup } from "@/components/ui/feedback-popup";
 import { Input } from "@/components/ui/form";
 import { localizeApiError, t } from "@/lib/i18n/ui";
 import { ProjectMeta } from "@/components/gallery/project-meta";
+import { ZoomableImage } from "@/components/ui/zoomable-image";
 
 const PAGE_SIZE = 9;
 
@@ -388,20 +389,19 @@ export function GalleryGrid({
             className="relative flex w-full max-w-5xl flex-col gap-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative h-[min(55vh,480px)] w-full sm:h-[65vh]">
-              <Image
-                src={active.image_url}
-                alt={
-                  pickLocalized(active, locale, "alt_text") ||
-                  pickLocalized(active, locale, "title")
-                }
-                fill
-                sizes="100vw"
-                className="object-contain"
-                priority
-                unoptimized={active.source === "database"}
-              />
-            </div>
+            <ZoomableImage
+              className="h-[min(55vh,480px)] w-full sm:h-[65vh]"
+              src={active.image_url}
+              alt={
+                pickLocalized(active, locale, "alt_text") ||
+                pickLocalized(active, locale, "title")
+              }
+              unoptimized={active.source === "database"}
+              resetKey={active.id}
+              zoomInLabel={copy.zoomIn}
+              zoomOutLabel={copy.zoomOut}
+              resetZoomLabel={copy.resetZoom}
+            />
           </div>
         </div>
       ) : null}
