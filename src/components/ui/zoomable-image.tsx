@@ -278,7 +278,7 @@ export function ZoomableImage({
       </div>
 
       <div
-        className="absolute bottom-3 start-1/2 z-10 flex -translate-x-1/2 items-center gap-2 rounded-md bg-black/60 p-1.5 backdrop-blur-sm"
+        className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 rounded-md bg-black/60 p-1.5 backdrop-blur-sm"
         onClick={(e) => e.stopPropagation()}
       >
         <button
