@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useId } from "react";
-import { Trash2, X, Loader2 } from "lucide-react";
+import { LogOut, Trash2, X, Loader2 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export function ConfirmPopup({
   open,
@@ -15,6 +16,7 @@ export function ConfirmPopup({
   onConfirm,
   onCancel,
   dir = "ltr",
+  intent = "danger",
 }: {
   open: boolean;
   title: string;
@@ -25,10 +27,12 @@ export function ConfirmPopup({
   onConfirm: () => void;
   onCancel: () => void;
   dir?: "ltr" | "rtl";
+  intent?: "danger" | "logout";
 }) {
   const titleId = useId();
   const descId = useId();
   const reduce = useReducedMotion();
+  const isLogout = intent === "logout";
 
   useEffect(() => {
     if (!open || pending) return;
@@ -75,7 +79,13 @@ export function ConfirmPopup({
             exit={reduce ? undefined : { opacity: 0, y: 10, scale: 0.98 }}
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="absolute inset-x-0 top-0 h-1 bg-danger" aria-hidden />
+            <div
+              className={cn(
+                "absolute inset-x-0 top-0 h-1",
+                isLogout ? "bg-steel" : "bg-danger",
+              )}
+              aria-hidden
+            />
 
             <button
               type="button"
@@ -88,8 +98,19 @@ export function ConfirmPopup({
             </button>
 
             <div className="px-6 pb-6 pt-8 text-center sm:px-8">
-              <span className="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-danger/15 text-danger">
-                <Trash2 size={26} aria-hidden />
+              <span
+                className={cn(
+                  "mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full",
+                  isLogout
+                    ? "bg-steel/15 text-steel-dark"
+                    : "bg-danger/15 text-danger",
+                )}
+              >
+                {isLogout ? (
+                  <LogOut size={26} aria-hidden />
+                ) : (
+                  <Trash2 size={26} aria-hidden />
+                )}
               </span>
 
               <h3
@@ -119,10 +140,14 @@ export function ConfirmPopup({
                 </Button>
                 <Button
                   type="button"
-                  variant="danger"
+                  variant={isLogout ? "secondary" : "danger"}
                   onClick={onConfirm}
                   disabled={pending}
-                  className="sm:min-w-28"
+                  className={cn(
+                    "sm:min-w-28",
+                    isLogout &&
+                      "border-steel/30 bg-surface text-text-dark hover:border-steel/50 hover:bg-surface-muted",
+                  )}
                 >
                   {pending ? (
                     <Loader2 className="size-4 animate-spin" aria-hidden />

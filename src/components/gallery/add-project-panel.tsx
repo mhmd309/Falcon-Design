@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import type { Locale } from "@/config/site";
 import { Button } from "@/components/ui/button";
+import { ConfirmPopup } from "@/components/ui/confirm-popup";
 import { FieldError, Input, Label } from "@/components/ui/form";
 import type { GalleryItem, ProjectRecord } from "@/types/content";
 import { cn } from "@/lib/utils";
@@ -66,6 +67,7 @@ export const AddProjectPanel = forwardRef<
   const [dragOver, setDragOver] = useState(false);
   const [pendingEditAfterLogin, setPendingEditAfterLogin] = useState(false);
   const [editingItem, setEditingItem] = useState<GalleryItem | null>(null);
+  const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -239,8 +241,12 @@ export const AddProjectPanel = forwardRef<
       onAuthChange?.(true);
       setPassword("");
       setShowPassword(false);
-      setMode("form");
-      setPendingEditAfterLogin(false);
+      if (pendingEditAfterLogin) {
+        setPendingEditAfterLogin(false);
+        setMode("form");
+      } else {
+        closePanel();
+      }
     } catch {
       setError(copy.couldNotReachServer);
     } finally {
@@ -258,10 +264,16 @@ export const AddProjectPanel = forwardRef<
       authenticatedRef.current = false;
       setAuthenticated(false);
       onAuthChange?.(false);
+      setLogoutConfirmOpen(false);
       closePanel();
     } finally {
       setPending(false);
     }
+  }
+
+  function requestLogout() {
+    if (pending) return;
+    setLogoutConfirmOpen(true);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -323,16 +335,32 @@ export const AddProjectPanel = forwardRef<
         {authenticated ? (
           <Button
             type="button"
-            variant="ghost"
+            variant="secondary"
             size="sm"
-            onClick={handleLogout}
+            onClick={requestLogout}
             disabled={pending}
+            className="border-steel/25 bg-surface text-text-dark hover:border-steel/40 hover:bg-surface-muted"
           >
             <LogOut className="size-4" aria-hidden />
             {copy.logOut}
           </Button>
         ) : null}
       </div>
+
+      <ConfirmPopup
+        open={logoutConfirmOpen}
+        intent="logout"
+        dir={locale === "ar" ? "rtl" : "ltr"}
+        title={copy.confirmLogout}
+        message={copy.confirmLogoutMessage}
+        confirmLabel={copy.logOut}
+        cancelLabel={copy.cancel}
+        pending={pending && logoutConfirmOpen}
+        onConfirm={() => void handleLogout()}
+        onCancel={() => {
+          if (!pending) setLogoutConfirmOpen(false);
+        }}
+      />
 
       {mode !== "closed" ? (
         <div
