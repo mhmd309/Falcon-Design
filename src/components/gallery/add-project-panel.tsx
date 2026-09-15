@@ -327,7 +327,7 @@ export const AddProjectPanel = forwardRef<
 
   return (
     <div className="shrink-0">
-      <div className="flex flex-wrap items-center gap-3 sm:justify-end">
+      <div className="flex flex-wrap items-center gap-3">
         <Button type="button" onClick={openCreate} disabled={checkingAuth}>
           <Plus className="size-4" aria-hidden />
           {copy.addNewProject}

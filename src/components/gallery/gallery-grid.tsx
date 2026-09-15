@@ -170,9 +170,9 @@ export function GalleryGrid({
   return (
     <section className="section-space">
       <div className="container-page">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+        <div className="flex flex-col gap-4">
           <SectionHeading
-            className="min-w-0 flex-1"
+            className="min-w-0"
             title={copy.projectGallery}
             description={copy.projectGalleryDesc}
           />
@@ -191,13 +191,13 @@ export function GalleryGrid({
           </div>
         ) : (
           <>
-            <div className="mt-8 flex justify-end">
+            <div className="mt-6">
               <Input
                 value={query}
                 onChange={(e) => handleQueryChange(e.target.value)}
                 placeholder={copy.searchProjectsPlaceholder}
                 aria-label={copy.search}
-                className="w-full sm:max-w-sm"
+                className="w-full sm:max-w-md"
               />
             </div>
 
