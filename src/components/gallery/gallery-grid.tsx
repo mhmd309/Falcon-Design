@@ -22,6 +22,7 @@ import {
 import { projectDbId, sortGalleryItems } from "@/lib/projects";
 import { ConfirmPopup } from "@/components/ui/confirm-popup";
 import { FeedbackPopup } from "@/components/ui/feedback-popup";
+import { Input } from "@/components/ui/form";
 import { localizeApiError, t } from "@/lib/i18n/ui";
 import { ProjectMeta } from "@/components/gallery/project-meta";
 
@@ -48,15 +49,32 @@ export function GalleryGrid({
     message: string;
   } | null>(null);
   const [page, setPage] = useState(1);
+  const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return items;
+    return items.filter((item) => {
+      const owner = (item.owner_name || "").toLowerCase();
+      const contractor = (item.project_contractor_name || "").toLowerCase();
+      return owner.includes(q) || contractor.includes(q);
+    });
+  }, [items, query]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
 
   const pageItems = useMemo(() => {
     const start = (currentPage - 1) * PAGE_SIZE;
-    return items.slice(start, start + PAGE_SIZE);
-  }, [items, currentPage]);
+    return filtered.slice(start, start + PAGE_SIZE);
+  }, [filtered, currentPage]);
+
+  function handleQueryChange(next: string) {
+    setQuery(next);
+    setPage(1);
+    setActiveIndex(null);
+  }
 
   function handleCreated(item: GalleryItem) {
     setItems((prev) => sortGalleryItems([item, ...prev.filter((p) => p.id !== item.id)]));
@@ -173,8 +191,24 @@ export function GalleryGrid({
           </div>
         ) : (
           <>
+            <div className="mt-8 flex justify-end">
+              <Input
+                value={query}
+                onChange={(e) => handleQueryChange(e.target.value)}
+                placeholder={copy.searchProjectsPlaceholder}
+                aria-label={copy.search}
+                className="w-full sm:max-w-sm"
+              />
+            </div>
+
+            {filtered.length === 0 ? (
+              <div className="mt-10">
+                <EmptyState title={copy.empty} />
+              </div>
+            ) : (
+              <>
             <div
-              key={page}
+              key={`${query}-${page}`}
               className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
             >
               {pageItems.map((item, index) => (
@@ -306,6 +340,8 @@ export function GalleryGrid({
                 </button>
               </div>
             ) : null}
+              </>
+            )}
           </>
         )}
       </div>
