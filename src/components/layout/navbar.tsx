@@ -57,17 +57,11 @@ export function Navbar({
                 href={localizedPath(locale, item.href)}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "relative text-sm font-medium transition hover:cursor-pointer hover:text-gold",
+                  "text-sm font-medium transition hover:cursor-pointer hover:text-gold",
                   active ? "text-gold" : "text-text",
                 )}
               >
                 {item.label[locale]}
-                {active ? (
-                  <span
-                    className="absolute inset-x-0 -bottom-1 h-0.5 rounded-full bg-gold"
-                    aria-hidden
-                  />
-                ) : null}
               </Link>
             );
           })}
