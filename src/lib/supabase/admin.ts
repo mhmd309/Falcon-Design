@@ -49,7 +49,6 @@ export function getSupabaseAdmin() {
   return client;
 }
 
-/** Creates the public storage bucket if it does not exist yet. */
 export async function ensureStorageBucket() {
   const supabase = getSupabaseAdmin();
   const bucket = getStorageBucket();

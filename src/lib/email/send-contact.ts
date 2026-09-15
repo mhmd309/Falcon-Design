@@ -77,10 +77,6 @@ function buildEmailBody(data: ContactFormInput) {
   return lines.join("\n");
 }
 
-/**
- * Resend only allows verified domains. Consumer mailboxes (Gmail, etc.)
- * must use Resend's onboarding sender unless RESEND_FROM_EMAIL is set.
- */
 function resolveResendFrom() {
   const configured =
     process.env.RESEND_FROM_EMAIL?.trim() ||
@@ -174,7 +170,6 @@ export async function sendContactEmail(data: ContactFormInput) {
   }
 
   const attempts: Array<"smtp" | "resend"> = [];
-  // Prefer SMTP for Gmail/app-password setups used in production.
   if (isSmtpConfigured()) attempts.push("smtp");
   if (isResendConfigured()) attempts.push("resend");
 

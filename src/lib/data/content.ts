@@ -557,13 +557,8 @@ export const timeline: TimelineItem[] = [
 
 export const galleryCategories: GalleryCategory[] = [];
 
-/** Dynamic projects come from the database; no static demo gallery items. */
 export const galleryItems: GalleryItem[] = [];
 
-/**
- * Contact emails — edit addresses here manually.
- * Only entries with a real email (not empty) are shown on the site.
- */
 export const contactEmails: ContactEmail[] = [
   {
     id: "email-1",
@@ -585,9 +580,6 @@ export const contactEmails: ContactEmail[] = [
   },
 ];
 
-/**
- * Certificates — labels match the official document titles on each image scan.
- */
 export const certificates: Certificate[] = [
   {
     id: "cert-1",

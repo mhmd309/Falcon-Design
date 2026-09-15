@@ -1,5 +1,3 @@
-/** Static website content models (no database). */
-
 export interface SiteSettings {
   id: string;
   company_name_ar: string;
