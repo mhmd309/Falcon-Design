@@ -402,34 +402,6 @@ export function GalleryGrid({
                 unoptimized={active.source === "database"}
               />
             </div>
-            {isAdmin && active.source === "database" ? (
-              <div className="flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-2 rounded-md bg-gold px-4 py-2 text-sm font-semibold text-on-gold"
-                  onClick={() => {
-                    setActiveIndex(null);
-                    panelRef.current?.openEdit(active);
-                  }}
-                >
-                  <Pencil className="size-4" />
-                  {copy.edit}
-                </button>
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-2 rounded-md bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-danger"
-                  disabled={deletingId === active.id}
-                  onClick={() => requestDelete(active)}
-                >
-                  {deletingId === active.id ? (
-                    <Loader2 className="size-4 animate-spin" />
-                  ) : (
-                    <Trash2 className="size-4" />
-                  )}
-                  {copy.delete}
-                </button>
-              </div>
-            ) : null}
           </div>
         </div>
       ) : null}
