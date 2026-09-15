@@ -35,7 +35,7 @@ export function FeaturedCertificates({
           />
         </Reveal>
 
-        <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-3">
+        <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {items.slice(0, 3).map((item, index) => (
             <Reveal key={item.id} delay={index * 0.05}>
               <Link
