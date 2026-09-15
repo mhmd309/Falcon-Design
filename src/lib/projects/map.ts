@@ -3,7 +3,12 @@ import type { GalleryItem, ProjectRecord } from "@/types/content";
 export function mapProjectRecordToGalleryItem(
   project: ProjectRecord,
 ): GalleryItem {
-  const title = project.ownerName;
+  const title =
+    project.ownerName?.trim() ||
+    project.consultantName?.trim() ||
+    project.projectContractorName?.trim() ||
+    "Project";
+
   return {
     id: `db-${project.id}`,
     category_id: null,
@@ -30,9 +35,9 @@ export function getDbProjectId(galleryItemId: string) {
 export function toProjectRecord(project: {
   id: string;
   imageUrl: string;
-  ownerName: string;
-  consultantName: string;
-  projectContractorName: string;
+  ownerName: string | null;
+  consultantName: string | null;
+  projectContractorName: string | null;
   createdAt: Date;
 }): ProjectRecord {
   return {

@@ -108,9 +108,9 @@ export interface GalleryCategory {
 export interface ProjectRecord {
   id: string;
   imageUrl: string;
-  ownerName: string;
-  consultantName: string;
-  projectContractorName: string;
+  ownerName: string | null;
+  consultantName: string | null;
+  projectContractorName: string | null;
   createdAt: string;
 }
 

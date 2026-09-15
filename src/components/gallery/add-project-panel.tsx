@@ -31,7 +31,14 @@ import { mapProjectToGalleryItem, projectDbId } from "@/lib/projects";
 
 type PanelMode = "closed" | "login" | "form";
 
-const ACCEPT = "image/jpeg,image/png,image/webp,image/gif";
+const ACCEPT =
+  "image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif,.heic,.heif";
+
+function isImageFile(file: File) {
+  const mime = (file.type || "").toLowerCase();
+  if (mime.startsWith("image/")) return true;
+  return /\.(jpe?g|png|webp|gif|heic|heif)$/i.test(file.name);
+}
 
 function formatBytes(size: number) {
   if (size < 1024) return `${size} B`;
@@ -196,7 +203,7 @@ export const AddProjectPanel = forwardRef<
 
   function pickFile(file: File | null | undefined) {
     if (!file) return;
-    if (!file.type.startsWith("image/")) {
+    if (!isImageFile(file)) {
       setError(copy.fileMustBeImage);
       return;
     }
@@ -210,7 +217,7 @@ export const AddProjectPanel = forwardRef<
       setDragOver(false);
       const file = e.dataTransfer.files?.[0];
       if (!file) return;
-      if (!file.type.startsWith("image/")) {
+      if (!isImageFile(file)) {
         setError(copy.fileMustBeImage);
         return;
       }
@@ -557,7 +564,6 @@ export const AddProjectPanel = forwardRef<
                   <Label htmlFor="owner-name">{copy.ownerName}</Label>
                   <Input
                     id="owner-name"
-                    required
                     value={ownerName}
                     onChange={(e) => setOwnerName(e.target.value)}
                   />
@@ -567,7 +573,6 @@ export const AddProjectPanel = forwardRef<
                   <Label htmlFor="consultant-name">{copy.consultantName}</Label>
                   <Input
                     id="consultant-name"
-                    required
                     value={consultantName}
                     onChange={(e) => setConsultantName(e.target.value)}
                   />
@@ -579,7 +584,6 @@ export const AddProjectPanel = forwardRef<
                   </Label>
                   <Input
                     id="project-contractor"
-                    required
                     value={projectContractorName}
                     onChange={(e) => setProjectContractorName(e.target.value)}
                   />

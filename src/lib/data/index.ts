@@ -83,9 +83,9 @@ export async function getDbGalleryItems(): Promise<GalleryItem[]> {
       (project: {
         id: string;
         imageUrl: string;
-        ownerName: string;
-        consultantName: string;
-        projectContractorName: string;
+        ownerName: string | null;
+        consultantName: string | null;
+        projectContractorName: string | null;
         createdAt: Date;
       }): GalleryItem => {
         const record: ProjectRecord = {

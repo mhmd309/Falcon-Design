@@ -3,17 +3,16 @@ import { getAdminSession } from "@/lib/auth/admin-session";
 import { isDatabaseConfigured, prisma } from "@/lib/db";
 import { revalidateProjectPages } from "@/lib/projects-cache";
 import { getSupabaseAdmin, ensureStorageBucket } from "@/lib/supabase/admin";
+import {
+  MAX_PROJECT_IMAGE_BYTES,
+  isAllowedProjectImage,
+  optionalText,
+  projectImageContentType,
+  projectImageExtension,
+} from "@/lib/projects/image";
 import type { ProjectRecord } from "@/types/content";
 
 export const runtime = "nodejs";
-
-const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
-const ALLOWED_TYPES = new Set([
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/gif",
-]);
 
 function json(data: object, status = 200) {
   return NextResponse.json(data, {
@@ -28,9 +27,9 @@ function json(data: object, status = 200) {
 function toProjectRecord(project: {
   id: string;
   imageUrl: string;
-  ownerName: string;
-  consultantName: string;
-  projectContractorName: string;
+  ownerName: string | null;
+  consultantName: string | null;
+  projectContractorName: string | null;
   createdAt: Date;
 }): ProjectRecord {
   return {
@@ -75,37 +74,26 @@ export async function POST(request: Request) {
   try {
     const form = await request.formData();
     const image = form.get("image");
-    const ownerName = String(form.get("ownerName") || "").trim();
-    const consultantName = String(form.get("consultantName") || "").trim();
-    const projectContractorName = String(
-      form.get("projectContractorName") || "",
-    ).trim();
-
-    if (!ownerName || !consultantName || !projectContractorName) {
-      return json({ error: "All fields are required" }, 400);
-    }
+    const ownerName = optionalText(form.get("ownerName"));
+    const consultantName = optionalText(form.get("consultantName"));
+    const projectContractorName = optionalText(
+      form.get("projectContractorName"),
+    );
 
     if (!(image instanceof File) || image.size === 0) {
       return json({ error: "Image is required" }, 400);
     }
 
-    if (!ALLOWED_TYPES.has(image.type)) {
+    if (!isAllowedProjectImage(image)) {
       return json({ error: "Unsupported image type" }, 400);
     }
 
-    if (image.size > MAX_IMAGE_BYTES) {
-      return json({ error: "Image must be 5MB or smaller" }, 400);
+    if (image.size > MAX_PROJECT_IMAGE_BYTES) {
+      return json({ error: "Image must be 15MB or smaller" }, 400);
     }
 
-    const ext =
-      image.type === "image/png"
-        ? "png"
-        : image.type === "image/webp"
-          ? "webp"
-          : image.type === "image/gif"
-            ? "gif"
-            : "jpg";
-
+    const ext = projectImageExtension(image);
+    const contentType = projectImageContentType(image);
     const path = `projects/${Date.now()}-${crypto.randomUUID()}.${ext}`;
     let supabase;
     let bucket: string;
@@ -123,7 +111,7 @@ export async function POST(request: Request) {
     const { error: uploadError } = await supabase.storage
       .from(bucket)
       .upload(path, buffer, {
-        contentType: image.type,
+        contentType,
         upsert: false,
       });
 

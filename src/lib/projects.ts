@@ -5,7 +5,12 @@ export function projectDbId(itemId: string) {
 }
 
 export function mapProjectToGalleryItem(project: ProjectRecord): GalleryItem {
-  const title = project.ownerName;
+  const title =
+    project.ownerName?.trim() ||
+    project.consultantName?.trim() ||
+    project.projectContractorName?.trim() ||
+    "Project";
+
   return {
     id: `db-${project.id}`,
     category_id: null,

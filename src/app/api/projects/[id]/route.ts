@@ -4,6 +4,13 @@ import { isDatabaseConfigured, prisma } from "@/lib/db";
 import { storagePathFromPublicUrl } from "@/lib/projects";
 import { revalidateProjectPages } from "@/lib/projects-cache";
 import {
+  MAX_PROJECT_IMAGE_BYTES,
+  isAllowedProjectImage,
+  optionalText,
+  projectImageContentType,
+  projectImageExtension,
+} from "@/lib/projects/image";
+import {
   getStorageBucket,
   getSupabaseAdmin,
   ensureStorageBucket,
@@ -11,14 +18,6 @@ import {
 import type { ProjectRecord } from "@/types/content";
 
 export const runtime = "nodejs";
-
-const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
-const ALLOWED_TYPES = new Set([
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/gif",
-]);
 
 function json(data: object, status = 200) {
   return NextResponse.json(data, {
@@ -33,9 +32,9 @@ function json(data: object, status = 200) {
 function toProjectRecord(project: {
   id: string;
   imageUrl: string;
-  ownerName: string;
-  consultantName: string;
-  projectContractorName: string;
+  ownerName: string | null;
+  consultantName: string | null;
+  projectContractorName: string | null;
   createdAt: Date;
 }): ProjectRecord {
   return {
@@ -49,22 +48,15 @@ function toProjectRecord(project: {
 }
 
 async function uploadImage(image: File) {
-  if (!ALLOWED_TYPES.has(image.type)) {
+  if (!isAllowedProjectImage(image)) {
     throw new Error("UNSUPPORTED_TYPE");
   }
-  if (image.size > MAX_IMAGE_BYTES) {
+  if (image.size > MAX_PROJECT_IMAGE_BYTES) {
     throw new Error("TOO_LARGE");
   }
 
-  const ext =
-    image.type === "image/png"
-      ? "png"
-      : image.type === "image/webp"
-        ? "webp"
-        : image.type === "image/gif"
-          ? "gif"
-          : "jpg";
-
+  const ext = projectImageExtension(image);
+  const contentType = projectImageContentType(image);
   const path = `projects/${Date.now()}-${crypto.randomUUID()}.${ext}`;
   try {
     const bucket = await ensureStorageBucket();
@@ -74,7 +66,7 @@ async function uploadImage(image: File) {
     const { error: uploadError } = await supabase.storage
       .from(bucket)
       .upload(path, buffer, {
-        contentType: image.type,
+        contentType,
         upsert: false,
       });
 
@@ -130,15 +122,11 @@ export async function PATCH(
 
     const form = await request.formData();
     const image = form.get("image");
-    const ownerName = String(form.get("ownerName") || "").trim();
-    const consultantName = String(form.get("consultantName") || "").trim();
-    const projectContractorName = String(
-      form.get("projectContractorName") || "",
-    ).trim();
-
-    if (!ownerName || !consultantName || !projectContractorName) {
-      return json({ error: "All fields are required" }, 400);
-    }
+    const ownerName = optionalText(form.get("ownerName"));
+    const consultantName = optionalText(form.get("consultantName"));
+    const projectContractorName = optionalText(
+      form.get("projectContractorName"),
+    );
 
     let imageUrl = existing.imageUrl;
     if (image instanceof File && image.size > 0) {
@@ -154,7 +142,7 @@ export async function PATCH(
           return json({ error: "Unsupported image type" }, 400);
         }
         if (code === "TOO_LARGE") {
-          return json({ error: "Image must be 5MB or smaller" }, 400);
+          return json({ error: "Image must be 15MB or smaller" }, 400);
         }
         if (code.startsWith("SUPABASE_CONFIG:")) {
           return json({ error: code.replace("SUPABASE_CONFIG:", "") }, 503);

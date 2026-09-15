@@ -1,4 +1,8 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import {
+  MAX_PROJECT_IMAGE_BYTES,
+  PROJECT_IMAGE_MIME_TYPES,
+} from "@/lib/projects/image";
 
 let client: SupabaseClient | null = null;
 let clientKey: string | null = null;
@@ -49,6 +53,12 @@ export function getSupabaseAdmin() {
   return client;
 }
 
+const bucketOptions = {
+  public: true,
+  fileSizeLimit: MAX_PROJECT_IMAGE_BYTES,
+  allowedMimeTypes: [...PROJECT_IMAGE_MIME_TYPES],
+};
+
 export async function ensureStorageBucket() {
   const supabase = getSupabaseAdmin();
   const bucket = getStorageBucket();
@@ -62,16 +72,10 @@ export async function ensureStorageBucket() {
 
   const exists = buckets?.some((item) => item.name === bucket);
   if (!exists) {
-    const { error: createError } = await supabase.storage.createBucket(bucket, {
-      public: true,
-      fileSizeLimit: 5 * 1024 * 1024,
-      allowedMimeTypes: [
-        "image/jpeg",
-        "image/png",
-        "image/webp",
-        "image/gif",
-      ],
-    });
+    const { error: createError } = await supabase.storage.createBucket(
+      bucket,
+      bucketOptions,
+    );
 
     if (
       createError &&
@@ -80,6 +84,14 @@ export async function ensureStorageBucket() {
       throw new Error(
         `Could not create bucket "${bucket}": ${createError.message}`,
       );
+    }
+  } else {
+    const { error: updateError } = await supabase.storage.updateBucket(
+      bucket,
+      bucketOptions,
+    );
+    if (updateError) {
+      console.error("storage bucket update failed", updateError);
     }
   }
 

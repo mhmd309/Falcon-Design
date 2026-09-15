@@ -10,9 +10,9 @@ datasource db {
 model Project {
   id                    String   @id @default(cuid())
   imageUrl              String
-  ownerName             String
-  consultantName        String
-  projectContractorName String
+  ownerName             String?
+  consultantName        String?
+  projectContractorName String?
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
 }
