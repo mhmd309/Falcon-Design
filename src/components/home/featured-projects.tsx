@@ -20,7 +20,7 @@ export function FeaturedProjects({
 
   return (
     <section
-      className="section-space bg-surface"
+      className="section-space border-y border-steel/15 bg-surface"
       aria-labelledby="featured-projects-heading"
     >
       <div className="container-page">
