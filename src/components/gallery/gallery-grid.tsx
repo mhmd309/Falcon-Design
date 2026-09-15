@@ -266,7 +266,7 @@ export function GalleryGrid({
                     <div className="absolute start-2 top-2 z-10 flex gap-1.5">
                       <button
                         type="button"
-                        className="inline-flex size-9 items-center justify-center rounded-md bg-black/55 text-white backdrop-blur-sm transition hover:bg-gold hover:text-on-gold"
+                        className="inline-flex size-9 items-center justify-center rounded-md bg-gold text-on-gold"
                         aria-label={copy.edit}
                         title={copy.edit}
                         onClick={(e) => {
@@ -278,7 +278,7 @@ export function GalleryGrid({
                       </button>
                       <button
                         type="button"
-                        className="inline-flex size-9 items-center justify-center rounded-md bg-black/55 text-white backdrop-blur-sm transition hover:bg-danger"
+                        className="inline-flex size-9 items-center justify-center rounded-md bg-danger text-white"
                         aria-label={copy.delete}
                         title={copy.delete}
                         disabled={deletingId === item.id}
